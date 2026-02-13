@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AeroVeloz.Domain.TransitionPolices
 {
-    public interface ISubscriptionPolicy
+    public interface ISubscriptionPolicys
     {
         //Desconectar el canal de subscripcion cuando se cree el enum correspondiente
         
