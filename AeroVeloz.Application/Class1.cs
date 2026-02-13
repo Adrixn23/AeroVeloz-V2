@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Aplication
+﻿namespace AeroVeloz.Application
 {
     public class Class1
     {
