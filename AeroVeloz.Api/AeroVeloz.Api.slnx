@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../AeroVeloz.Application/AeroVeloz.Application.csproj" />
+  <Project Path="../AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
+  <Project Path="../AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj" />
+  <Project Path="../AeroVeloz.Web/AeroVeloz.Web.csproj" />
+  <Project Path="AeroVeloz.Api.csproj" />
+</Solution>

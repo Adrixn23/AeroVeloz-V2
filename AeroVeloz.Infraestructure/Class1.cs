@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Infrastruture
+﻿namespace AeroVeloz.Infraestructure
 {
     public class Class1
     {
