@@ -10,7 +10,6 @@
     <Folder Include="Audit\" />
     <Folder Include="Common\" />
     <Folder Include="Flights\" />
-    <Folder Include="TransitionPolices\" />
     <Folder Include="Subscriptions\" />
     <Folder Include="Notifications\" />
   </ItemGroup>
