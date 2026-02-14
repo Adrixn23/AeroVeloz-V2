@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using AeroVeloz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AeroVeloz.Infraestructure.Entities;
+namespace AeroVeloz.Infraestructure;
 
 public partial class AeroVelozContext : DbContext
 {
