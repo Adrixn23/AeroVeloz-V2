@@ -1,1 +1,9 @@
-<Solution />
+<Solution>
+  <Project Path="AeroVeloz.Api/AeroVeloz.Api.csproj" />
+  <Project Path="AeroVeloz.Application/AeroVeloz.Application.csproj" />
+  <Project Path="AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
+  <Project Path="AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj">
+    <BuildDependency Project="AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
+  </Project>
+  <Project Path="AeroVeloz.Web/AeroVeloz.Web.csproj" />
+</Solution>
