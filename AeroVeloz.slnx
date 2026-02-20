@@ -1,9 +1,17 @@
 <Solution>
-  <Project Path="AeroVeloz.Api/AeroVeloz.Api.csproj" />
-  <Project Path="AeroVeloz.Application/AeroVeloz.Application.csproj" />
-  <Project Path="AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
-  <Project Path="AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj">
-    <BuildDependency Project="AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
-  </Project>
-  <Project Path="AeroVeloz.Web/AeroVeloz.Web.csproj" />
+  <Folder Name="/Api/">
+    <Project Path="AeroVeloz.Api/AeroVeloz.Api.csproj" />
+  </Folder>
+  <Folder Name="/core/">
+    <Project Path="AeroVeloz.Application/AeroVeloz.Application.csproj" />
+    <Project Path="AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infraestructure/">
+    <Project Path="AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj">
+      <BuildDependency Project="AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/presentacion/">
+    <Project Path="AeroVeloz.Web/AeroVeloz.Web.csproj" />
+  </Folder>
 </Solution>

@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using AeroVeloz.Domain.Entities;
+using AeroVeloz.Domain.Entities.Airlines;
+using AeroVeloz.Domain.Entities.Audit;
+using AeroVeloz.Domain.Entities.Flights;
+using AeroVeloz.Domain.Entities.Notifications;
+using AeroVeloz.Domain.Entities.Operations;
+using AeroVeloz.Domain.Entities.Security;
+using AeroVeloz.Domain.Entities.Subscriptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AeroVeloz.Infraestructure;
