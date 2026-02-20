@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Polices.ChangeTypePolicy
+namespace AeroVeloz.Domain.TransitionPolices.Polices.ChangeTypePolicy
 {
     public  class ChangeTypePolicy : IChangeTypePolicy
     {

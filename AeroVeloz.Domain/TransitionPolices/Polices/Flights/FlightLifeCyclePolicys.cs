@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Polices.Flights
+namespace AeroVeloz.Domain.TransitionPolices.Polices.Flights
 {
     public class FlightLifeCyclePolicys : IFlightLifeCiclyePolicy
     {

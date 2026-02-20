@@ -7,11 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Common\" />
-    <Folder Include="Events\Definitions\" />
-    <Folder Include="Events\Handlers\" />
-    <Folder Include="interfaces\adapters\" />
+    <Compile Remove="Commands\**" />
+    <Compile Remove="Common\**" />
+    <Compile Remove="Events\**" />
+    <Compile Remove="interfaces\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <EmbeddedResource Remove="Common\**" />
+    <EmbeddedResource Remove="Events\**" />
+    <EmbeddedResource Remove="interfaces\**" />
+    <None Remove="Commands\**" />
+    <None Remove="Common\**" />
+    <None Remove="Events\**" />
+    <None Remove="interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>

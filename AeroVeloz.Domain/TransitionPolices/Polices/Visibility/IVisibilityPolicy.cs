@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Polices.Visibility
+namespace AeroVeloz.Domain.TransitionPolices.Polices.Visibility
 {
     public interface IVisibilityPolicy
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Polices.SubscriptionPolicy
+namespace AeroVeloz.Domain.TransitionPolices.interfaces.Subscription
 {
     public interface ISubscriptionPolicys
     {
