@@ -1,9 +1,8 @@
-﻿using AeroVeloz.Domain.TransitionPolices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Notifications
+namespace AeroVeloz.Domain.TransitionPolices.Polices.Notifications
 {
     public class NotificationPolicy : INotificationPolicy
     {

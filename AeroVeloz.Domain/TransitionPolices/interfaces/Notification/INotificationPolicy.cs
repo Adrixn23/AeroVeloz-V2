@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Polices.Notifications
+namespace AeroVeloz.Domain.TransitionPolices.interfaces.Notification
 {
     public interface INotificationPolicy
     {

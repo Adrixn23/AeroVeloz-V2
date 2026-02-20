@@ -1,9 +1,8 @@
-﻿using AeroVeloz.Domain.TransitionPolices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.Visibility
+namespace AeroVeloz.Domain.TransitionPolices.Polices.Visibility
 {
     public class VisibilityPolicy : IVisibilityPolicy
     {

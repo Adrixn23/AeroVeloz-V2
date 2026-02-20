@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AeroVeloz.Domain.TransitionPolices
+namespace AeroVeloz.Domain.TransitionPolices.interfaces.Flight
 {
     public interface IFlightLifeCiclyePolicy
     {
