@@ -9,15 +9,9 @@
   <ItemGroup>
     <Folder Include="Commands\" />
     <Folder Include="Common\" />
-    <Folder Include="DTOs\Airlines\" />
-    <Folder Include="DTOs\Audit\" />
-    <Folder Include="DTOs\Flights\" />
-    <Folder Include="DTOs\Subscriptions\" />
-    <Folder Include="DTOs\Operations\" />
     <Folder Include="Events\Definitions\" />
     <Folder Include="Events\Handlers\" />
     <Folder Include="interfaces\adapters\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
