@@ -13,5 +13,7 @@
     <Project Path="Presentacion/AeroVeloz.Desktop/AeroVeloz.Desktop.csproj" />
     <Project Path="Presentacion/AeroVeloz.Web/AeroVeloz.Web.csproj" />
   </Folder>
-  <Folder Name="/Transversal/" />
+  <Folder Name="/Transversal/">
+    <Project Path="AeroVeloz.Transversal/AeroVeloz.Transversal.csproj" Id="38de2245-eb9e-404f-896f-188278cf4c35" />
+  </Folder>
 </Solution>
