@@ -12,6 +12,7 @@
     </Project>
   </Folder>
   <Folder Name="/presentacion/">
+    <Project Path="AeroVeloz.Desktop/AeroVeloz.Desktop.csproj" Id="ecb3a51a-0a6f-438b-b9b4-20ec1d10ba14" />
     <Project Path="AeroVeloz.Web/AeroVeloz.Web.csproj" />
   </Folder>
 </Solution>
