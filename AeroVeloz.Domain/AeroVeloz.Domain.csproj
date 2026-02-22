@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Audit\" />
     <Folder Include="Common\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
