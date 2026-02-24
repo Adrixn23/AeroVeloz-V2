@@ -16,7 +16,7 @@ namespace AeroVeloz.Application.Interfaces
         // Actualizar estadoo
         Task<FlightResponseDto> UpdateStatusAsync(short flightId, byte newStateId, string airlineCode);
 
-        //  Obtener el tablero operativo actualizad
+        //  Obtener el tablero operativo actualizado
         Task<IEnumerable<FlightResponseDto>> GetOperationalBoardAsync();
     }
 }

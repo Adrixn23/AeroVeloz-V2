@@ -20,15 +20,6 @@ public class Flight : BEntity<short>
 
     public Flight (short id, string codeAirlines, byte flightStatesId, string OriginAirport,string DestinationAirport, DateTimeOffset ScheduledDeparture, DateTimeOffset ScheduledArrival )
     {
-        if (OriginAirport == DestinationAirport)
-        {
-            throw new FlightDomainException("El origen y destino no pueden ser iguales");
-        }
-
-        if (ScheduledArrival <= ScheduledDeparture)
-        {
-            throw new FlightDomainException("La llegada debe ser posterior a la salida");
-        }
 
         this.Id = id;
         this.codeAirlines = codeAirlines;
