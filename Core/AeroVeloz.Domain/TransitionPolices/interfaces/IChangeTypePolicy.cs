@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AeroVeloz.Domain.Common.Enums;
 
 namespace AeroVeloz.Domain.TransitionPolices
 {
     public interface IChangeTypePolicy
     {
-        //Descomentar cuando se cree el enum correspondiente
-
-        public bool IsAllowed(/*OperationalChangeTyoe type*/);
+        public bool IsAllowed(OperationalChangeType type);
     }
 }
