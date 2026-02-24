@@ -16,5 +16,5 @@ public partial class FlightHistory
 
     public Guid? ChangeBy { get; set; }
 
-    public virtual Flight Flight { get; set; } = null!;
+ 
 }

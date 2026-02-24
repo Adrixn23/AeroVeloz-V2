@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AeroVeloz.Application.DTOs
+namespace AeroVeloz.Domain.Entities.BaseEntity
 {
-    internal class FlightDto
+    public abstract class BEntity<TiD>
     {
+        public TiD? Id {get; protected set;}
+
     }
 }

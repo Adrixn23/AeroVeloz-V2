@@ -1,34 +1,46 @@
-﻿using AeroVeloz.Domain.Entities.Airlines;
-using AeroVeloz.Domain.Entities.Operations;
-using AeroVeloz.Domain.Entities.Subscriptions;
 using System;
-using System.Collections.Generic;
+using AeroVeloz.Domain.Entities.BaseEntity;
+using AeroVeloz.Domain.Entities.Exceptions;
 
-namespace AeroVeloz.Domain.Entities.Flights;
+namespace AeroVeloz.Domain.Entities.Flight;
 
-public partial class Flight
+
+
+
+public class Flight : BEntity<short>
 {
-    public Guid FlightId { get; set; }
 
-    public string FlightNumber { get; set; } = null!;
+    public string codeAirlines { get; private set; } = null!;
+    public byte flightStatesId { get; private set; }
+    public string OriginAirport { get; private set; } = null!;
+    public string DestinationAirport { get; private set; } = null!;
+    public DateTimeOffset ScheduledDeparture { get; private set; }
 
-    public string Origin { get; set; } = null!;
+    public DateTimeOffset ScheduledArrival { get; private set; }
 
-    public string Destination { get; set; } = null!;
+    public Flight (short id, string codeAirlines, byte flightStatesId, string OriginAirport,string DestinationAirport, DateTimeOffset ScheduledDeparture, DateTimeOffset ScheduledArrival )
+    {
+        if (OriginAirport == DestinationAirport)
+        {
+            throw new FlightDomainException("El origen y destino no pueden ser iguales");
+        }
 
-    public DateTime ScheduledTime { get; set; }
+        if (ScheduledArrival <= ScheduledDeparture)
+        {
+            throw new FlightDomainException("La llegada debe ser posterior a la salida");
+        }
 
-    public Guid AirlineId { get; set; }
+        this.Id = id;
+        this.codeAirlines = codeAirlines;
+        this.flightStatesId = flightStatesId;
+        this.OriginAirport = OriginAirport;
+        this.DestinationAirport = DestinationAirport;
+        this.ScheduledDeparture = ScheduledDeparture;
+        this.ScheduledArrival = ScheduledArrival;
+       
 
-    public Guid StateId { get; set; }
 
-    public virtual Airline Airline { get; set; } = null!;
+    }
 
-    public virtual ICollection<FlightHistory> FlightHistories { get; set; } = new List<FlightHistory>();
-
-    public virtual ICollection<OperationChange> OperationChanges { get; set; } = new List<OperationChange>();
-
-    public virtual FlightState State { get; set; } = null!;
-
-    public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }
+    
