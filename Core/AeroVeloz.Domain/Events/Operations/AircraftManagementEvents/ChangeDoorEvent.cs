@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace AeroVeloz.Domain.Events.AircraftManagementEvents
+namespace AeroVeloz.Domain.Events.Operations.AircraftManagementEvents
 {
     public record ChangeDoorEvent(
             int FlightNumber,
