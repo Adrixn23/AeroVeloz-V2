@@ -8,16 +8,23 @@ namespace AeroVeloz.Domain.Validators.Orquestador
 {
     public class OperationalChangeValidator : IOperationalChangeValidator
     {
-
         private readonly IChangeTypePolicy _changeTypePolicy;
-        public OperationalChangeValidator(IChangeTypePolicy changeTypePolicy) {
+
+        private readonly IFlightLifeCiclyePolicy _flightLifeCiclyePolicy;
+        public OperationalChangeValidator(IChangeTypePolicy changeTypePolicy, IFlightLifeCiclyePolicy flightLifeCiclyePolicy) {
             _changeTypePolicy = changeTypePolicy;
+            _flightLifeCiclyePolicy = flightLifeCiclyePolicy;
         }
 
+        public void ValidateManualChange(OperationChange operation)
+        {
+            //agregar logica de validation de elementos para la visbilidad automatica de vuelos <= 48 horas
+            //ademas de gestionar elementos de state para bloque al equipo operacional si el vuelo esta en vuelo
+        }
 
         public ValidationResult ValidateOperational(OperationChange operation)
         {
-           var errors = new List<DomainError>();
+            var errors = new List<DomainError>();
 
             if (string.IsNullOrEmpty(operation.codeAirline) || operation.codeAirline.Length < 3)
                 errors.Add(OperationalChangeErrors.InvalidAirlineCode);
@@ -27,6 +34,8 @@ namespace AeroVeloz.Domain.Validators.Orquestador
                 errors.Add(OperationalChangeErrors.InvalidChangeOperational);
             if (!_changeTypePolicy.IsAllowed(operation!.operationalChangeType))
                 errors.Add(OperationalChangeErrors.InvalidChangeOperational);
+            if (operation.changeAt < DateTime.UtcNow)
+                errors.Add(OperationalChangeErrors.InvalidChangeOperationDateInvalidPast);
 
             //descomentar esto cuando se agregue el modulo de vuelos
 
@@ -37,7 +46,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador
              */
 
             var result = new ValidationResult();
-            return result.Failur(errors);
+            return result.Failur(errors); 
         }
     }
 }
