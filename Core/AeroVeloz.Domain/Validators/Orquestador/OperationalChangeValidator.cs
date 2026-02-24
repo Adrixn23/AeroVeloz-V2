@@ -10,6 +10,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador
     {
         private readonly IChangeTypePolicy _changeTypePolicy;
 
+     
         private readonly IFlightLifeCiclyePolicy _flightLifeCiclyePolicy;
         public OperationalChangeValidator(IChangeTypePolicy changeTypePolicy, IFlightLifeCiclyePolicy flightLifeCiclyePolicy) {
             _changeTypePolicy = changeTypePolicy;
