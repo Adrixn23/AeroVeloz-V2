@@ -6,7 +6,6 @@ namespace AeroVeloz.Domain.Entities.Operations;
 public partial class OperationChange :  BEntity<Guid>
 {
       public int  idUser { get; private set; }  
-
       public OperationalChangeType operationalChangeType { get; private set; }
       public string? codeAirline { get; private set; }
       public int flightNumber { get; private set; }

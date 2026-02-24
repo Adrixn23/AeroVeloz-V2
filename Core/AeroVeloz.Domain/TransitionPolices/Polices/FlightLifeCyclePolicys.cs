@@ -1,7 +1,5 @@
 ﻿using AeroVeloz.Domain.TransitionPolices;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace AeroVeloz.Domain.Flights
 {
