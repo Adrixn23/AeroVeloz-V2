@@ -1,6 +1,4 @@
 ﻿using AeroVeloz.Domain.Entities.Subscriptions;
-using System;
-using System.Collections.Generic;
 
 namespace AeroVeloz.Domain.Entities.Notifications;
 

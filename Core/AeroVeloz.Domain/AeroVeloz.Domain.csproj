@@ -8,16 +8,15 @@
 
   <ItemGroup>
     <Compile Remove="Audit\**" />
+    <Compile Remove="Models\**" />
     <EmbeddedResource Remove="Audit\**" />
+    <EmbeddedResource Remove="Models\**" />
     <None Remove="Audit\**" />
+    <None Remove="Models\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Events\Operations\SecurityOperationEvents\DomesticFlightCancellationEvent.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
