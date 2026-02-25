@@ -1,5 +1,5 @@
-﻿using AeroVeloz.Domain.Common.Enums;
-using AeroVeloz.Domain.Entities.Flights;
+using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Services.Interfaces;
 using AeroVeloz.Domain.TransitionPolices;
@@ -36,9 +36,10 @@ namespace AeroVeloz.Domain.Services.orquestador
      
              */
 
+            /*
               if(!_changeTypePolicy.IsAllowed(operationalChange))
                 //result.addError('CHANGE_TYPE_REQUIERED');
-
+            */
             return null;
         }
     }

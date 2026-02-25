@@ -1,6 +1,4 @@
-using System;
 using AeroVeloz.Domain.Entities.BaseEntity;
-using AeroVeloz.Domain.Entities.Exceptions;
 
 namespace AeroVeloz.Domain.Entities.Flight;
 
@@ -18,7 +16,10 @@ public class Flight : BEntity<short>
 
     public DateTimeOffset ScheduledArrival { get; private set; }
 
-    public Flight (short id, string codeAirlines, byte flightStatesId, string OriginAirport,string DestinationAirport, DateTimeOffset ScheduledDeparture, DateTimeOffset ScheduledArrival )
+    public string BordingGate { get; private set; }
+    public string BordingGateArrived { get; private set; }
+
+    public Flight(short id, string codeAirlines, byte flightStatesId, string OriginAirport, string DestinationAirport, DateTimeOffset ScheduledDeparture, DateTimeOffset ScheduledArrival, string BordingGate, string BordingGateArrived )
     {
 
         this.Id = id;
@@ -28,6 +29,8 @@ public class Flight : BEntity<short>
         this.DestinationAirport = DestinationAirport;
         this.ScheduledDeparture = ScheduledDeparture;
         this.ScheduledArrival = ScheduledArrival;
+        this.BordingGate = BordingGate;
+        this.BordingGateArrived = BordingGateArrived;
        
 
 

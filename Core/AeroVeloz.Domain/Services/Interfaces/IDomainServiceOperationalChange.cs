@@ -1,5 +1,5 @@
-﻿using AeroVeloz.Domain.Common.Enums;
-using AeroVeloz.Domain.Entities.Flights;
+using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.Entities.Operations;
 using System.ComponentModel.DataAnnotations;
 

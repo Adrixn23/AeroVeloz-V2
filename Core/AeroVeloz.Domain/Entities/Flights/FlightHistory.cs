@@ -1,20 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 
-namespace AeroVeloz.Domain.Entities.Flights;
+namespace AeroVeloz.Domain.Entities.Flight;
+
 public partial class FlightHistory
 {
-    public Guid HistoryId { get; set; }
+    // Llaves primarias compuestas
+    public short FlightNumber { get; private set; }
+    public string CodeAirlines { get; private set; } = null!;
+    
+    public DateTime ChangeAt { get; private set; }
+    public string Reason { get; private set; } = null!;
+    
+    public byte FlightStatesIdAfter { get; private set; }
+    public byte FlightStatedsIdBefore { get; private set; }
 
-    public Guid FlightId { get; set; }
+    protected FlightHistory() { }
 
-    public Guid? OldStateId { get; set; }
-
-    public Guid? NewStateId { get; set; }
-
-    public DateTime? ChangeDate { get; set; }
-
-    public Guid? ChangeBy { get; set; }
-
- 
+    public FlightHistory(short flightNumber, string codeAirlines, DateTime changeAt, string reason, byte stateIdAfter, byte stateIdBefore)
+    {
+        FlightNumber = flightNumber;
+        CodeAirlines = codeAirlines;
+        ChangeAt = changeAt;
+        Reason = reason;
+        FlightStatesIdAfter = stateIdAfter;
+        FlightStatedsIdBefore = stateIdBefore;
+    }
 }
