@@ -1,7 +1,4 @@
-﻿// Interface
-
-// Interface
-using AeroVeloz.Domain.Common.ValidationBase;
+﻿using AeroVeloz.Domain.Common.ValidationBase;
 
 namespace AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator
 {

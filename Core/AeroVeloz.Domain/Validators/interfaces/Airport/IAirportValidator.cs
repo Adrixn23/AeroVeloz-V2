@@ -1,5 +1,5 @@
 ﻿using AeroVeloz.Domain.Common.ValidationBase;
-using AeroVeloz.Domain.Entities.Airport;
+using AeroVeloz.Domain.Entities.Airports;
 
 namespace AeroVeloz.Domain.Validators.interfaces.Airports
 {
