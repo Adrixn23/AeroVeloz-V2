@@ -33,5 +33,9 @@ namespace AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Airport
 
         public static DomainError MaxNameLength =>
             DomainError.Create("AIRPORT_10", "El nombre del aeropuerto no puede exceder los 150 caracteres");
+
+     
+
     }
+
 }
