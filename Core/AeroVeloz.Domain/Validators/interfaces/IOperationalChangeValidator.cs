@@ -6,7 +6,5 @@ namespace AeroVeloz.Domain.Validators.interfaces
     public interface IOperationalChangeValidator
     {
         ValidationResult ValidateOperational(OperationChange operation);
-
-        public void ValidateManualChange(OperationChange operation /*, Flight currentFlight*/);
     }
 }

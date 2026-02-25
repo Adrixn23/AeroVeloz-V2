@@ -19,5 +19,7 @@ namespace AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Operations
         public static DomainError InvalidChangeOperationDateInvalidPast =>
             DomainError.Create("OP_CHANGE_07", "El cambio operacional que se ha intentado corresponde a un" +
                 "registro antiguo por lo que no puede se realizado, consulte la fecha del vuelo que ha intentado modificar");
+        
+
     }
 }
