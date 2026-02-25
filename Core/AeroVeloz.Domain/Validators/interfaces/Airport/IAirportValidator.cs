@@ -4,6 +4,7 @@ using AeroVeloz.Domain.Entities.Airports;
 namespace AeroVeloz.Domain.Validators.interfaces.Airports
 {
     public interface IAirportValidator { 
+
         ValidationResult ValidateAirportRegistration(Airport airport);
         ValidationResult ValidateAirportCode(string airportCode); 
         ValidationResult ValidateAirlineConnection(string airportCode, string airlineCode, string apiToken); 
