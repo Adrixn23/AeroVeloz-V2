@@ -1,5 +1,4 @@
-﻿// Implementación
-using AeroVeloz.Domain.Entities.Airport;
+﻿using AeroVeloz.Domain.Validators.interfaces.Airports;
 using AeroVeloz.Domain.Common.ValidationBase;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Airport;
 using System.Text.RegularExpressions;
@@ -11,7 +10,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
         private readonly Regex _emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         private readonly Regex _airportCodeRegex = new Regex(@"^[A-Z]{4}$");
 
-        public ValidationResult ValidateAirportRegistration(Airport airport)
+        public ValidationResult ValidateAirportRegistration(AeroVeloz.Domain.Entities.Airports.Airport  airport)
         {
             var errors = new List<DomainError>();
 
