@@ -9,6 +9,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
     {
         private readonly Regex _emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         private readonly Regex _airportCodeRegex = new Regex(@"^[A-Z]{4}$");
+        private readonly Regex _airportCodeIATA = new Regex(@"^[A-Z]{3}$");
 
         public ValidationResult ValidateAirportRegistration(AeroVeloz.Domain.Entities.Airports.Airport  airport)
         {
@@ -20,25 +21,26 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
                 return new ValidationResult().Failur(errors);
             }
 
-            if (string.IsNullOrWhiteSpace(airport.Id) || !_airportCodeRegex.IsMatch(airport.Id))
+            if (string.IsNullOrWhiteSpace(airport.codeAiprot) || !_airportCodeRegex.IsMatch(airport.codeAiprot))
+                errors.Add(AirportErrors.InvalidAirportCode);
+
+            if (string.IsNullOrWhiteSpace(airport.codeAiportIATA) || !_airportCodeRegex.IsMatch(airport.codeAiportIATA))
                 errors.Add(AirportErrors.InvalidAirportCode);
 
             if (string.IsNullOrWhiteSpace(airport.nameAirport))
                 errors.Add(AirportErrors.AirportNameRequired);
+
             else if (airport.nameAirport.Length > 150)
                 errors.Add(AirportErrors.MaxNameLength);
 
             if (string.IsNullOrWhiteSpace(airport.city))
                 errors.Add(AirportErrors.CityRequired);
 
-            
             if (string.IsNullOrWhiteSpace(airport.country))
                 errors.Add(AirportErrors.CountryRequired);
 
-           
-            if (string.IsNullOrWhiteSpace(airport.emailAirport) || !_emailRegex.IsMatch(airport.emailAirport))
+            if (string.IsNullOrWhiteSpace(airport.emailOrganization) || !_emailRegex.IsMatch(airport.emailOrganization))
                 errors.Add(AirportErrors.InvalidEmailFormat);
-
            
             if (string.IsNullOrWhiteSpace(airport.apiKeyMaster) || airport.apiKeyMaster.Length < 32)
                 errors.Add(AirportErrors.InvalidApiKey);
@@ -111,6 +113,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
                 errors.Add(AirportErrors.InvalidAirportCode);
 
             // errors.Add(AirportErrors.AirportHasActiveFlights);
+            // --elemento para multiples vuelos verificando las activacion de todos
 
             var result = new ValidationResult();
             return errors.Any() ? result.Failur(errors) : result.Success();
