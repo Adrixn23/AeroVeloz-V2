@@ -1,10 +1,10 @@
 ﻿using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Common.ValidationBase;
-using AeroVeloz.Domain.Validators.interfaces;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Operations;
 using AeroVeloz.Domain.TransitionPolices;
+using AeroVeloz.Domain.Validators.interfaces.Operations;
 
-namespace AeroVeloz.Domain.Validators.Orquestador
+namespace AeroVeloz.Domain.Validators.Orquestador.Operations
 {
     public class OperationalChangeValidator : IOperationalChangeValidator
     {
