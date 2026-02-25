@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.Security;
-using AeroVeloz.Domain.Common.ValidationBase;
+﻿using AeroVeloz.Domain.Common.ValidationBase;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.SuperAdmin;
 using System.Text.RegularExpressions;
 using AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator;
