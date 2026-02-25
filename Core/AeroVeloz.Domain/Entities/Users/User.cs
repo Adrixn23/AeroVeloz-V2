@@ -1,6 +1,6 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
-namespace AeroVeloz.Domain.Entities.Security;
+namespace AeroVeloz.Domain.Entities.Users;
 
 public partial class User : BEntity<Guid>
 {

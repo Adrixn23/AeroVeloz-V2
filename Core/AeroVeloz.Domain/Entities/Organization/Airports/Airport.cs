@@ -1,6 +1,6 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
-namespace AeroVeloz.Domain.Entities.Airport;
+namespace AeroVeloz.Domain.Entities.Airports;
 
 public partial class Airport : BEntity<string>
 {
