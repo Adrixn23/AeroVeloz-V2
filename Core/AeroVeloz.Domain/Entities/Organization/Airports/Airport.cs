@@ -1,39 +1,42 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using AeroVeloz.Domain.Entities.Organization.type;
 
 namespace AeroVeloz.Domain.Entities.Airports;
 
-public partial class Airport : BEntity<string>
+public partial class Airport : organization
 {
+  
+    public string codeAiprot { get; private set; }
+    public string codeAiportIATA { get; private set; }
     public string nameAirport { get; private set; }
     public string city { get; private set; }
     public string country { get; private set; }
-    public string emailAirport { get; private set; }
     public string apiKeyMaster { get; private set; }
-    public bool isActive { get; private set; }
-    public DateTime createdAt { get; private set; }
     public TimeZoneInfo timeZone { get; private set; }
 
-    private Airport(string codeAirport, string nameAirport, string city, string country,
-                   string emailAirport, string apiKeyMaster)
+   public Airport(int idOrganization, TypeOrganization typeOrganization, string? emailOrganization,
+      string codeAiport, string codeAiportIATA, string nameAirport, string city,
+       string country, string apiKeyMaster, TimeZoneInfo timeZone ) :
+
+       base(idOrganization, typeOrganization, emailOrganization)
     {
-        this.Id = codeAirport; 
+        this.codeAiprot = codeAiport;
+        this.codeAiportIATA = codeAiportIATA;
         this.nameAirport = nameAirport;
         this.city = city;
         this.country = country;
-        this.emailAirport = emailAirport;
         this.apiKeyMaster = apiKeyMaster;
-        this.isActive = true;
-        this.createdAt = DateTime.UtcNow;
+        this.timeZone = timeZone;
     }
 
-    public static Airport CreateAirport(string codeAirport, string nameAirport, string city,
-                                   string country, string emailAirport, string apiKeyMaster)
+    public static Airport CreateAirport(int idOrganization, TypeOrganization typeOrganization, 
+        string? emailOrganization, string codeAiport, string codeAiportIATA, string nameAirport, string city,
+        string country, string apiKeyMaster, TimeZoneInfo timeZone)
     {
-        return new Airport(codeAirport, nameAirport, city, country, emailAirport, apiKeyMaster);
+        return new Airport(idOrganization, typeOrganization, emailOrganization, codeAiport,
+            codeAiportIATA, nameAirport, city, country, apiKeyMaster,timeZone);
     }
 
-    public void DeactivateAirport()
-    {
-        isActive = false;
-    }
+
+   
 }
