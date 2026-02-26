@@ -11,6 +11,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
         private readonly Regex _airportCodeRegex = new Regex(@"^[A-Z]{4}$");
         private readonly Regex _airportCodeIATA = new Regex(@"^[A-Z]{3}$");
 
+
         public ValidationResult ValidateAirportRegistration(AeroVeloz.Domain.Entities.Airports.Airport  airport)
         {
             var errors = new List<DomainError>();
@@ -52,7 +53,6 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
         public ValidationResult ValidateAirportCode(string airportCode)
         {
             var errors = new List<DomainError>();
-
             if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
                 errors.Add(AirportErrors.InvalidAirportCode);
 

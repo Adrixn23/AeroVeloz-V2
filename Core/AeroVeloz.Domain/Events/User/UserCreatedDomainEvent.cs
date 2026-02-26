@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Common.Enums;
-
+﻿using AeroVeloz.Domain.Common.Enums.Organization;
 using MediatR;
 namespace AeroVeloz.Domain.Events.User
 {

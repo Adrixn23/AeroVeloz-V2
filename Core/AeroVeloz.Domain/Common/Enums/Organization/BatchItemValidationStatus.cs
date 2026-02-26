@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AeroVeloz.Domain.Common.Enums
+namespace AeroVeloz.Domain.Common.Enums.Organization
 {
-    public enum NotificationDeliveryStatus
+    public enum BatchItemValidationStatus
     {
-        Peding,
-        Sent,
-        Failed
+        Valid,
+        Incongruent
     }
 }

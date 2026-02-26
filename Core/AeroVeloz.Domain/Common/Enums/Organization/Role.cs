@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.Common.Enums;
+﻿namespace AeroVeloz.Domain.Common.Enums.Organization;
 
 public  enum Role
 {

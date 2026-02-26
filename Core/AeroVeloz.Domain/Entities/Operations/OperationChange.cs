@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Common.Enums;
+﻿using AeroVeloz.Domain.Common.Enums.Organization;
 using AeroVeloz.Domain.Entities.BaseEntity;
 
 namespace AeroVeloz.Domain.Entities.Operations;

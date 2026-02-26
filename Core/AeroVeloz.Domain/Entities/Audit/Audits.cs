@@ -1,5 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
-using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Common.Enums.auditoria;
 
 namespace AeroVeloz.Domain.Entities.Audits;
 

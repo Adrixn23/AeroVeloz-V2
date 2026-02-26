@@ -1,25 +1,18 @@
-﻿using AeroVeloz.Domain.TransitionPolices;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AeroVeloz.Domain.Common.Enums.Mensajeria;
+using AeroVeloz.Domain.TransitionPolices;
 
 namespace AeroVeloz.Domain.Notifications
 {
     public class NotificationPolicy : INotificationPolicy
     {
+        private HashSet<ProviderResponde> AllowedTypes  = new HashSet<ProviderResponde>();
 
-        //agregar campos/atributos cuando se modifique lo descripto en la interfaz
-
-        public bool IsRecipientAllowed(Guid flightId)
+       
+        public bool isAllowedProvider(ProviderResponde providerResponde)
         {
-            throw new NotImplementedException(); //agregar logica de negocio 
+            return AllowedTypes.Contains(providerResponde);
         }
 
-        //agregar campos/atributos cuando se modifique lo descripto en la interfaz
-
-        public bool ShouldNotify()
-        {
-            throw new NotImplementedException(); //agregar logica de negocio 
-        }
+       
     }
 }
