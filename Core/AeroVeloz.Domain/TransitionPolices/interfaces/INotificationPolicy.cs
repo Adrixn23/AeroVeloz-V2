@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using AeroVeloz.Domain.Common.Enums.Mensajeria;
 
 namespace AeroVeloz.Domain.TransitionPolices
 {
     public interface INotificationPolicy
     {
+        public bool isAllowedProvider(ProviderResponde providerResponde);
 
-        //descomentar cuando se cree la clase vuelos y el enum de operationalChange
-        public bool ShouldNotify(/*OperationalChange change, Flight: flight */);
-
-        public bool IsRecipientAllowed(Guid flightId /*, Subscription sub*/);
+        //agregar posibles logicas futuras de notification policy en caso de que los adaptadores lo requieran
+    
     }
 }

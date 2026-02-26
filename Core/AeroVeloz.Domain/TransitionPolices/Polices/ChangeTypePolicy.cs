@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Common.Enums;
+﻿using AeroVeloz.Domain.Common.Enums.Organization;
 using AeroVeloz.Domain.TransitionPolices;
 
 namespace AeroVeloz.Domain.Polices
