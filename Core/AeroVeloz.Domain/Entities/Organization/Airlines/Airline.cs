@@ -2,7 +2,7 @@ using AeroVeloz.Domain.Entities.BaseEntity;
 using AeroVeloz.Domain.Entities.Organization.type;
 using System.Collections.Generic;
 
-namespace AeroVeloz.Domain.Entities.Flight;
+namespace AeroVeloz.Domain.Entities.Organization.Airlines;
 
 public partial class Airline : organization
 {
@@ -20,7 +20,7 @@ public partial class Airline : organization
     public Airline(int idOrganization, TypeOrganization typeOrganization, string? emailOrganization,string codeAirlines, string name, string codeIATA, int idOrganizaion) : base(idOrganization, typeOrganization, emailOrganization)
     {
         this.codeAirlines = codeAirlines;
-        this.Name = name;
+        Name = name;
         this.codeIATA = codeIATA;
         this.idOrganization = idOrganization;
     }

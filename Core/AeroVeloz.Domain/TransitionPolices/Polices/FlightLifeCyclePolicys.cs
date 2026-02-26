@@ -1,19 +1,45 @@
-﻿using AeroVeloz.Domain.TransitionPolices;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.TransitionPolices;
+
 
 namespace AeroVeloz.Domain.Flights
 {
     public class FlightLifeCyclePolicys : IFlightLifeCiclyePolicy
     {
 
-        //cuando se agreguen los elementos descriptos en la interfaces modificar aqui 
-        public bool CanTrasition()
+
+        public bool CanTrasition(FlightStateEnum fromFlightState, FlightStateEnum toFlightState) 
         {
-            throw new NotImplementedException(); //agregar la implementacion y logica de negocio  del metodo 
+            if (fromFlightState == FlightStateEnum.Programado && toFlightState == FlightStateEnum.EnProceso)
+            {
+                return true;
+
+
+            }
+
+            if (fromFlightState == FlightStateEnum.EnProceso && toFlightState == FlightStateEnum.EnVuelo)
+            {
+                return true;
+            }
+
+            if (fromFlightState == FlightStateEnum.EnVuelo && toFlightState == FlightStateEnum.Desviado)
+            {
+                return true;
+            }
+
+            if (fromFlightState == FlightStateEnum.EnVuelo  && toFlightState == FlightStateEnum.AterrizadoArribado)
+            {
+                return true;
+            }
+
+         
+
+
+            return false;
+
+            
         }
 
-
+       
     }
 }

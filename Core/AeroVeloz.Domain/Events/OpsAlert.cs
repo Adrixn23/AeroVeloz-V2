@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AeroVeloz.Domain.Events
 {
-    internal class OpsAlert
+     class OpsAlert
     {
     }
 }

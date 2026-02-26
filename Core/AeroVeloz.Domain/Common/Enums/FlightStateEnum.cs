@@ -1,6 +1,7 @@
 namespace AeroVeloz.Domain.Common.Enums;
 
-public enum FlightStateEnum
+
+public enum FlightStateEnum 
 {
     Programado = 1,
     EnProceso = 2,
