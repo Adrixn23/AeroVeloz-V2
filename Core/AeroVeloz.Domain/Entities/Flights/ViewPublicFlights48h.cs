@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace AeroVeloz.Domain.Entities.Flights;
+namespace AeroVeloz.Domain.Entities.Flight;
 
 public partial class ViewPublicFlights48h
 {

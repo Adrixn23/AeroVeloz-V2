@@ -1,4 +1,4 @@
-﻿
+
 namespace AeroVeloz.Domain.ValidationBase
 {
     public sealed class DomainError

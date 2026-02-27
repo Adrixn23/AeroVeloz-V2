@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +8,7 @@ namespace AeroVeloz.Application.DTOs
 {
     public record FlightCreateDto(
         string AirlineCode,
-        string FlightNumber, // El código de negocio (ej: AV204)
+        string FlightNumber, // El c�digo de negocio (ej: AV204)
         string OriginAirport,
         string DestinationAirport,
         DateTime ScheduledDeparture,

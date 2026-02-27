@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.TransitionPolices;
+using AeroVeloz.Domain.TransitionPolices;
 using System;
 using System.Collections.Generic;
 using System.Text;

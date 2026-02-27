@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using AeroVeloz.Domain.Entities.BaseEntity;
 
 namespace AeroVeloz.Domain.Entities.Organization.type
 {

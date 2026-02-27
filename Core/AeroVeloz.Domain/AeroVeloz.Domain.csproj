@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Events\EventsAirlines\" />
     <Folder Include="Execeptions\" />
     
   </ItemGroup>

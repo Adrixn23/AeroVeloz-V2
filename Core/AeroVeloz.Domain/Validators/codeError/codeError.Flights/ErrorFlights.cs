@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Common;
+using AeroVeloz.Domain.Common;
 using AeroVeloz.Domain.ValidationBase;
 
 namespace AeroVeloz.Domain.Validators.codeError.codeError.Flights
@@ -6,13 +6,13 @@ namespace AeroVeloz.Domain.Validators.codeError.codeError.Flights
    public static class ErrorFlights
 {
     public static DomainError InvalidIdFlight =>
-        DomainError.Create("Flight_01", "El Id de vuelo debe ser un identificador válido.");
+        DomainError.Create("Flight_01", "El Id de vuelo debe ser un identificador v�lido.");
 
     public static DomainError InvalidCodeAirlines =>
-        DomainError.Create("Flight_02", "El código de la aerolínea no tiene un formato válido.");
+        DomainError.Create("Flight_02", "El c�digo de la aerol�nea no tiene un formato v�lido.");
 
     public static DomainError InvalidFlightState =>
-  DomainError.Create("Flight_03", "La transición del estado actual al nuevo no es permitida en este momento.");
+  DomainError.Create("Flight_03", "La transici�n del estado actual al nuevo no es permitida en este momento.");
 
     public static DomainError SameOriginAndDestination =>
         DomainError.Create("Flight_04", "El aeropuerto de origen y destino no pueden ser el mismo.");
@@ -29,16 +29,16 @@ namespace AeroVeloz.Domain.Validators.codeError.codeError.Flights
 
    
     public static DomainError InvalidBoardingGate =>
-        DomainError.Create("Flight_08", "La puerta de embarque proporcionada no es válida.");
+        DomainError.Create("Flight_08", "La puerta de embarque proporcionada no es v�lida.");
 
     public static DomainError InvalidArrivalGate =>
-        DomainError.Create("Flight_09", "La puerta de llegada no puede ser asignada antes del aterrizaje o es inválida.");
+        DomainError.Create("Flight_09", "La puerta de llegada no puede ser asignada antes del aterrizaje o es inv�lida.");
 
         public static DomainError InvalidOrigin =>
-            DomainError.Create("Flight_10", "El aeropuerto de origen no es válido");
+            DomainError.Create("Flight_10", "El aeropuerto de origen no es v�lido");
 
         public static DomainError InvalidOwner =>
-            DomainError.Create("Flight_11", "La aerolínea no es dueña de este vuelo.");
+            DomainError.Create("Flight_11", "La aerol�nea no es due�a de este vuelo.");
 
 
 }

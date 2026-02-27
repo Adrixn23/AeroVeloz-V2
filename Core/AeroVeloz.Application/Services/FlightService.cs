@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AeroVeloz.Application.DTOs;
@@ -7,7 +7,7 @@ namespace AeroVeloz.Application.Interfaces
 {
     public interface IFlightService
     {
-        //  Crear un vuelo validando aerolínea e integridad
+        //  Crear un vuelo validando aerol�nea e integridad
         Task<FlightResponseDto> CreateFlightAsync(FlightCreateDto flightDto);
 
         // Procesar el lote de la aerolinea

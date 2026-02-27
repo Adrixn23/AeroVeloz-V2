@@ -1,6 +1,6 @@
-﻿using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.BaseEntity;
-using AeroVeloz.Domain.Entities.Flights;
+using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.Entities.Security;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 

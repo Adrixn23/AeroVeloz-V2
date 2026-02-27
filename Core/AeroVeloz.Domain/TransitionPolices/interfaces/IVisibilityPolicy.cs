@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.TransitionPolices
+namespace AeroVeloz.Domain.TransitionPolices
 {
     public interface IVisibilityPolicy
     {

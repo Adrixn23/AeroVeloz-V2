@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.ValidationBase
+namespace AeroVeloz.Domain.ValidationBase
 {
     public abstract class DomainExceptions  : Exception
     {

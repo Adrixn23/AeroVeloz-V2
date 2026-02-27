@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.Operations;
+using AeroVeloz.Domain.Entities.Operations;
 using System;
 using System.Collections.Generic;
 

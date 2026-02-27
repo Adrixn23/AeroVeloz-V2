@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.Models
+namespace AeroVeloz.Domain.Models
 {
     public class OperationalChangeModel
     {

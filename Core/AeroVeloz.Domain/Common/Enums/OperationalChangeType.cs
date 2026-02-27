@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.Common.Enums
+namespace AeroVeloz.Domain.Common.Enums
 {
     public enum OperationalChangeType  // enum que gestiona los elementos operacionales que puede realizar 
         //el equipo de operaciones del aeropuerto en caso de que se requieran mas acciones se pueden colocar directamente
