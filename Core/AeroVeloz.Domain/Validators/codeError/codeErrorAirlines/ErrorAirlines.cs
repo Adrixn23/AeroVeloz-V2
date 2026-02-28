@@ -22,7 +22,7 @@ namespace AeroVeloz.Domain.Validators.codeError.codeError_Airlines
 
 
         public static DomainError InvalidCancellationInFlight =>
-            DomainError.Create("Airline_04", "no se puede cancelar un vuelo que ya ha despegado");
+            DomainError.Create("Airline_04", "no se puede cancelar un vuelo que ya ha despegado o este en estado Final. ");
 
         public static DomainError InvalidUnauthorizedBatchAccess =>
             DomainError.Create("Airline_05", "La aerolinea no es dueña de este lote de vuelos, o este lote ya fue procesado.");
@@ -33,7 +33,12 @@ namespace AeroVeloz.Domain.Validators.codeError.codeError_Airlines
         public static DomainError InvalidIataFormat =>
     DomainError.Create("Airline_07", "El código IATA de la aerolinea debe tener minimo 3 caracteres alfanumericos ");
 
+        public static DomainError InvalidRevertFlightAirline =>
+    DomainError.Create("Flight_08", "No se puede revertir un vuelo al estado Programado una vez iniciado el proceso.");
 
+        public static DomainError FlightAlreadyFinalized => 
+DomainError.Create("Flight_09", "el vuelo ya esta finalizado.");
+        
 
 
     }

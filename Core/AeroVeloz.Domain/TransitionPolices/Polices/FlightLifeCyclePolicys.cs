@@ -31,8 +31,13 @@ namespace AeroVeloz.Domain.Flights
             {
                 return true;
             }
+           
+            if (fromFlightState == FlightStateEnum.Programado && toFlightState == FlightStateEnum.Cancelado)
+                 {
+                    return true;
+                }
 
-         
+
 
 
             return false;

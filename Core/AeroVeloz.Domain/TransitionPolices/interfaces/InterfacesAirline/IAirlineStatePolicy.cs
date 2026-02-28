@@ -15,5 +15,6 @@ namespace AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesAirline
     public interface IAirlineStatePolicy
     { 
  public ValidationResult EvaluateStateTransition(Flight flight, FlightStateEnum newState);
+
     }
 }

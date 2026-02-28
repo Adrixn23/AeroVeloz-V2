@@ -1,27 +1,36 @@
-﻿using AeroVeloz.Domain.Entities.Flight;
-using AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesAirline;
-using AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesAirline;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AeroVeloz.Domain.Entities.Flight; // Para reconocer "Flight"
+using AeroVeloz.Domain.ValidationBase;   // Para reconocer "ValidationResult"
+    using AeroVeloz.Domain.Validators.codeError.codeError_Airlines; // Para reconocer "ErrorAirlines"
+    using AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesAirline; // Para reconocer la Interfaz
+    using System.Collections.Generic;
+    using System.Linq;
 namespace AeroVeloz.Domain.TransitionPolices.Polices.PolicyAirlines
 {
     class AirlineOwnershipPolicy : IAirlineOwnershipPolicy
     {
-        public bool IsAirlineOwnerOfBatch(string Airlinecode, IEnumerable<Flight> batch)
+        // Evalúa si el código de aerolínea proporcionado es el dueño legítimo de todos los vuelos en el lote
+        public ValidationResult IsAirlineOwnerOfBatch(string Airlinecode, IEnumerable<Flight> batch)
         {
+            var result = new ValidationResult();
 
-           // Si el lote es nulo o viene vacío, devolvemos falso.
-             // Una aerolínea no puede procesar "la nada
-             if (Airlinecode == null || !batch.Any())
+
+            // No se permite procesar lotes nulos o codigos de aerolínea vacioos
+            if (string.IsNullOrEmpty(Airlinecode) || batch == null || !batch.Any())
             {
-                return false;
+                return result.Failur(ErrorAirlines.InvalidAirlineCode);
             }
             // Si encuentra tan solo UN vuelo cuyo codeAirlines sea diferente al airlineCode, devuelve false
-            return batch.All(f => f.codeAirlines == Airlinecode);
+            if (!batch.All(f => f.codeAirlines == Airlinecode))
+                 {
+                // Error Airline_05: "La aerolinea no es dueña de este lote de vuelos, o este lote ya fue procesado
+                return result.Failur(ErrorAirlines.InvalidUnauthorizedBatchAccess);
+                   }
+           // El lote es íntegro y pertenece a la aerolinea
+            return result.Success();
+
         }
+
+
+        
     }
 }

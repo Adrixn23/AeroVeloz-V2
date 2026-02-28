@@ -16,11 +16,25 @@ namespace AeroVeloz.Domain.Visibility
 
         }
 
+
         public bool CanSeeField(string role, string fieldName)
         {
-            throw new NotImplementedException(); //agregar logica
+            // Campos que el SAD define como publicss
+            var publicFields = new HashSet<string> { "FlightNumber", "Origin", "Destination", "State", "Gate" };
+            if (publicFields.Contains(fieldName)) return true;
+            if (role == "Operaciones" || role == "Admin") return true;
+            // si no entro en ninguno de los anteriores , se denegara el acceso
+            return false;
         }
 
-       //agregar metodo extra cuando se aplique lo descripto en la interfaz
+
+
+        //agregar metodo extra cuando se aplique lo descripto en la interfaz
+
+        public bool IsVisibleToPublic(DateTime flightDate, DateTime now)
+        {
+            Double hoursDifference = Math.Abs((flightDate - now).TotalHours);
+            return hoursDifference <= 48;
+        }
     }
 }
