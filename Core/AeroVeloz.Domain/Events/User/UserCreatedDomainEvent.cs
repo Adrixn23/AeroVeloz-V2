@@ -1,12 +1,12 @@
-﻿using AeroVeloz.Domain.Common.Enums;
+﻿using AeroVeloz.Domain.Entities.Users.Roles;
 
 namespace AeroVeloz.Domain.Events.User
 {
-    public  record UserCreatedDomainEvent(
+    public record UserCreatedDomainEvent(
         Guid idUser,
         string? codeAirport,
-        Role Role,
+        Roles Role,
         DateTime createAt
-        ) : INotification
+        ) : INotification;
     
 }
