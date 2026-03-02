@@ -21,6 +21,8 @@ integridad de los datos según el diseño de seguridad.*/
          DateTime DetectedAt
 
         ) : INotification;
+
+
     
     
 }

@@ -3,11 +3,9 @@ using MediatR;
 
 namespace AeroVeloz.Domain.Events.EventsFlights
 {
-     public record FlightStateChanged(
+     public record FlightNew(
           // GUID Id
           string codeAirlines,
-         FlightStateEnum fromFlightState,
-         FlightStateEnum toFlightState,
          string OriginAirport,
          DateTimeOffset ScheduledDeparture,
          DateTimeOffset ScheduledArrival

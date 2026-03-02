@@ -8,15 +8,7 @@ namespace AeroVeloz.Domain.Entities.BaseEntity
         public bool isActived { get; private set; }
         public string? emailOrganization { get; private set; }
         public DateTime createAt { get; private set; }
-        protected organization(int idOrganization,
-            TypeOrganization typeOrganization, string? emailOrganization)
-        {
-            Id = idOrganization;
-            this.typeOrganization = typeOrganization;
-            this.emailOrganization = emailOrganization;
-            isActived = true;
-            this.createAt = createAt;
+        
+}
 
-        }
-    }
 }

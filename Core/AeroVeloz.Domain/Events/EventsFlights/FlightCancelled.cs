@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace AeroVeloz.Domain.Events.EventsFlights
 {
-     public record FlightCancelled (
+     public record FlightNew (
                   // GUID id user
           string codeAirlines,
           string OriginAirport,
           string DestinationAirport,
           DateTimeOffset ScheduledDeparture,
           DateTimeOffset ScheduledArrival
-
-
          ) : INotification;
 
 

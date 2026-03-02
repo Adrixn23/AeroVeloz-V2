@@ -5,29 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AeroVeloz.Domain.Entities.Organization.type;
+using AeroVeloz.Domain.Entities.BaseEntity;
+
 namespace AeroVeloz.Domain.Entities.Airlines
 {
     public class Airline : organization
     {
        
 
-        public string Airlinecode { get; private set; } = null!;
+        public string? Airlinecode { get; init; }
 
-        public string Name { get; private set; } = null!;
-        public string CodeIATA { get; private set; } = null!;
-        public int IdOrganization { get; private set; }
-
-
-        public Airline(int idOrganization, TypeOrganization typeOrganization, string? emailOrganization, string airlineCode, string codeIATA, string name) : base(idOrganization, typeOrganization, emailOrganization)
-        {
-            this.IdOrganization = idOrganization;
-                    this.Airlinecode = airlineCode;
-                     this.Name = name;
-            this.CodeIATA = codeIATA;
-        }
-
-
-
+        public string? Name { get; init; }
+        public string? CodeIATA { get; init; }
+        public int IdOrganization { get; init; }
 
 
     }

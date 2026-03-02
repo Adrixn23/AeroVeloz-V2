@@ -17,7 +17,7 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Airline
 
         Task<ValidationResult> ValidateOwnerAsync(string airlineCode, IEnumerable<AeroVeloz.Domain.Entities.Flight.Flight> batch);
         // nombre de metodo pa validar quien es el dueño del lote, recibe el codigo de la aerolinea que esta intentando enviar o modificar lote,
-        // recibe la lista de los vuelos que se quiere procesar}
+        // recibe la lista de los vuelos que se quiere procesar
 
 
         // Recibe la lista de vuelos (IEnumerable) para procesar el lote completo
@@ -26,5 +26,15 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Airline
         /* Cubre la parte de seguridad operativa y la regla de no modificar lo ya procesado: No podraa eliminar los lotes de vuelos que envié al aeropuerto.
         Primero, verifica que todos los vuelos en ese batch tengan el mismo codeAirlines que el airlineCode proporcionado(la aerolínea no puede alterar vuelos de otra compañia ta prohibido) de´spues  debe verificar
         prob consultando un repositorioo, que ese lote de vuelos no haya sido ya procesado o cerrado por el equipo de operaciones del aeropuerto */
+
+
+
+
+
+
+
+
+
+
     }
 }
