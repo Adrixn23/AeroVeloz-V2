@@ -1,6 +1,6 @@
-﻿namespace AeroVeloz.Domain.Models.User
+﻿namespace AeroVeloz.Domain.Models.UserSystem
 {
-    public class UserModel
+    public class UserSystemModel
     {
         public Guid userId { get; }
         public string? nameUser { get; }
