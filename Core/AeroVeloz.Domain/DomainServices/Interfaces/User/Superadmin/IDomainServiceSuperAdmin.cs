@@ -1,7 +1,6 @@
 ﻿using AeroVeloz.Domain.Common.ValidationBase;
 using AeroVeloz.Domain.Entities.Airlines;
 using AeroVeloz.Domain.Entities.Airports;
-using AeroVeloz.Domain.Entities.Users;
 using AeroVeloz.Domain.Entities.Users.Roles;
 
 namespace AeroVeloz.Domain.DomainServices.Interfaces.User.Superadmin
@@ -14,12 +13,14 @@ namespace AeroVeloz.Domain.DomainServices.Interfaces.User.Superadmin
         Task<ValidationResult> RemoveRoleFromUserAsync(Guid userId, Roles rol, int organizationId);
         Task<ValidationResult> ResetUserPasswordAsync(Guid userId, string newPassword);
         Task<ValidationResult> ManageOrganizationStatusAsync(int OrganizationID, bool isActive);
-        Task<ValidationResult> MagageUserSystemStatusAsync(Guid userId, int OrganizationID, bool isActive);
-        Task<IEnumerable<Airport>> GetAllAirportsAsync();
-        Task<IEnumerable<Airline>> GetAllAirlinesAsync();
-        Task<IEnumerable<Domain.Entities.Users.User>> GetUsersSystemAsync();
-        Task<ValidationResult> ViewSystemAuditAsync(Guid userId, DateTime? from, DateTime? to);
-        Task<IEnumerable<AeroVeloz.Domain.Entities.Users.User>> GetAllSystemOrganizationsAsync();
 
+        /*analizar este elemento puesto que el admin no puede desactivar un usuario del equipo de airport por ejemplo entonces a su vez  si se
+        desactiva un airport todos los usuarios deben desactivarse automaticamente, entonces el punto de verificacion es si es mas viable
+        tener lo asi o recibir la lista de usuarios o que entonces cuando se consulte tener un metodo en el repositorio que recibe esa lista de
+        usuarios y los desactive
+        */
+
+        Task<ValidationResult> ManageUserSystemStatusAsync(Guid userId, int OrganizationID, bool isActive);
+    
     }
 }
