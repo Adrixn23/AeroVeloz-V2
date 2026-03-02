@@ -2,8 +2,8 @@
 {
     public sealed class ValidationResult
     {
-        public ValidationResult() { } //constrcutor default para instanciar los objects, lo tu ve que crear pq
-                                     ///esta vaina se bugueo y no me dejaba usar el default
+        public ValidationResult() { } 
+
         public ValidationResult Success() => new(); //
         public ValidationResult Failur(DomainError error) { // este elemento es para agregar los errores uno a uno
                 var result = new ValidationResult();

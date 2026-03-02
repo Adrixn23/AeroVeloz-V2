@@ -1,5 +1,7 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
+using AeroVeloz.Domain.Entities.Users.Roles;
+
 namespace AeroVeloz.Domain.Entities.Users;
 
 public partial class User : BEntity<Guid>
@@ -12,5 +14,5 @@ public partial class User : BEntity<Guid>
     public DateTime? lastLoginAt { get;init ; }
     public int failedLoginAttempts { get;init ; }
     public DateTime? lockedUntil { get;init ; }
-    //public Roles roles { get;init ;}
+    
 }
