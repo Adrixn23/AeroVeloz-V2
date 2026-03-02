@@ -1,4 +1,6 @@
+using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.TransitionPolices;
+using AeroVeloz.Domain.ValidationBase;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,17 +11,15 @@ namespace AeroVeloz.Domain.Notifications
     {
 
         //agregar campos/atributos cuando se modifique lo descripto en la interfaz
-
-        public bool IsRecipientAllowed(Guid flightId)
+        public ValidationResult ShouldNotify(OperationalChange change, Flight flight)
         {
-            throw new NotImplementedException(); //agregar logica de negocio 
+            throw new NotImplementedException();
         }
 
         //agregar campos/atributos cuando se modifique lo descripto en la interfaz
-
-        public bool ShouldNotify()
+        ValidationResult INotificationPolicy.IsRecipientAllowed(Guid flightId)
         {
-            throw new NotImplementedException(); //agregar logica de negocio 
+            throw new NotImplementedException();
         }
     }
 }
