@@ -1,8 +1,6 @@
 using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.Flight;
-using AeroVeloz.Domain.Entities.Notifications;
 using AeroVeloz.Domain.Entities.Operations;
-using AeroVeloz.Domain.Entities.Security;
 using AeroVeloz.Domain.Entities.Subscriptions;
 using AeroVeloz.Domain.TransitionPolices;
 using AeroVeloz.Domain.ValidationBase;
@@ -59,13 +57,15 @@ namespace AeroVeloz.Domain.Notifications
                     {
                     return result.Failur(ErrorNotifications.InvalidSubscription);
                      }
+
+
             // verificamos y Usamos el error SubscriptionNotActive
-            if (subscription.IsActive == false) 
+            if (!subscription.ActiveSubscription == false)
             {
                 return result.Failur(ErrorNotifications.MissingContactDestination);
             }
             // Validar que exista un medio de contacto(ej.Email)
-            if (string.IsNullOrWhiteSpace(SubscriptionChannel.Email))
+            if (string.IsNullOrWhiteSpace(SubscriptionChannel.Email));
             {
                 return result.Failur(ErrorNotifications.MissingContactDestination);
             }
