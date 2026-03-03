@@ -11,7 +11,7 @@ namespace AeroVeloz.Domain.Validators.codeError.codeErrorNotifications
                DomainError.Create("Notification_02", "Esta subscripcion esta revocada o invalida");
 
         public static DomainError MissingContactDestination =>
-               DomainError.Create("Notification_03", "No se puede enviar la notificación porque el usuario no tiene configurado un número de teléfono ");
+               DomainError.Create("Notification_03", "No se puede enviar la notificación porque el destinatario no tiene configurado un punto de contacto válido para el canal seleccionado (Ej. Email o Teléfono faltante ");
 
 
         // errores de validacion de ShouldNotification
@@ -34,5 +34,13 @@ namespace AeroVeloz.Domain.Validators.codeError.codeErrorNotifications
           DomainError.Create("Notification_08", "El proveedor externo rechazó el envío de la alerta. Verifique el formato, tamaño del mensaje o los permisos de la cuenta");
         public static DomainError MessageContentEmpty =>
             DomainError.Create("Notification_09", "El contenido del mensaje de la notificación no puede estar vacío.");
+
+
+        public static DomainError MissingTransportProvider =>
+    DomainError.Create("Notification_10", "La notificación no tiene un proveedor de transporte asignado (Ej. Email, SMS, SignalR). Es obligatorio para el enrutamiento.");
+
+
+        public static DomainError SlaTimeLimitBreached =>
+    DomainError.Create("Notification_12", "La notificación superó el límite estricto de 15 minutos de retención permitido desde el cambio operativo. Alerta de desinformación crítica.");
     }
 }

@@ -49,26 +49,34 @@ namespace AeroVeloz.Domain.Notifications
             return result.Success();
         }
         //agregar campos/atributos cuando se modifique lo descripto en la interfaz
-        ValidationResult INotificationPolicy.IsRecipientAllowed(Guid flightId, Subscription subscription)
+        
+        public ValidationResult IsRecipientAllowed(Guid flightId, Subscription subscription, DateTimeOffset flightStatusChangedAt)
         {
             var result = new ValidationResult();
 
-            if (subscription == null) // si la subscripcion esta vacia, entonces que envie este cod de error. 
-                    {
-                    return result.Failur(ErrorNotifications.InvalidSubscription);
-                     }
+            if (subscription == null)
+            {
+                return result.Failur(ErrorNotifications.InvalidSubscription);
+            }
 
+            // devuelve si esta activo o no
+            if (!subscription.ActiveSubscription)
+            {
+                return result.Failur(ErrorNotifications.SubscriptionNotActive);
+            }
 
-            // verificamos y Usamos el error SubscriptionNotActive
-            if (!subscription.ActiveSubscription == false)
+            // Validar que exista un medio de contacto (ej.Email, etx)
+            if (string.IsNullOrWhiteSpace(subscription.ContactValue))
             {
                 return result.Failur(ErrorNotifications.MissingContactDestination);
             }
-            // Validar que exista un medio de contacto(ej.Email)
-            if (string.IsNullOrWhiteSpace(SubscriptionChannel.Email));
+
+            //  La validación de los 15 minutos del sad.
+            if (flightStatusChangedAt.AddMinutes(15) < DateTimeOffset.UtcNow)
             {
-                return result.Failur(ErrorNotifications.MissingContactDestination);
+                return result.Failur(ErrorNotifications.SlaTimeLimitBreached);
             }
+
             return result.Success();
         }
     }

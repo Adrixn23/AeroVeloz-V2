@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AeroVeloz.Domain.Events.EventsFlights
 {
-     public record FlightNew (
+     public record FlightCancelled (
                   // GUID id user
           string codeAirlines,
           string OriginAirport,

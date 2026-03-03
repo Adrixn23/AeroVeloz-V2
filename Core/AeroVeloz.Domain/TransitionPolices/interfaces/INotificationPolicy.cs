@@ -15,6 +15,7 @@ namespace AeroVeloz.Domain.TransitionPolices
         public ValidationResult ShouldNotify(OperationChange change, Flight flight); // deberia notificar??, depende el cambio se notifica
 
         // es para saber si a tal subscripcion se le permite mandar notificacion de este vuelo. 
-        public ValidationResult IsRecipientAllowed(Guid flightId, Subscription subscription);
+        // El timestamp para evaluar la regla estricta de 15 minutos(SLA)
+        ValidationResult IsRecipientAllowed(Guid flightId, Subscription subscription, DateTimeOffset flightStatusChangedAt);
     }
 }
