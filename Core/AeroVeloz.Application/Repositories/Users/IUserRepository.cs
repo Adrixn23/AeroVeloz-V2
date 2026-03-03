@@ -5,7 +5,7 @@ using AeroVeloz.Domain.Entities.Users;
 
 namespace AeroVeloz.Application.Repositories.UseAdmin
 {
-    public interface IUserAdminRepository :  IRepository<User>
+    public interface IUserRepository :  IRepository<User>
     {
         Task<IEnumerable<Airport>> GetAllAirportsAsync();
         Task<IEnumerable<Airline>> GetAllAirlinesAsync();
