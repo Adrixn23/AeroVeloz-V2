@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AeroVeloz.Application.DTOs;
-
 namespace AeroVeloz.Application.Interfaces
 {
     public interface IFlightService

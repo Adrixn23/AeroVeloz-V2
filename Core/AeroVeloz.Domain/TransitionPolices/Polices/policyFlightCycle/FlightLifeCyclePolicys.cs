@@ -2,7 +2,7 @@ using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.TransitionPolices;
 
 
-namespace AeroVeloz.Domain.Flights
+namespace AeroVeloz.Domain.TransitionPolices.Polices.policyFlightCycle
 {
     public class FlightLifeCyclePolicys : IFlightLifeCiclyePolicy
     {

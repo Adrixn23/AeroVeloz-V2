@@ -2,11 +2,11 @@ using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Entities.Subscriptions;
-using AeroVeloz.Domain.TransitionPolices;
+using AeroVeloz.Domain.TransitionPolices.interfaces.interfaceNotification;
 using AeroVeloz.Domain.ValidationBase;
 using AeroVeloz.Domain.Validators.codeError.codeErrorNotifications;
 
-namespace AeroVeloz.Domain.Notifications
+namespace AeroVeloz.Domain.TransitionPolices.Polices.policyNotification
 {
     public class NotificationPolicy : INotificationPolicy
     {
