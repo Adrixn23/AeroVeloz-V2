@@ -1,5 +1,5 @@
 ﻿using MediatR;
-
+using System;
 namespace AeroVeloz.Domain.Events.EventsAirlines
 {
     public record FlightBatchRejected(

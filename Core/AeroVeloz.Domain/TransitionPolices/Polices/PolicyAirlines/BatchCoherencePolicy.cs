@@ -17,7 +17,7 @@ namespace AeroVeloz.Domain.TransitionPolices.Polices.PolicyAirlines
             if (batch == null || !batch.Any())
 
                 // reutilizamo el error de la incongruencia de lote
-                return result.Failur(ErrorAirlines.InvalidBatchAirline);
+                return result.Failur(ErrorAirlines.InvalidBatchCoherence);
 
 
 
@@ -27,7 +27,7 @@ namespace AeroVeloz.Domain.TransitionPolices.Polices.PolicyAirlines
             if (!allMatch)
                           {
                               // los aeropuertos del lote de vuelo no coinciden con el aeropuerto receptor
-                 return result.Failur(ErrorAirlines.InvalidBatchAirline);
+                 return result.Failur(ErrorAirlines.InvalidBatchCoherence);
                            }
             // El lote es coherente con la ubicación geográfica del aeropuerto
             return result.Success();

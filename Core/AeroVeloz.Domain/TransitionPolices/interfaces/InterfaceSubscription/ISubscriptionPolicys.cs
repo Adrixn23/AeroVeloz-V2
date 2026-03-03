@@ -4,7 +4,7 @@ using AeroVeloz.Domain.Entities.Subscriptions;
 using AeroVeloz.Domain.ValidationBase;
 
 
-namespace AeroVeloz.Domain.TransitionPolices
+namespace AeroVeloz.Domain.TransitionPolices.interfaces.InterfaceSubscription
 {
     public interface ISubscriptionPolicy
     {

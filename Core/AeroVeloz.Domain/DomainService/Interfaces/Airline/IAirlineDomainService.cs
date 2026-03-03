@@ -21,7 +21,7 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Airline
 
 
         // Recibe la lista de vuelos (IEnumerable) para procesar el lote completo
-        Task<ValidationResult> ProcessFlightBatchAsync(IEnumerable<AeroVeloz.Domain.Entities.Flight.Flight> batch, string airlineCode);
+        Task<ValidationResult> ProcessFlightBatchAsync(IEnumerable<AeroVeloz.Domain.Entities.Flight.Flight> batch, string airlineCode, string currentAirport);
 
         /* Cubre la parte de seguridad operativa y la regla de no modificar lo ya procesado: No podraa eliminar los lotes de vuelos que envié al aeropuerto.
         Primero, verifica que todos los vuelos en ese batch tengan el mismo codeAirlines que el airlineCode proporcionado(la aerolínea no puede alterar vuelos de otra compañia ta prohibido) de´spues  debe verificar

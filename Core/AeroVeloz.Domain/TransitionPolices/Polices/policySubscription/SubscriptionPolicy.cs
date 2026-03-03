@@ -4,6 +4,7 @@ using AeroVeloz.Domain.Entities.Subscriptions;
 using System;
 using AeroVeloz.Domain.ValidationBase;
 using AeroVeloz.Domain.Validators.codeError.codeErrorSubscriptions;
+using AeroVeloz.Domain.TransitionPolices.interfaces.InterfaceSubscription;
 
 namespace AeroVeloz.Domain.TransitionPolices.Polices.policySubscrption
 {

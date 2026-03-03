@@ -17,14 +17,14 @@ namespace AeroVeloz.Domain.Validators.codeError.codeError_Airlines
         public static DomainError InvalidAirlineName =>
             DomainError.Create("Airline_02", "el Nombre de la aerolinea debe ser Obligatorio.");
 
-        public static DomainError InvalidBatchAirline =>
+        public static DomainError InvalidBatchCoherence =>
             DomainError.Create("Airline_03", "incongruencia: los aeropuertos del lote de vuelo no coinciden con el aeropuerto receptor. ");
 
-
+     
         public static DomainError InvalidCancellationInFlight =>
             DomainError.Create("Airline_04", "no se puede cancelar un vuelo que ya ha despegado o este en estado Final. ");
 
-        public static DomainError InvalidUnauthorizedBatchAccess =>
+        public static DomainError UnauthorizedBatchAccess =>
             DomainError.Create("Airline_05", "La aerolinea no es dueña de este lote de vuelos, o este lote ya fue procesado.");
 
         public static DomainError MissingIataCode =>
@@ -38,7 +38,12 @@ namespace AeroVeloz.Domain.Validators.codeError.codeError_Airlines
 
         public static DomainError FlightAlreadyFinalized => 
 DomainError.Create("Flight_09", "el vuelo ya esta finalizado.");
-        
+
+        public static DomainError InvalidFlightTimeline =>
+   DomainError.Create("Flight_10", "La hora de llegada no puede ser anterior o igual a la hora de salida");
+
+
+
 
 
     }

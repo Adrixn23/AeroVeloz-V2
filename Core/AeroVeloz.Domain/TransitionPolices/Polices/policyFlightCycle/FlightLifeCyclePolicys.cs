@@ -1,5 +1,5 @@
 using AeroVeloz.Domain.Common.Enums;
-using AeroVeloz.Domain.TransitionPolices;
+using AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesFlightState;
 
 
 namespace AeroVeloz.Domain.TransitionPolices.Polices.policyFlightCycle

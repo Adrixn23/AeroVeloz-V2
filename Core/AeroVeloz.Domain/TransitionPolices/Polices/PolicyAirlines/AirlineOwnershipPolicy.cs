@@ -23,7 +23,7 @@ namespace AeroVeloz.Domain.TransitionPolices.Polices.PolicyAirlines
             if (!batch.All(f => f.codeAirlines == Airlinecode))
                  {
                 // Error Airline_05: "La aerolinea no es dueña de este lote de vuelos, o este lote ya fue procesado
-                return result.Failur(ErrorAirlines.InvalidUnauthorizedBatchAccess);
+                return result.Failur(ErrorAirlines.UnauthorizedBatchAccess);
                    }
            // El lote es íntegro y pertenece a la aerolinea
             return result.Success();

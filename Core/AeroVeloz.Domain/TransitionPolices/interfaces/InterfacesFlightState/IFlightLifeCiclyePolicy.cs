@@ -1,7 +1,6 @@
+using AeroVeloz.Domain.Common.Enums;
 
- using AeroVeloz.Domain.Common.Enums;
-
-namespace AeroVeloz.Domain.TransitionPolices;
+namespace AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesFlightState;
 
     public interface IFlightLifeCiclyePolicy
     {
