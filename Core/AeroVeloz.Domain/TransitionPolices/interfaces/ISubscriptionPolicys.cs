@@ -1,15 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Entities.Flight;
+using AeroVeloz.Domain.Entities.Subscriptions;
+using AeroVeloz.Domain.ValidationBase;
+
 
 namespace AeroVeloz.Domain.TransitionPolices
 {
-    public interface ISubscriptionPolicys
+    public interface ISubscriptionPolicy
     {
         //Desconectar el canal de subscripcion cuando se cree el enum correspondiente
-        
+
         //metodo para manejas las politicas de subscripcion
-        public bool CanSubscribe(Guid flight, /*SubscriptionChannel channel,*/ string contactValue); 
+         ValidationResult CanSubscribe(Flight flight, SubscriptionChannel channel, string contactValue);
+
+
+
+        ValidationResult CanCancel(Subscription subscription);
+
+        ValidationResult IsFlightEligibleForSubscription(Flight flight,DateTime serverTime);
+
+        ValidationResult IsNotificationAllowed(Flight flight,Subscription subscription);
+
 
     }
 }

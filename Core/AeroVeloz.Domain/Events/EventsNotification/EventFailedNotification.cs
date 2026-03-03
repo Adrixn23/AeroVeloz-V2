@@ -12,7 +12,7 @@ namespace AeroVeloz.Domain.Events.EventsNotification
         (
         Guid NotificationId, // id unico de la noti que fallo
         Guid SubscriptionId, // a qn iba dirigida
-        Guid FlightId, // el vuelo q era 
+         short FlightNumber, // el vuelo q era 
         string TransportChannel, // el transporte de mensajeria
         string Message, // el mensaje
         string ErrorReason, // la razon del error

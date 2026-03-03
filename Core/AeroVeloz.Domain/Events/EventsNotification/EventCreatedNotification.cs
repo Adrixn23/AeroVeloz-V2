@@ -13,8 +13,8 @@ namespace AeroVeloz.Domain.Events.EventsNotification
         // ID unico de la notificación creada
         Guid NotificationId,
 
-        ///ID del vuelo que generó la notificacion
-        Guid FlightId,
+      ///ID del vuelo que generó la notificacion
+      short FlightNumber,
 
         ///ID de la suscripción del usuario interesado
         Guid SubscriptionId,

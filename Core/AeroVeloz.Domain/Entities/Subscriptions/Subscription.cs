@@ -1,7 +1,4 @@
-using AeroVeloz.Domain.Entities.Flight;
-using AeroVeloz.Domain.Entities.Notifications;
-using System;
-using System.Collections.Generic;
+
 
 namespace AeroVeloz.Domain.Entities.Subscriptions;
 
@@ -19,7 +16,7 @@ public class Subscription
 
     public DateTime CreatedAt { get; init; }
 
-    public DateTime CanceledAt { get; init; }
+    public DateTime? CanceledAt { get; init; }
 
    public bool ActiveSubscription { get; init; }
 
