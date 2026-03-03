@@ -11,12 +11,12 @@ public class Notification
       // Esta entidad actúa como un simple contenedor de datos Toda la lógica de negocio,
        // transiciones de estado y validaciones deben realizarse en los Servicios de Dominio o la aplicacion
     public Guid NotificationsId  { get; init; }
-    public Guid SuscriptionId { get; init; }
+    public Guid SubscriptionId { get; init; }
     
           // Canal seleccionado para la entrega (Sms, email, Push/oneSignal 
            // Determina que adaptador de infraestructura se utilizará para el envío final
           
-    public CodeProvidesNotifications CodeProvides { get; init; }
+    public CodeProvidesNotifications CodeProvides { get; init; }  
 
    
           

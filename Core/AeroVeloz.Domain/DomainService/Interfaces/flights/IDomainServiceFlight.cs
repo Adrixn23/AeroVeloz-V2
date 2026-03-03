@@ -1,9 +1,6 @@
 using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.ValidationBase;
-using AeroVeloz.Domain.Entities.Flight;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace AeroVeloz.Domain.DomainService.Interfaces.Flight
 {

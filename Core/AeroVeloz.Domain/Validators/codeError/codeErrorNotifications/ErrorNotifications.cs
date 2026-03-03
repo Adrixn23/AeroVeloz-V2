@@ -1,7 +1,7 @@
 ﻿using AeroVeloz.Domain.ValidationBase;
 namespace AeroVeloz.Domain.Validators.codeError.codeErrorNotifications
 {
-    public static class ErrorNotificaciones {
+    public static class ErrorNotifications {
 
         // Errores de Validación de Suscripción
         public static DomainError InvalidSubscription =>
@@ -21,9 +21,6 @@ namespace AeroVeloz.Domain.Validators.codeError.codeErrorNotifications
 
         public static DomainError FlightCycleClosed =>
               DomainError.Create("Notification_05", "El vuelo ya ha finalizado su ciclo operativo, No se admiten nuevas notificaciones automáticas.");
-
-
-
 
         public static DomainError InsignificantOperationalChange =>
           DomainError.Create("Notification_06", "El cambio operativo registrado no altera el estado visible del vuelo. No se requiere enviar una nueva notificación");

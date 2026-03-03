@@ -19,21 +19,10 @@ public partial class OperationChange :  BEntity<Guid>
        *
        * public FlightState previousValue {get; private set; } 
        public FlightState newValue {get; private set; } 
-
        */
       public DateTime changeAt { get; private set; }
       public string? cause { get; private set; }
 
-    private OperationChange(Guid id,int idUser, OperationalChangeType operationalChangeType, char codeAirline, int flightNumber
-         /*FlightState previousValue, FlightState newValue */)
-    {
-        this.Id = id;
-        this.operationalChangeType = operationalChangeType;
-        this.codeAirline = codeAirline;
-        this.flightNumber = flightNumber;
-        /*this.previousValue = previosValue;
-         this.newValue = newValue;
-         */
-    }
+    
 
 }

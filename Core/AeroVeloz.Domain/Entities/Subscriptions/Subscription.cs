@@ -5,17 +5,23 @@ using System.Collections.Generic;
 
 namespace AeroVeloz.Domain.Entities.Subscriptions;
 
-public partial class Subscription
+public class Subscription
 {
-    public Guid SubscriptionId { get; set; }
+   public Guid SubscriptionId { get; init; }
 
-    public Guid FlightId { get; set; }
+    public short FlightNumber { get; init; }
 
-    public string Email { get; set; } = null!;
+    public string? codeAirlines { get; init; }
 
-    public bool? IsActive { get; set; }
+    public short CodeChannel { get; init; }
 
-    public virtual AeroVeloz.Domain.Entities.Flight.Flight Flight { get; set; } = null!;
+    public int NumberInsterested { get; init; }
 
-    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-}
+    public DateTime CreateDate { get; init; }
+
+    public DateTime endingDate { get; init; }
+
+   public short activeSubscription { get; init; }
+
+   public string? contactValue { get; init; }
+} 
