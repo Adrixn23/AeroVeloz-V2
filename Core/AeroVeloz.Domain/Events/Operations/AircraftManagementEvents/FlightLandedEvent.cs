@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿//using MediatR;
 
 namespace AeroVeloz.Domain.Events.Operations.AircraftManagementEvents
 {
@@ -12,7 +12,7 @@ namespace AeroVeloz.Domain.Events.Operations.AircraftManagementEvents
         string? codeAirportOrigin,
         string? GateDeparture
         //Flight stateAfter,
-        
-        ) : INotification;
+        );
+        //) : INotification;
     
 }
