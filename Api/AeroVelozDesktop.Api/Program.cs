@@ -3,14 +3,12 @@ using AeroVeloz.Infraestructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AeroVelozDbContext>(options =>
     options.UseSqlServer(connectionString));
-
 
 var app = builder.Build();
 
