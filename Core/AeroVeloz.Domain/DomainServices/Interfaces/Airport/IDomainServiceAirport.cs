@@ -1,6 +1,5 @@
 ﻿using AeroVeloz.Domain.Common.ValidationBase;
-using AeroVeloz.Domain.Entities.Security;
-
+using AeroVeloz.Domain.Entities.Users;
 namespace AeroVeloz.Domain.Services.Interfaces.Airport
 {
     public interface IDomainServiceAirport

@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿//using MediatR;
 
 namespace AeroVeloz.Domain.Events.Operations.AircraftManagementEvents
 {
@@ -9,7 +9,7 @@ namespace AeroVeloz.Domain.Events.Operations.AircraftManagementEvents
             string? BordingGateArrived,
             DateTime? DateTime,
             string? cause,
-            int idUser
-        ) : INotification;
+            int idUser);
+        //) : INotification;
     
 }
