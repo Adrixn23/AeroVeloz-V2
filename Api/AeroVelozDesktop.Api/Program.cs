@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using AeroVeloz.Infraestructure.Persistence;
+using AeroVeloz.Infraestructure.Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,16 +1,14 @@
 ﻿using AeroVeloz.Application.Repositories.Base;
-using AeroVeloz.Domain.Entities.Airlines;
-using AeroVeloz.Domain.Entities.Airports;
-using AeroVeloz.Domain.Entities.Users;
+using AeroVeloz.Domain.Entities.Users.User;
 
-namespace AeroVeloz.Application.Repositories.UseAdmin
+namespace AeroVeloz.Application.Repositories.Users
 {
-    public interface IUserRepository :  IRepository<User>
+    public interface IUserRepository : IRepository<User, Guid>
     {
-        Task<IEnumerable<Airport>> GetAllAirportsAsync();
-        Task<IEnumerable<Airline>> GetAllAirlinesAsync();
-        Task<IEnumerable<User>> GetUsersSystemAsync();
-        Task<IEnumerable<User>> GetAllSystemOrganizationsAsync();
-        
+        Task<bool> GetUserExistsByUserName(Guid userId);
+        Task<User> GetUserWithOrganization(Guid useId);
+        Task<User> ExistEmailSystem(string? email);
+        Task<IEnumerable<User>> GetUsersByActive();
+
     }
 }
