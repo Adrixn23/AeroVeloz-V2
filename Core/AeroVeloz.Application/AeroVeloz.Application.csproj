@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <Folder Include="DTOs\BaseDto\" />
-    <Folder Include="Services\interface\" />
-    <Folder Include="Services\UseCases\" />
+	<Folder Include="Repositories\Base\" />
+	 <Folder Include="Repositories\Users\ " />
   </ItemGroup>
 
 </Project>

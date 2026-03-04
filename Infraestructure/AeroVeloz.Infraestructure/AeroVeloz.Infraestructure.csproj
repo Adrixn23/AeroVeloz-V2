@@ -28,7 +28,6 @@
     <Folder Include="Integrations\" />
     <Folder Include="Persistence\Entities\" />
     <Folder Include="Persistence\Migrations\" />
-    <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
 
 	
@@ -47,6 +46,7 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\..\Core\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
+	<ProjectReference Include="..\..\Core\AeroVeloz.Application\AeroVeloz.Application.csproj" />
   </ItemGroup>
 
 </Project>

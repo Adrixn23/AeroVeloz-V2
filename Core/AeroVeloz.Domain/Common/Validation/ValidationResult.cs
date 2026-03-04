@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.Common.ValidationBase
+﻿namespace AeroVeloz.Domain.Common.Validation
 {
     public sealed class ValidationResult
     {

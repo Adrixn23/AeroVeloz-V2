@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using AeroVeloz.Infraestructure.Persistence.Entities;
+﻿using AeroVeloz.Infraestructure.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AeroVeloz.Infraestructure.Persistence;
+namespace AeroVeloz.Infraestructure.Persistence.Context;
 
 public partial class AeroVelozDbContext : DbContext
 {
     public AeroVelozDbContext()
     {
     }
-
     public AeroVelozDbContext(DbContextOptions<AeroVelozDbContext> options)
         : base(options)
     {
