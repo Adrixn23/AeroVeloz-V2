@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Domain.Entities.BaseEntity
+namespace AeroVeloz.Domain.Entities.BaseEntity
 {
     public abstract class BEntity <TiD>
     {

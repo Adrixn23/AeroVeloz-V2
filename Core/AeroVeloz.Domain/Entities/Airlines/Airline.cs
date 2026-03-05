@@ -1,16 +1,24 @@
-﻿using System;
+using AeroVeloz.Domain.Entities.BaseEntity;
+using System;
 using System.Collections.Generic;
-using AeroVeloz.Domain.Entities.Flights;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AeroVeloz.Domain.Entities.Organization.type;
+using AeroVeloz.Domain.Entities.BaseEntity;
 
-namespace AeroVeloz.Domain.Entities.Airlines;
-
-public partial class Airline
+namespace AeroVeloz.Domain.Entities.Airlines
 {
-    public Guid AirlineId { get; set; }
+    public class Airline : organization
+    {
+       
 
-    public string AirlineName { get; set; } = null!;
+        public string? Airlinecode { get; init; }
 
-    public string AirlineCode { get; set; } = null!;
+        public string? Name { get; init; }
+        public string? CodeIATA { get; init; }
+        public int IdOrganization { get; init; }
 
-    public virtual ICollection<Flight> Flights { get; set; } = new List<Flight>();
+
+    }
 }

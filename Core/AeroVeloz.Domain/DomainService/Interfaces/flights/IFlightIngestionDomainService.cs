@@ -1,0 +1,14 @@
+﻿
+using AeroVeloz.Domain.ValidationBase;
+using AeroVeloz.Domain.Entities.Flight;
+namespace AeroVeloz.Domain.DomainService.Interfaces.flight
+{
+    public interface IFlightIngestionDomainService
+    {
+         // El método clavee pa que la capa de aplication ejecute la ingesta 
+          Task<ValidationResult> IngestBatchAsync(IEnumerable<AeroVeloz.Domain.Entities.Flight.Flight> batch, string airlineCode, string
+      currentAirport);
+
+
+    }
+}

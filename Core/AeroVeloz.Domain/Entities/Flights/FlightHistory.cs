@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+using AeroVeloz.Domain.Common.Enums;
+using System;
 
-namespace AeroVeloz.Domain.Entities.Flights;
+namespace AeroVeloz.Domain.Entities.Flight;
+
 public partial class FlightHistory
 {
-    public Guid HistoryId { get; set; }
+    // Llaves primarias compuestas
+    public short FlightNumber { get; init; }
+    public string? CodeAirlines { get; init; } 
+    
+    public DateTime ChangeAt { get;init; }
+    public string? Reason { get; init; } 
+    
+    public FlightStateEnum FlightStatesIdAfter { get; init; }
+    public FlightStateEnum FlightStatedsIdBefore { get; init; }
 
-    public Guid FlightId { get; set; }
 
-    public Guid? OldStateId { get; set; }
-
-    public Guid? NewStateId { get; set; }
-
-    public DateTime? ChangeDate { get; set; }
-
-    public Guid? ChangeBy { get; set; }
-
-    public virtual Flight Flight { get; set; } = null!;
 }
