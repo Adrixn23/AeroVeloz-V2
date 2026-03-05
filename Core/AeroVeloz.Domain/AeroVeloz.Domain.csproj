@@ -8,11 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Audit\**" />
-    <Compile Remove="Events\EventsNotifications\**" />
     <EmbeddedResource Remove="Audit\**" />
-    <EmbeddedResource Remove="Events\EventsNotifications\**" />
     <None Remove="Audit\**" />
-    <None Remove="Events\EventsNotifications\**" />
   </ItemGroup>
 
   <ItemGroup>
