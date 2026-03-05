@@ -1,6 +1,6 @@
 ﻿
 using AeroVeloz.Domain.Entities.Audits;
-using AeroVeloz.Domain.Common.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Audits;
 using AeroVeloz.Domain.Validators.interfaces.Audit;
 

@@ -1,14 +1,17 @@
-﻿using AeroVeloz.Infraestructure.Persistence.Entities;
+﻿using System;
+using System.Collections.Generic;
+using AeroVeloz.Infraestructure.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AeroVeloz.Infraestructure.Persistence.Context;
 
-public partial class AeroVelozDbContext : DbContext
+public partial class AeroVelozContext : DbContext
 {
-    public AeroVelozDbContext()
+    public AeroVelozContext()
     {
     }
-    public AeroVelozDbContext(DbContextOptions<AeroVelozDbContext> options)
+
+    public AeroVelozContext(DbContextOptions<AeroVelozContext> options)
         : base(options)
     {
     }
@@ -51,10 +54,11 @@ public partial class AeroVelozDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserOrganizaton> UserOrganizatons { get; set; }
- 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+    }
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Airline>(entity =>
         {
@@ -581,6 +585,8 @@ public partial class AeroVelozDbContext : DbContext
             entity.Property(e => e.FailedLoginAttempts)
                 .HasDefaultValue(0)
                 .HasColumnName("failedLoginAttempts");
+            entity.Property(e => e.IdOrganization).HasColumnName("idOrganization");
+            entity.Property(e => e.IdRol).HasColumnName("idRol");
             entity.Property(e => e.IpAdress)
                 .HasMaxLength(16)
                 .HasColumnName("ipAdress");
@@ -601,33 +607,16 @@ public partial class AeroVelozDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("passwordHash");
-        });
 
-        modelBuilder.Entity<UserOrganizaton>(entity =>
-        {
-            entity.HasKey(e => e.IdUserOrganization).HasName("PK__UserOrga__41EB21B7706EDD0B");
-
-            entity.ToTable("UserOrganizatons", "Identitys");
-
-            entity.Property(e => e.IdUserOrganization).HasColumnName("idUserOrganization");
-            entity.Property(e => e.IdOrganizations).HasColumnName("idOrganizations");
-            entity.Property(e => e.IdRol).HasColumnName("idRol");
-            entity.Property(e => e.IdUser).HasColumnName("idUser");
-
-            entity.HasOne(d => d.IdOrganizationsNavigation).WithMany(p => p.UserOrganizatons)
-                .HasForeignKey(d => d.IdOrganizations)
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Users)
+                .HasForeignKey(d => d.IdOrganization)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_Organization");
+                .HasConstraintName("fk_Organization_User");
 
-            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.UserOrganizatons)
+            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRol)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_Rol");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserOrganizatons)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_User");
+                .HasConstraintName("fk_Rol_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

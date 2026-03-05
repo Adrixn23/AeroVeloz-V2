@@ -1,5 +1,5 @@
 ﻿using AeroVeloz.Domain.Validators.interfaces.Airports;
-using AeroVeloz.Domain.Common.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Airport;
 using System.Text.RegularExpressions;
 

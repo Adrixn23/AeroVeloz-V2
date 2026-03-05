@@ -1,5 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.Operations;
-using AeroVeloz.Domain.Common.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Operations;
 using AeroVeloz.Domain.TransitionPolices;
 using AeroVeloz.Domain.Validators.interfaces.Operations;
