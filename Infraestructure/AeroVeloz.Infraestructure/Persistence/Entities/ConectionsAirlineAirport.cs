@@ -16,4 +16,5 @@ public partial class ConectionsAirlineAirport
     public virtual Airline CodeAirlinesNavigation { get; set; } = null!;
 
     public virtual Airport CodeAirportNavigation { get; set; } = null!;
+
 }

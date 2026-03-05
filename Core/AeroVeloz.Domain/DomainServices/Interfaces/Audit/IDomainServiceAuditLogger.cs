@@ -16,5 +16,7 @@ namespace AeroVeloz.Domain.Services.Interfaces.Audits
         Task<IEnumerable<Entities.Audits.Audits>> GetUserAuditTrailAsync(Guid userId, DateTime? from = null, DateTime? to = null);
         bool ValidateAuditIntegrity(Entities.Audits.Audits auditEntry);
         Task<bool> IsAuditRetentionCompliantAsync(DateTime cutoffDate);
+
+
     }
 }
