@@ -8,12 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
 
     <PackageReference Include="MediatR" Version="13.0.0" />
 
     <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
 
+=======
+<<<<<<< HEAD
+    <PackageReference Include="MediatR" Version="13.0.0" />
+=======
+    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+>>>>>>> feature/domain-model
+>>>>>>> 8ff7e52ce328d800bcb9fdf92857e0d8210fb6a2
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
