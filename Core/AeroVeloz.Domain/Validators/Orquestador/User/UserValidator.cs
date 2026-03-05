@@ -1,8 +1,8 @@
-﻿using AeroVeloz.Domain.Common.Validation;
+﻿using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.DomainServices.Interfaces.User;
 using AeroVeloz.Domain.Entities.Users.User;
-using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.User;
 using AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator;
 
 
@@ -22,7 +22,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
 
         public async Task<ValidationResult> ValidateForCreateUser(User user)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
             //si el usuario llega en blanco se returna el mismo y no se recibe ni se agrega
             if (user == null)
             {

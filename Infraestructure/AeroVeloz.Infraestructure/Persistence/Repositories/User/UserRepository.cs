@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AeroVeloz.Domain.DomainServices.Interfaces.User;
 using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Entities.Users.User;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 {
@@ -21,7 +22,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 
         public async Task<bool> CreateEntity(Domain.Entities.Users.User.User entity)
         {
-            var hasher = new PasswordHasher<Object>();
+            var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
             string hash = hasher.HashPassword(null!, entity.passwordHash);
             var user = new AeroVeloz.Infraestructure.Persistence.Entities.User
             {
@@ -48,7 +49,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
            
         }
 
-        public async Task<UserSystemModel> GetByUserName(string nameUser)
+        public async Task<UserSystemModel> GetByUserName(string nameUser) //arreglar metodo apra que funcione en base a la organization
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser);
  
@@ -100,7 +101,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 
         public async Task<bool> UpdateEntity(Domain.Entities.Users.User.User entity)
         {
-            var hasher = new PasswordHasher<Object>();
+            var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
             string hash = hasher.HashPassword(null!, entity.passwordHash);
 
             var result = await  _context.Users.Where(us => us.IdUser == entity.Id)

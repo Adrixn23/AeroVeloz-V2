@@ -1,6 +1,7 @@
 ﻿namespace AeroVeloz.Domain.Events.Result
 {
-    public sealed class OperationResult<T>
+    public sealed class OperationResult<T> //este elemento es usado entre las diversas capas  y acciones que requieren un
+        //return operational para notificar a los diveros interesados dentro del sistema
     {
         public T? Value { get; private set; }
         
