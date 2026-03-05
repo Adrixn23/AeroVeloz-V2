@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Api/">
     <Project Path="Api/AeroVeloz.Api/AeroVeloz.Api.csproj" />
+    <Project Path="Api/AeroVelozDesktop.Api/AeroVelozDesktop.Api.csproj" Id="926607de-7e64-429d-9bc6-b492893c2e2c" />
   </Folder>
   <Folder Name="/core/">
     <Project Path="Core/AeroVeloz.Application/AeroVeloz.Application.csproj" />
@@ -9,6 +10,7 @@
   <Folder Name="/Infraestructure/">
     <Project Path="Infraestructure/AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj" />
   </Folder>
+  <Folder Name="/IOC/" />
   <Folder Name="/presentacion/">
     <Project Path="Presentacion/AeroVeloz.Desktop/AeroVeloz.Desktop.csproj" />
     <Project Path="Presentacion/AeroVeloz.Web/AeroVeloz.Web.csproj" />
