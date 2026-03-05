@@ -1,7 +1,7 @@
 ﻿using AeroVeloz.Domain.Validators.interfaces.Airports;
 using AeroVeloz.Domain.Common.Validation;
-using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Airport;
 using System.Text.RegularExpressions;
+using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 {
@@ -12,7 +12,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 
         public ValidationResult ValidateAirportRegistration(AeroVeloz.Domain.Entities.Airports.Airport  airport)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
 
             if (airport == null)
             {
@@ -49,7 +49,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 
         public ValidationResult ValidateAirportCode(string airportCode)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
 
             if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
                 errors.Add(AirportErrors.InvalidAirportCode);
@@ -60,7 +60,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 
         public ValidationResult ValidateAirlineConnection(string airportCode, string airlineCode, string apiToken)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
 
             if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
                 errors.Add(AirportErrors.InvalidAirportCode);
@@ -77,7 +77,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 
         public ValidationResult ValidateAirportAccess(Guid userId, string airportCode)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
 
             if (userId == Guid.Empty)
                 errors.Add(AirportErrors.AirportNotFound);
@@ -91,7 +91,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 
         public ValidationResult ValidateApiKey(string airportCode, string apiKey)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
 
             if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
                 errors.Add(AirportErrors.InvalidAirportCode);
@@ -105,7 +105,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 
         public ValidationResult ValidateAirportDeactivation(string airportCode)
         {
-            var errors = new List<DomainError>();
+            var errors = new List<ErrosValidationResults>();
 
             if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
                 errors.Add(AirportErrors.InvalidAirportCode);
