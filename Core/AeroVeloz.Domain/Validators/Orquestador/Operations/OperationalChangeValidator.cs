@@ -3,6 +3,7 @@ using AeroVeloz.Domain.Common.ValidationBase;
 using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Operations;
 using AeroVeloz.Domain.TransitionPolices;
 using AeroVeloz.Domain.Validators.interfaces.Operations;
+using AeroVeloz.Domain.TransitionPolices.interfaces.InterfacesFlightState;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Operations
 {

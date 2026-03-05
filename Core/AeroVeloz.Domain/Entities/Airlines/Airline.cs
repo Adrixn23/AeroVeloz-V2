@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AeroVeloz.Domain.Entities.Organization.type;
-using AeroVeloz.Domain.Entities.BaseEntity;
+
 
 namespace AeroVeloz.Domain.Entities.Airlines
 {

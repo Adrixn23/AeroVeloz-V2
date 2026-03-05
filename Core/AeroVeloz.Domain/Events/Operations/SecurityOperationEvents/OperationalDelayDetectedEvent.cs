@@ -1,4 +1,5 @@
-﻿using AeroVeloz.Domain.Entities.Flights;
+﻿using AeroVeloz.Domain.Entities.Flight;
+
 //using MediatR;
 
 namespace AeroVeloz.Domain.Events.Operations.SecurityOperationEvents

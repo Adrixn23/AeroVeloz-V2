@@ -1,11 +1,11 @@
-<<<<<<< HEAD
+
 using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.Subscriptions;
 using System;
 using System.Collections.Generic;
-=======
-﻿using AeroVeloz.Domain.Entities.Subscriptions;
->>>>>>> feature/domain-model
+
+
+
 
 namespace AeroVeloz.Domain.Entities.Notifications;
 

@@ -21,8 +21,8 @@ namespace AeroVeloz.Domain.TransitionPolices.Polices.policySubscrption
                 return result.Failur(ErrorSubscriptions.InvalidFlightReference);
             }
 
-            if (string.IsNullOrWhiteSpace(flight.codeAirlines) || flight.Id <= 0)
-                  {
+            if (flight == null || string.IsNullOrWhiteSpace(flight.codeAirlines) || flight.Id <= 0)
+            {
                        return result.Failur(ErrorSubscriptions.InvalidFlightReference);
                     }
 

@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.Flights;
+﻿using AeroVeloz.Domain.Entities.Flight;
 
 namespace AeroVeloz.Domain.Services.Interfaces.Operational
 {

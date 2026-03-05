@@ -1,11 +1,11 @@
 using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.BaseEntity;
-<<<<<<< HEAD
+
 using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.Entities.Security;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-=======
->>>>>>> feature/domain-model
+
+
 
 namespace AeroVeloz.Domain.Entities.Operations;
 
@@ -26,9 +26,8 @@ public partial class OperationChange :  BEntity<Guid>
       public DateTime changeAt { get; private set; }
       public string? cause { get; private set; }
 
-<<<<<<< HEAD
-    
-=======
+
+
     private OperationChange(Guid id,int idUser, OperationalChangeType operationalChangeType, string codeAirline, int flightNumber
          /*FlightState previousValue, FlightState newValue */)
     {
@@ -40,6 +39,6 @@ public partial class OperationChange :  BEntity<Guid>
          this.newValue = newValue;
          */
     }
->>>>>>> feature/domain-model
+
 
 }
