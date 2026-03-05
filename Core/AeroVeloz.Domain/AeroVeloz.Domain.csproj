@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Audit\**" />
+    <Compile Remove="Execeptions\**" />
     <EmbeddedResource Remove="Audit\**" />
+    <EmbeddedResource Remove="Execeptions\**" />
     <None Remove="Audit\**" />
+    <None Remove="Execeptions\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,12 +36,6 @@
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
-<<<<<<< HEAD
-  <ItemGroup>
-    <Folder Include="Execeptions\" />
-    
-  </ItemGroup>
 
-=======
->>>>>>> feature/domain-model
+
 </Project>

@@ -10,6 +10,7 @@
   <Folder Name="/Infraestructure/">
     <Project Path="Infraestructure/AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj" />
   </Folder>
+  <Folder Name="/Infraestructure/Integrations/" />
   <Folder Name="/IOC/" />
   <Folder Name="/presentacion/">
     <Project Path="Presentacion/AeroVeloz.Desktop/AeroVeloz.Desktop.csproj" />
