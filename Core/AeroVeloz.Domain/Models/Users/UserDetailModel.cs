@@ -10,7 +10,7 @@ namespace AeroVeloz.Domain.Models.Users
          string? nameOrganization,
          OrganizationType OrganizationType,
          bool isActive,
-         List<Roles> roles,
+         Roles nameRol,
          List<Permission> Permissions,
          DateTime createAt
         );

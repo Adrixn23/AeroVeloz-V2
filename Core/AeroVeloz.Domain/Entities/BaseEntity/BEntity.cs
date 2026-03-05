@@ -2,7 +2,7 @@
 {
     public abstract class BEntity <TiD>
     {
-        public TiD? Id { get;  protected set; }
+        public TiD? Id { get; init; }
     
     }
 }
