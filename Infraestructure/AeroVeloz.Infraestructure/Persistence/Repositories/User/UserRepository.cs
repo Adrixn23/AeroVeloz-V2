@@ -1,14 +1,15 @@
 ﻿using AeroVeloz.Application.Repositories.Users;
-using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Models.Users;
 using AeroVeloz.Domain.Models.UserSystem;
 using AeroVeloz.Infraestructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using AeroVeloz.Domain.DomainServices.Interfaces.User;
+using AeroVeloz.Domain.Common.Enums;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository, IDomainServiceUser
     {
 
         private readonly AeroVelozContext _context;
@@ -38,11 +39,12 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 
         public async Task<bool> DeleteEntity(Domain.Entities.Users.User.User entity)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(us => us.IdUser == entity.Id);
-            user!.IsActive = false;
-            _context.Users.Update(user);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            var result = await _context.Users.Where(us => us.IdUser == entity.Id)
+                .ExecuteUpdateAsync(setters => setters
+                .SetProperty(u => u.IsActive, false)
+                );
+                   
+                return result > 0;
            
         }
 
@@ -65,39 +67,64 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         public async Task<IReadOnlyCollection<UserDetailModel>> GetUserByOrganizationsId(Guid userId, int orgId)
         {
             var organization = await _context.Organizations.FirstOrDefaultAsync(org => org.IdOrganizations == orgId);
-            //var users = await _context
-            // .Users
-            //   .Where(u => u.IdUser == userId && u.IdOrganization == orgId).
-            //   Select(u => new UserDetailModel
-            //   {
-            //       idUser = u.IdUser,
-            //       userName = u.NameUser,
-            //       nameOrganization = organization.NameOrganization,
-            //       Enum.Parse<OrganizationType>(organization.TypeOrganization),
-
-
-            //   }).
-            //   ToListAsync();
-
-            return null;
-            
+            if (organization == null)
+            {
+                return Array.Empty<UserDetailModel>();
+            }
+            var users = await _context
+               .Users
+               .Where(u => u.IdUser == userId && u.IdOrganization == orgId)
+               .Select(u => new UserDetailModel(
+                   u.IdUser,
+                   u.NameUser,
+                   organization.NameOrganization,
+                   Enum.Parse<OrganizationType>(organization.TypeOrganization),
+                   u.IsActive ?? false,
+                   new Domain.Entities.Users.Roles.Roles
+                   {
+                       Id = u.IdRol,
+                       nameRol = u.IdRolNavigation.NameRol
+                   },
+                   u.IdRolNavigation.RolPermissions.Select(rp => new Domain.Entities.Users.Permission.Permission {
+                      Id = rp.IdPermissionNavigation.IdPermission,
+                      codePermision = rp.IdPermissionNavigation.CodePermission,
+                      description = rp.IdPermissionNavigation.Description
+                       }
+                       ).ToList(), 
+                   u.CreateAt ?? DateTime.MinValue
+               ))
+               .ToListAsync();
+            return users;
         }
 
-        public async Task<Domain.Entities.Users.User.User?> GetByEntityAsync(Guid id)
+
+        public async Task<bool> UpdateEntity(Domain.Entities.Users.User.User entity)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(us => us.IdUser == id);
-            //return new Domain.Entities.Users.User.User
-            //{
-            //    Id = user!.IdUser,
+            var hasher = new PasswordHasher<Object>();
+            string hash = hasher.HashPassword(null!, entity.passwordHash);
 
-
-            return null;
-           
+            var result = await  _context.Users.Where(us => us.IdUser == entity.Id)
+                .ExecuteUpdateAsync(setters => setters
+                  .SetProperty(u => u.NameUser, entity.nameUser!)
+                  .SetProperty(u => u.IsActive, entity.isActive)
+                  .SetProperty(u => u.PasswordHash, hash )
+                  .SetProperty(u => u.IdOrganization, entity.idOrganization)
+                  .SetProperty(u => u.IdRol, entity.idRol)
+                
+                );
+            return result > 0;
         }
 
-        public Task<bool> UpdateEntity(Domain.Entities.Users.User.User entity)
+        public async Task<bool> ExistActiveUserAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == userId);
+            return user?.IsActive ?? false;
+        }
+
+        public async Task<bool> UserNameExistOrganization(string? userName, int orgId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == userName && u.IdOrganization == orgId);
+            return user != null;
         }
     }
 }
