@@ -22,7 +22,6 @@ namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
 
         public async Task<ValidationResult> ValidateForCreateUser(User user)
         {
-
             var errors = new List<DomainError>();
             //si el usuario llega en blanco se returna el mismo y no se recibe ni se agrega
             if (user == null)
