@@ -8,7 +8,7 @@ namespace AeroVeloz.Domain.DomainServices.Interfaces.Organization
         Task<Organizations> ExistByOrgAsync(int orgId);
         Task<bool> ExistActiveAsync(int orgId);
         Task<bool> NameOrganizationExistAsync(int orgId);
-        Task<bool> EmailOrganizationExistAsync(int orgId, string email);
-       
+        Task<Organizations> GetOrganizationsByEmailAsync(string email);
+  
     }
 }
