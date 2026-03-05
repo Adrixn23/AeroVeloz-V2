@@ -1,14 +1,14 @@
 ﻿using AeroVeloz.Application.Repositories.Base;
 using AeroVeloz.Domain.Entities.Users.User;
+using AeroVeloz.Domain.Models.Users;
+using AeroVeloz.Domain.Models.UserSystem;
 
 namespace AeroVeloz.Application.Repositories.Users
 {
-    public interface IUserRepository : IRepository<User, Guid>
+    public interface IUserRepository : IBRepository<User, Guid>
     {
-        Task<bool> GetUserExistsByUserName(Guid userId);
-        Task<User> GetUserWithOrganization(Guid useId);
-        Task<User> ExistEmailSystem(string? email);
-        Task<IEnumerable<User>> GetUsersByActive();
+        Task<IReadOnlyCollection<UserDetailModel>> GetUserByOrganizationsId(Guid userId, int orgId);
+        Task<UserSystemModel> GetByUserName(string nameUser);
 
     }
 }

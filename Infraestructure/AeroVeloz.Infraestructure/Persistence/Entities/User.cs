@@ -20,7 +20,13 @@ public partial class User
 
     public bool? IsActive { get; set; }
 
-    public virtual ICollection<OperationChange> OperationChanges { get; set; } = new List<OperationChange>();
+    public int IdOrganization { get; set; }
 
-    public virtual ICollection<UserOrganizaton> UserOrganizatons { get; set; } = new List<UserOrganizaton>();
+    public short IdRol { get; set; }
+
+    public virtual Organization IdOrganizationNavigation { get; set; } = null!;
+
+    public virtual Rol IdRolNavigation { get; set; } = null!;
+
+    public virtual ICollection<OperationChange> OperationChanges { get; set; } = new List<OperationChange>();
 }

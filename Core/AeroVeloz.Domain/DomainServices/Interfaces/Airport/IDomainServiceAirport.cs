@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Common.ValidationBase;
+﻿using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Users.User;
 namespace AeroVeloz.Domain.Services.Interfaces.Airport
 {

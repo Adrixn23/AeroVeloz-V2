@@ -1,5 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.Audits;
-using AeroVeloz.Domain.Common.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 
 namespace AeroVeloz.Domain.Validators.interfaces.Audit
 {

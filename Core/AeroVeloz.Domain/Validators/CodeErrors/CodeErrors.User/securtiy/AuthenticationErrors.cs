@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Common.ValidationBase;
+﻿using AeroVeloz.Domain.Common.Validation;
 
 namespace AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.User.securtiy
 

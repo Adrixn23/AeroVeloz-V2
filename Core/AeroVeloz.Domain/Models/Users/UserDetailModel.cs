@@ -1,12 +1,18 @@
 ﻿using AeroVeloz.Domain.Common.Enums;
+using AeroVeloz.Domain.Entities.Users.Permission;
+using AeroVeloz.Domain.Entities.Users.Roles;
 
 namespace AeroVeloz.Domain.Models.Users
 {
-    public class UserDetailModel
-    {
-        public Guid idUser { get; }
-        public string? userName { get; }
-        public OrganizationType OrganizationType { get; }
-
-    }
+    public sealed record UserDetailModel(
+         Guid idUser,
+         string? userName,
+         string? nameOrganization,
+         OrganizationType OrganizationType,
+         bool isActive,
+         List<Roles> roles,
+         List<Permission> Permissions,
+         DateTime createAt
+        );
+   
 }

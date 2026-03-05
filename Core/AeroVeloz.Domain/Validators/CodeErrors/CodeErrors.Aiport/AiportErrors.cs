@@ -1,7 +1,6 @@
-﻿using AeroVeloz.Domain.Common.ValidationBase;
+﻿using AeroVeloz.Domain.Common.Validation;
 
-namespace AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Airport
-{
+namespace AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Airport { 
     public static class AirportErrors
     {
         public static DomainError InvalidAirportCode =>

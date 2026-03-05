@@ -11,5 +11,5 @@ public partial class Rol
 
     public virtual ICollection<RolPermission> RolPermissions { get; set; } = new List<RolPermission>();
 
-    public virtual ICollection<UserOrganizaton> UserOrganizatons { get; set; } = new List<UserOrganizaton>();
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
