@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using AeroVeloz.Infraestructure.Persistence.context;
+//using AeroVeloz.Infraestructure.Persistence.context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AeroVelozDbContext>(options =>
-    options.UseSqlServer(connectionString));
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<AeroVelozDbContext>(options =>
+//    options.UseSqlServer(connectionString));
 
 
 var app = builder.Build();

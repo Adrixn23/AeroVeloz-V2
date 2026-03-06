@@ -11,7 +11,7 @@ namespace AeroVeloz.Application.Services
 
 
         ValidationResult ValidateSubscriptionCreation(
-        Flight flight,
+        Flights flight,
         Subscription newSubscription,
         IReadOnlyCollection<Subscription> existingSubscriptions,
         DateTime serverTime);
@@ -21,7 +21,7 @@ namespace AeroVeloz.Application.Services
             DateTime serverTime);
 
         ValidationResult ValidateNotificationEligibility(
-            Flight flight,
+            Flights flight,
             Subscription subscription,
             DateTime serverTime);
     }

@@ -14,7 +14,7 @@ namespace AeroVeloz.Domain.Events.Operations.SecurityOperationEvents
        string? cause,
        //TypeDealy delay,
        int idUserOperational,
-       List<Flight> AffectedFlightsConnection
+       List<Entities.Flight.Flights> AffectedFlightsConnection
 
         );
         //) : INotification;

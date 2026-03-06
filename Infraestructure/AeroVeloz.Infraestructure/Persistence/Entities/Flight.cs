@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AeroVeloz.Domain.Common.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace AeroVeloz.Infraestructure.Persistence.Entities;
@@ -36,4 +37,5 @@ public partial class Flight
     public virtual Airport OriginAirportNavigation { get; set; } = null!;
 
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+    public FlightStateEnum FlightStated { get; internal set; }
 }

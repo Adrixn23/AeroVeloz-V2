@@ -4,20 +4,22 @@ using AeroVeloz.Domain.ValidationBase;
 
 namespace AeroVeloz.Domain.DomainService.Interfaces.Flight
 {
-    public interface IDomainServiceFlight
+    public interface IFlightDomainService
     {
-        Task<AeroVeloz.Domain.Entities.Flight.Flight> GetFlightidNumber(short id);
-
-        ValidationResult GetcodeAirlinesOwner(Entities.Flight.Flight flight, string codeAirline); //Valida que el cambio provenga de la aerolinea dueña del vuelo.
-
-        Task<ValidationResult> IsvalidOriginAirport(Entities.Flight.Flight flight); // Valida si el aeropuerto de origen es correcto
+        Task<AeroVeloz.Domain.Entities.Flight.Flights> GetFlightidNumber(short id, string airlineCode,int idOrganization); // SI LA AEROLINEA PERTENECE A LA ORGANIZACION
+                                                                                                                           // Y SI LA MISMA SE ENCUENTRA ACTIVA, VIENE DEL MOD DE USUARIO.
 
 
-        Task<AeroVeloz.Domain.Entities.Flight.Flight> ChangeStatedFlightAsync(Entities.Flight.Flight flight, FlightStateEnum newState);  // realiza el cambio de estado, programado, cancelado, etc.
+        ValidationResult GetcodeAirlinesOwner(Entities.Flight.Flights flight, string codeAirline); //Valida que el cambio provenga de la aerolinea dueña del vuelo.
 
-        Task<AeroVeloz.Domain.Entities.Flight.Flight> ChangeBoardingFlightAsync(Entities.Flight.Flight flight, string newGate); //le ordena al objeto vuelo que actualice su puerta interna, y valida el momento de cambiar la puerta 
+        Task<ValidationResult> IsvalidOriginAirport(Entities.Flight.Flights flight); // Valida si el aeropuerto de origen es correcto
 
-        Task<IEnumerable<Entities.Flight.Flight>> GetAllFlightsOperational(); // devuelve la lista de vuelos que no termina o sea operacionales
+
+        Task<AeroVeloz.Domain.Entities.Flight.Flights> ChangeStatedFlightAsync(Entities.Flight.Flights flight, FlightStateEnum newState);  // realiza el cambio de estado, programado, cancelado, etc.
+
+        Task<AeroVeloz.Domain.Entities.Flight.Flights> ChangeBoardingFlightAsync(Entities.Flight.Flights flight, string newGate); //le ordena al objeto vuelo que actualice su puerta interna, y valida el momento de cambiar la puerta 
+
+        Task<IEnumerable<Entities.Flight.Flights>> GetAllFlightsOperational(); // devuelve la lista de vuelos que no termina o sea operacionales
 
     }
 }
