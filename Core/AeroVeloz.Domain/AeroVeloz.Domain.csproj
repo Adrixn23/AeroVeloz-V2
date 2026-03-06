@@ -36,6 +36,11 @@
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\Orquestador\Airlines\" />
+    <Folder Include="Validators\Orquestador\Flights\" />
+  </ItemGroup>
+
 
 
 </Project>

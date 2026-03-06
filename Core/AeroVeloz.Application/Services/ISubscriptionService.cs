@@ -1,6 +1,6 @@
 using AeroVeloz.Domain.Entities.Flight;
 using AeroVeloz.Domain.Entities.Subscriptions;
-using AeroVeloz.Domain.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 
 
 namespace AeroVeloz.Application.Services
@@ -11,7 +11,7 @@ namespace AeroVeloz.Application.Services
 
 
         ValidationResult ValidateSubscriptionCreation(
-        Flights flight,
+        Flight flight,
         Subscription newSubscription,
         IReadOnlyCollection<Subscription> existingSubscriptions,
         DateTime serverTime);
@@ -21,7 +21,7 @@ namespace AeroVeloz.Application.Services
             DateTime serverTime);
 
         ValidationResult ValidateNotificationEligibility(
-            Flights flight,
+            Flight flight,
             Subscription subscription,
             DateTime serverTime);
     }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AeroVeloz.Domain.DomainService.Repositories
+namespace AeroVeloz.Domain.Repositories
 {
     public interface IAirlineDomainRepository
     {

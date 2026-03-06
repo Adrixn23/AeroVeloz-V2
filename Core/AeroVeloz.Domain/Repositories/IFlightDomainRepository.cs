@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-namespace AeroVeloz.Domain.DomainService.Repositories
+namespace AeroVeloz.Domain.Repositories
 {
     public interface IFlightDomainRepository
     {// Verifica si ya existe un vuelo con ese número y cdigo de aerolinea
@@ -15,7 +14,7 @@ namespace AeroVeloz.Domain.DomainService.Repositories
         //verifica si la aerolinea es dueña de el vuelo. 
         // Usado por: IFlightDomainService:GetcodeAirlinesOwner
 
-        Task<bool> IsAirlineOwnerOfFlightAsync(short flightNUmber, string airportCode);
+        Task<bool> IsAirlineOwnerOfFlightAsync(short flightNumber, string airlineCode);
 
         // Verifica si la organización a la que pertenece la aerolínea está activa
         // Usado por: IFlightDomainService: GetFlightidNumber
