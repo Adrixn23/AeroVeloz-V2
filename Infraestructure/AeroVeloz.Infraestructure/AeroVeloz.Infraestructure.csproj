@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Integrations\" />
     <Folder Include="Persistence\Migrations\" />
-    <Folder Include="Persistence\Repositories\Airport\" />
   </ItemGroup>
 
 	
