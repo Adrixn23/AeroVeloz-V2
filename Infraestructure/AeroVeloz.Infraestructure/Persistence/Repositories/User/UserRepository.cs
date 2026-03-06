@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AeroVeloz.Domain.DomainServices.Interfaces.User;
 using AeroVeloz.Domain.Common.Enums;
-using AeroVeloz.Domain.Entities.Users.User;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 {
@@ -48,12 +47,11 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
                 return result > 0;
            
         }
-
         public async Task<UserSystemModel> GetByUserName(string nameUser) //arreglar metodo apra que funcione en base a la organization
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser);
  
-            if (user == null)
+            if (user != null)
             {
                return new UserSystemModel(
                     user!.IdUser,

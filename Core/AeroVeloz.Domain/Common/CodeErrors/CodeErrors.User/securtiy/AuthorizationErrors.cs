@@ -24,5 +24,13 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User.securtiy
 
         public static ErrosValidationResults SuperAdminAccessRequired =>
             ErrosValidationResults.Create("AUTHZ_07", "Se requieren privilegios de super administrador para esta operación");
+        
+        public static ErrosValidationResults OrganizationsNoValid =>
+            ErrosValidationResults.Create("AUTHZ_08", "Esta organización no cuenta con los privilegios para " +
+                "realizar esta acción, se ha intentado realizar una acción no correspondiente a este organismo  ");
+
+        public static ErrosValidationResults OrganizationNoActive =>
+            ErrosValidationResults.Create("AUTHZ_09", "Esta organización no se encuentra activa por lo que no puede realizar operaciones dentro del sistema");
+        
     }
 }
