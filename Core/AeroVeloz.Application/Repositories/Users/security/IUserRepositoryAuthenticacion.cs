@@ -11,14 +11,12 @@ namespace AeroVeloz.Application.Repositories.Users.security
          * direcciones ip en caso de que la ip de donde esta viniendo el logueo no coincide a la ultima ip que el usuario uso para 
          * acceder al sistema
          */
-
         Task<ValidationResult> ValidateUserCredentialsAsync(string username, string password, int orgId);
-        Task<bool> IsUserActiveAsync(string nameUser, int orgId);
-        Task<bool> IsUserLockedAsync(string nameUser, int orgId);
-        Task<bool> BelongsToOrganizationAsync(string nameUser, int orgId);
-        Task<IReadOnlyCollection<Permission>> GetUserPermissionsAsync(string nameUser, int orgId); 
-        Task<bool> IsOrganizationAccessAllowedAsync(int orgId);
-        Task<bool> RegisterLoginAttemptAsync(string nameUser, int failedLoginAttempts, DateTime lockedUntil, byte[] ipAddress, int orgId);
+        Task<ValidationResult> IsUserActiveAsync(Guid userId, int orgId);
+        Task<ValidationResult> IsUserLockedAsync(Guid userId, int orgId);
+        Task<ValidationResult> BelongsToOrganizationAsync(Guid userId, int orgId);
+        Task<ValidationResult> IsOrganizationAccessAllowedAsync(int orgId);
+        Task<bool> RegisterLoginAttemptAsync(Guid userId, int failedLoginAttempts, DateTime lockedUntil, byte[] ipAddress, int orgId);
         
 
     }

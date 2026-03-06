@@ -28,6 +28,10 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User.securtiy
 
         public static ErrosValidationResults SessionExpired =>
             ErrosValidationResults.Create("AUTH_08", "La sesión ha expirado, debe autenticarse nuevamente");
+
+        public static ErrosValidationResults NoExistOrgByUsers =>
+            ErrosValidationResults.Create("AUTH_09", "La organización a la cual esta intentando acceder no existe o se encuentra desactivada");
+
     }
 
    

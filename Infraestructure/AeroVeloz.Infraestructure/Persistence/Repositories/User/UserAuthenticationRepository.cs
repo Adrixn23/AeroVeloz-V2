@@ -16,16 +16,23 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         public UserAuthenticationRepository(AeroVelozContext context) { 
             _context = context; 
         }
-        public async Task<bool> BelongsToOrganizationAsync(string nameUser, int orgId)
+        public async Task<ValidationResult> BelongsToOrganizationAsync(Guid userId, int orgId)
         {
-            var user =  await _context.Users.FirstOrDefaultAsync(u => u.NameUser.ToLower().Trim()  == nameUser.ToLower().Trim() && u.IdOrganization == orgId);
-            return user != null;
+            var errors = new List<ErrosValidationResults>();
+
+            var user =  await _context.Users.FirstOrDefaultAsync(u => u.IdUser == userId && u.IdOrganization == orgId);
+            if (user == null)
+            {
+                errors.Add(AuthenticationErrors.UserNotFound);
+                return new ValidationResult().Failur(errors);
+            }
+            return new ValidationResult().Success();
         }
 
-        public async Task<IReadOnlyCollection<Permission>> GetUserPermissionsAsync(string nameUser, int orgId)
+        public async Task<IReadOnlyCollection<Permission>> GetUserPermissionsAsync(Guid userId, int orgId)
         {
             var permissions = await _context.Users
-                .Where(u => u.NameUser.ToLower().Trim()  == nameUser.ToLower().Trim() && u.IdOrganization == orgId )
+                .Where(u => u.IdUser == userId && u.IdOrganization == orgId )
                 .SelectMany(u => u.IdRolNavigation.RolPermissions)
                 .Select(rp => new Domain.Entities.Users.Permission.Permission
                 {
@@ -38,31 +45,53 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
             return permissions;
          }
 
-        public async Task<bool> IsOrganizationAccessAllowedAsync(int orgId)
+        public async Task<ValidationResult> IsOrganizationAccessAllowedAsync(int orgId)
         {
+            var errors = new List<ErrosValidationResults>();
             var org = await _context.Organizations.FirstOrDefaultAsync(org => org.IdOrganizations == orgId);
-            return org!.IsActive ?? false;
+            if(org == null || org.IsActive == false)
+            {
+                errors.Add(AuthenticationErrors.NoExistOrgByUsers);
+                return new ValidationResult().Failur(errors);
+            }
+            return new ValidationResult().Success();    
         }
 
-        public async Task<bool> IsUserActiveAsync(string nameUser, int orgId)
+        public async Task<ValidationResult> IsUserActiveAsync(Guid userId, int orgId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser.ToLower().Trim() == nameUser.ToLower().Trim() && u.IdOrganization == orgId);
-            return user!.IsActive ?? false;   
+            var errors = new List<ErrosValidationResults>();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == userId && u.IdOrganization == orgId);
+            if(user == null || user.IsActive == false)
+            {
+                errors.Add(AuthenticationErrors.UserInactive);
+                return new ValidationResult().Failur(errors);
+            }
+            return new ValidationResult().Success();
+      
         }
 
-        public async Task<bool> IsUserLockedAsync(string nameUser, int orgId  )
+        public async Task<ValidationResult> IsUserLockedAsync(Guid userId, int orgId  )
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser.ToLower().Trim() == nameUser.ToLower().Trim() && u.IdOrganization == orgId);
-            return user!.LockedUntil != null;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == userId && u.IdOrganization == orgId);
+            var errors = new List<ErrosValidationResults>();
+            if(user == null)
+            {
+                errors.Add(AuthenticationErrors.UserNotFound);
+                return new ValidationResult().Failur(errors);
+            }
+            if(user.LockedUntil != null)
+            {
+                errors.Add(AuthenticationErrors.UserLocked);
+                return new ValidationResult().Failur(errors);
+            }
+            return new ValidationResult().Success();
         }
 
-        public async Task<bool> RegisterLoginAttemptAsync(string nameUser, int failedLoginAttempts, DateTime lockedUntil, byte[] ipAddress, int orgId)
-        {
-            
+        public async Task<bool> RegisterLoginAttemptAsync(Guid userId, int failedLoginAttempts, DateTime lockedUntil, byte[] ipAddress, int orgId)
+        {   
             var rowsAffected = await _context.Users
-                .Where(us => us.NameUser.ToLower().Trim() == nameUser.ToLower().Trim() && us.IdOrganization == orgId)
+                .Where(u => u.IdUser == userId && u.IdOrganization == orgId)
                 .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(u => u.NameUser, nameUser)
                     .SetProperty(u => u.FailedLoginAttempts, failedLoginAttempts)
                     .SetProperty(u => u.LockedUntil, lockedUntil)
                     .SetProperty(u => u.IpAdress, ipAddress)
