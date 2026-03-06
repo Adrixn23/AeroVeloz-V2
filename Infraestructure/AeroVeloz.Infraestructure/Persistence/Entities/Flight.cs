@@ -13,7 +13,7 @@ public partial class Flight
     public byte FlightStatesId { get; set; }
 
     public string OriginAirport { get; set; } = null!;
-
+    
     public string DestinationAirport { get; set; } = null!;
 
     public DateTimeOffset ScheduledDeparture { get; set; }

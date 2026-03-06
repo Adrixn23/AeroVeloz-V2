@@ -1,5 +1,5 @@
 ﻿
-using AeroVeloz.Domain.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Flight;
 namespace AeroVeloz.Domain.DomainService.Interfaces.flight
 {

@@ -1,6 +1,6 @@
 ﻿using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.Subscriptions;
-using AeroVeloz.Domain.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

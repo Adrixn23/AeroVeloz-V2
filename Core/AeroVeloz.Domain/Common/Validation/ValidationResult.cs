@@ -1,6 +1,6 @@
 ﻿using AeroVeloz.Domain.Common.Validation;
 
-namespace AeroVeloz.Domain.Common.ValidationBase
+namespace AeroVeloz.Domain.Common.Validation
 
 {
     public sealed class ValidationResult

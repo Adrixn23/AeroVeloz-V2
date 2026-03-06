@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AeroVeloz.Domain.ValidationBase;
+using AeroVeloz.Domain.Common.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
