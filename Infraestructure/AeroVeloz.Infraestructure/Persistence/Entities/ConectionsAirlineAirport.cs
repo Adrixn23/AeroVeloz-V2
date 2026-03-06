@@ -13,6 +13,9 @@ public partial class ConectionsAirlineAirport
 
     public string TokenApi { get; set; } = null!;
 
+    public bool? IsActive { get; set; }
+    public DateTime? CreateAt { get; set; }
+
     public virtual Airline CodeAirlinesNavigation { get; set; } = null!;
 
     public virtual Airport CodeAirportNavigation { get; set; } = null!;

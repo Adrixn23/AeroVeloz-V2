@@ -1,5 +1,4 @@
 ﻿using AeroVeloz.Domain.Entities.Organization.Base;
-using AeroVeloz.Domain.Entities.Users.User;
 
 namespace AeroVeloz.Domain.DomainServices.Interfaces.Organization
 {
