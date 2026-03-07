@@ -1,10 +1,10 @@
 ﻿namespace AeroVeloz.Domain.Models.Airports
 {
     public sealed record AirportModel(
-          string? codeAirportIata,
           string? codeAirportIcao,
+          string? codeAirportIata,
           string? nameAirport,
-          TimeZoneInfo TimeZone,
+          DateTimeOffset TimeZone,
           string? city,
           string? country
         );

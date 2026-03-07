@@ -26,4 +26,6 @@ public partial class Airport
     public virtual ICollection<Flight> FlightOriginAirportNavigations { get; set; } = new List<Flight>();
 
     public virtual Organization IdOrganizationNavigation { get; set; } = null!;
+
+    
 }

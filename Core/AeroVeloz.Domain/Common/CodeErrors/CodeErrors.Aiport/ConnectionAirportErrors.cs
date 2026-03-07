@@ -10,7 +10,6 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport
 
         public static ErrosValidationResults ConnectionNoExist =>
             ErrosValidationResults.Create("AIRPORT_CONNECTION_02", "Este aeropuerto no tiene comunicación con ninguna aerolinea");
-        public static ErrosValidationResults
 
     }
 }
