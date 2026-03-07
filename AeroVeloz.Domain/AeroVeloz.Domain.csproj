@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Audit\" />
+    <Compile Remove="Audit\**" />
+    <EmbeddedResource Remove="Audit\**" />
+    <None Remove="Audit\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="Events\" />
   </ItemGroup>
 
   <ItemGroup>
