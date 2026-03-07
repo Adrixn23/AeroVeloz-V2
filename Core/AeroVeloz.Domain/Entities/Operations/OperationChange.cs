@@ -5,43 +5,14 @@ namespace AeroVeloz.Domain.Entities.Operations;
 
 public partial class OperationChange :  BEntity<Guid>
 {
-      public Guid  idUser { get; private set; }  
-      public OperationalChangeType operationalChangeType { get; private set; }
-      public string? codeAirline { get; private set; }
-      public int flightNumber { get; private set; }
-      
-      /*
-       * Descomentar este elemento cuando el otro developer (adrian) cree el enum de los estados de vuelos
-       * con su respectivo valor de codigo para cada uno 
-       *
-       *public FlightState previousValue {get; private set; } 
-       public FlightState newValue {get; private set; } 
-
-       */
-
-      public DateTime changeAt { get; private set; }
-
-      public string? cause { get; private set; }
-
-    private OperationChange(Guid id, Guid idUser, OperationalChangeType operationalChangeType, string codeAirline, int flightNumber
-         /*FlightState previousValue, FlightState newValue */)
-    {
-        this.Id = id;
-        this.operationalChangeType = operationalChangeType;
-        this.codeAirline = codeAirline;
-        this.flightNumber = flightNumber;
-        this.idUser = idUser;
-
-        /*this.previousValue = previosValue;
-         this.newValue = newValue;
-         */
-    }
-
-    public static OperationChange CreateOperation(Guid id, Guid idUser, OperationalChangeType operationalChangeType, string codeAirline, int flightNumber
-         /*FlightState previousValue, FlightState newValue */)
-    {
-        return new OperationChange(id, idUser, operationalChangeType, codeAirline, flightNumber
-         /*FlightState previousValue, FlightState newValue */);
-    }
-
+      public Guid idUser { get; init; }
+      public OperationalChangeType operationType { get; init; }   
+      public short? flightNumber { get; init; }
+      public string? codeAirline { get; init;  }
+      public string? codeAirport { get; init; }
+      public string? previosValue { get; init; }
+      public string? newValue {  get; init; }
+      public DateTime changeAt { get; init; }
+      public string? cause { get; init; }
+            
 }

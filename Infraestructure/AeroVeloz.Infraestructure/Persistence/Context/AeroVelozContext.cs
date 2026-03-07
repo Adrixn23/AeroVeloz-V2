@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using AeroVeloz.Infraestructure.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 

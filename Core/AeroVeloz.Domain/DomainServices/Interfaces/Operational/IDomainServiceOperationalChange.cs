@@ -1,26 +1,19 @@
-﻿using AeroVeloz.Domain.Entities.Flights;
+﻿using AeroVeloz.Domain.Common.Enums.Organization;
+using AeroVeloz.Domain.Entities.Flights;
 
 namespace AeroVeloz.Domain.Services.Interfaces.Operational
 {
     public interface IDomainServiceOperationalChange
     {
-        public Task ConsultStateFlightsAsync();
 
-        public Task ManageBoardingGate();
+        Task<bool> OperationExistsAsync(Guid operationId);
 
-        public Task ShowFlightPublic();
-
-        public Task UpdateEstimatedTime();
-
-        public bool ValidateAirportAccess(int userId, string airportCode);
-
-        public Task ReconcileBatchInconsistency();
-
-        public bool AuthorizeOperationalChange(int flightId,  int userId);
-
-        public bool CanUserManagerFlight(/*User user, Flight flight*/);
-
+        Task<bool> FlightExistsAsync(short flightNumber);
 
   
+        Task<bool> OperationAlreadyRegisteredAsync(Guid operationId, OperationalChangeType type );
+
+        Task<bool> OperationBelongsToOrganizationAsync(Guid operationId, int organizationId);
+
     }
 }

@@ -24,10 +24,6 @@
     <None Remove="Repositories\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Persistence\" />
-  </ItemGroup>
-
 	
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.1.0" />
