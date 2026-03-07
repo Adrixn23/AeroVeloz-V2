@@ -47,10 +47,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
                 return result > 0;
            
         }
-        public async Task<UserSystemModel> GetByUserName(string nameUser) //arreglar metodo apra que funcione en base a la organization
+        public async Task<UserSystemModel> GetByUserName(string nameUser, int orgId) 
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser);
- 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser && u.IdOrganization == orgId);
             if (user != null)
             {
                return new UserSystemModel(
