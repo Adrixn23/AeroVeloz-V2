@@ -1,26 +1,19 @@
 ﻿namespace AeroVeloz.Domain.Events.Result
 {
-    public sealed class OperationResult<T> //este elemento es usado entre las diversas capas  y acciones que requieren un
+    public sealed class OperationResult<T> 
+        //este elemento es usado entre las diversas capas  y acciones que requieren un
         //return operational para notificar a los diveros interesados dentro del sistema
     {
-<<<<<<< HEAD
+
         public T? Value { get; set; }
         public bool Success {get; set;}
         public string? Message { get; set;}
         public List<Object> DomainEvents { get; set; } = new();
-=======
-        public T? Value { get; private set; }
-        
-        public bool Success {get; private set;}
-
-        public string? Message { get; private set;}
+     
 
         public string? errorCode { get; private set; }
 
 
-        public List<Object> DomainEvents { get; private set; } = new();
-
->>>>>>> modulo-aeropuertuario
         public static OperationResult<T> Ok (T value) => new() { Value = value, Success = true };
        
         public void AddEvent(Object @event) => DomainEvents.Add(@event);
