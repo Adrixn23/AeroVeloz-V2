@@ -5,7 +5,7 @@ namespace AeroVeloz.Domain.Validators.interfaces.Airports
 {
     public interface IAirportValidator
     {
-        Task<ValidationResult> ValidateForCreateAirport(Airport airport);
+        Task<ValidationResult> ValidateForCreateAirport(Domain.Entities.Organization.Airports.Airport airport);
     }
 
 

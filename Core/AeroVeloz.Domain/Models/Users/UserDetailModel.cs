@@ -8,7 +8,7 @@ namespace AeroVeloz.Domain.Models.Users
          Guid idUser,
          string? userName,
          string? nameOrganization,
-         OrganizationType OrganizationType,
+         TypeOrganization OrganizationType,
          bool isActive,
          Roles nameRol,
          List<Permission> Permissions,

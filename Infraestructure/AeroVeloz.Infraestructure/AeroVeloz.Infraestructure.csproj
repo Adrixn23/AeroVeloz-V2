@@ -19,6 +19,7 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,6 +33,7 @@
 
 	
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\AeroVeloz.Application\AeroVeloz.Application.csproj" />
     <ProjectReference Include="..\..\Core\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
   </ItemGroup>
 

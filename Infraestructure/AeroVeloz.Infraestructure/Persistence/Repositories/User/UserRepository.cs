@@ -21,8 +21,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 
         public async Task<bool> CreateEntity(Domain.Entities.Users.User.User entity)
         {
-            var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
-            string hash = hasher.HashPassword(null!, entity.passwordHash);
+            var hasher = new PasswordHasher<Domain.Entities.Users.User.User>()!;
+            string hash = hasher.HashPassword(null!, entity.passwordHash!);
             var user = new AeroVeloz.Infraestructure.Persistence.Entities.User
             {
                 IdUser = entity.Id,
@@ -49,7 +49,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         }
         public async Task<UserSystemModel> GetByUserName(string nameUser, int orgId) 
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser && u.IdOrganization == orgId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser && u.IdOrganization == orgId );
+ 
             if (user != null)
             {
                return new UserSystemModel(
@@ -76,7 +77,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
                    u.IdUser,
                    u.NameUser,
                    organization.NameOrganization,
-                   Enum.Parse<OrganizationType>(organization.TypeOrganization),
+                   Enum.Parse<TypeOrganization>(organization.TypeOrganization),
                    u.IsActive ?? false,
                    new Domain.Entities.Users.Roles.Roles
                    {

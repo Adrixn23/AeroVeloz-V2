@@ -8,23 +8,15 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 {
     public class AirportValidator : IAirportValidator
     {
-<<<<<<< HEAD
-        private readonly Regex _emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-        private readonly Regex _airportCodeRegex = new Regex(@"^[A-Z]{4}$");
-        private readonly Regex _airportCodeIATA = new Regex(@"^[A-Z]{3}$");
-
-
-        public ValidationResult ValidateAirportRegistration(AeroVeloz.Domain.Entities.Airports.Airport  airport)
-=======
         private readonly IDomainServiceAirport _domainServiceAirport;
         private readonly IAiportExternarDomainServiceValidator _aiportExternarDomainServiceValidator;
-        public AirportValidator(IDomainServiceAirport domainServiceAirport, IAiportExternarDomainServiceValidator aiportExternarDomainServiceValidator) { 
-        
-                _domainServiceAirport = domainServiceAirport;
-                _aiportExternarDomainServiceValidator = aiportExternarDomainServiceValidator;
+        public AirportValidator(IDomainServiceAirport domainServiceAirport, IAiportExternarDomainServiceValidator aiportExternarDomainServiceValidator)
+        {
+
+            _domainServiceAirport = domainServiceAirport;
+            _aiportExternarDomainServiceValidator = aiportExternarDomainServiceValidator;
         }
         public async Task<ValidationResult> ValidateForCreateAirport(Entities.Organization.Airports.Airport airport)
->>>>>>> modulo-aeropuertuario
         {
             var errors = new List<ErrosValidationResults>();
 
@@ -78,76 +70,6 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             var result = new ValidationResult();
             return errors.Any() ? result.Failur(errors) : result.Success();
 
-<<<<<<< HEAD
-        public ValidationResult ValidateAirportCode(string airportCode)
-        {
-            var errors = new List<DomainError>();
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateAirlineConnection(string airportCode, string airlineCode, string apiToken)
-        {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            if (string.IsNullOrWhiteSpace(airlineCode) || airlineCode.Length != 3)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            if (string.IsNullOrWhiteSpace(apiToken) || apiToken.Length < 20)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateAirportAccess(Guid userId, string airportCode)
-        {
-            var errors = new List<DomainError>();
-
-            if (userId == Guid.Empty)
-                errors.Add(AirportErrors.AirportNotFound);
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateApiKey(string airportCode, string apiKey)
-        {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            if (string.IsNullOrWhiteSpace(apiKey) || apiKey.Length < 32)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateAirportDeactivation(string airportCode)
-        {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            // errors.Add(AirportErrors.AirportHasActiveFlights);
-            // --elemento para multiples vuelos verificando las activacion de todos
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-=======
->>>>>>> modulo-aeropuertuario
         }
     }
 }

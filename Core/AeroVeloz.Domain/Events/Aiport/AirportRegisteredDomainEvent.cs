@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 ﻿using AeroVeloz.Domain.TransitionPolices;
-=======
-﻿
->>>>>>> modulo-aeropuertuario
+
 using MediatR;
 namespace AeroVeloz.Domain.Events.Aiport
 {

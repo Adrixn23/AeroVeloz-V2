@@ -1,6 +1,8 @@
-﻿using AeroVeloz.Domain.Common.Validation;
+﻿
+using AeroVeloz.Domain.Common.Validation;
 
-namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport { 
+namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport
+{
     public static class AirportErrors
     {
 

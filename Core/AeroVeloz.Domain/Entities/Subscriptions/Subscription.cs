@@ -1,5 +1,4 @@
 ﻿using AeroVeloz.Domain.Entities.Flights;
-using AeroVeloz.Domain.Entities.Notifications;
 using System;
 using System.Collections.Generic;
 
@@ -17,5 +16,4 @@ public partial class Subscription
 
     public virtual Flight Flight { get; set; } = null!;
 
-    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

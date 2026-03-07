@@ -74,9 +74,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
             //validar el tipo de organization que esta intentando realizar cambios en el vuelo ya que solo pueden
             //hacerlos los clientes airports y airlines
 
-            var type = Enum.Parse<OrganizationType>(org.TypeOrganization);
+            var type = Enum.Parse<TypeOrganization>(org.TypeOrganization);
 
-            if (type != OrganizationType.Airport || type != OrganizationType.Airport)
+            if (type != TypeOrganization.Airport || type != TypeOrganization.Airport)
             {
                 errors.Add(AuthorizationErrors.OrganizationsNoValid);
                 errors.Add(AuthorizationErrors.InsufficientPermissions);
