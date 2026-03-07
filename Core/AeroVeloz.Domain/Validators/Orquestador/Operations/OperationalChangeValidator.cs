@@ -1,13 +1,13 @@
 ﻿using AeroVeloz.Domain.Entities.Operations;
-using AeroVeloz.Domain.Common.ValidationBase;
-using AeroVeloz.Domain.Validators.CodeErrors.CodeErrors.Operations;
-using AeroVeloz.Domain.TransitionPolices;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Validators.interfaces.Operations;
+using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Operations;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Operations
 {
-    public class OperationalChangeValidator : IOperationalChangeValidator
+    public class OperationalChangeValidator 
     {
+<<<<<<< HEAD
         private readonly IChangeTypePolicy _changeTypePolicy;
 
         public OperationalChangeValidator(IChangeTypePolicy changeTypePolicy) {
@@ -40,5 +40,8 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Operations
             var result = new ValidationResult();
             return  errors.Any() ?  result.Failur(errors) : result.Success(); 
         }
+=======
+        
+>>>>>>> modulo-aeropuertuario
     }
 }

@@ -1,10 +1,10 @@
 ﻿using AeroVeloz.Domain.Entities.Flights;
-using MediatR;
+//using MediatR;
 
 namespace AeroVeloz.Domain.Events.Operations.SecurityOperationEvents
 {
     public record OperationalDelayDetectedEvent(
-        
+
        int flightNumber,
        string? codeAirline,
        string? codeAirport,
@@ -15,6 +15,7 @@ namespace AeroVeloz.Domain.Events.Operations.SecurityOperationEvents
        int idUserOperational,
        List<Flight> AffectedFlightsConnection
 
-        ) : INotification;
+        );
+        //) : INotification;
     
 }
