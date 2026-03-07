@@ -100,7 +100,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         public async Task<bool> UpdateEntity(Domain.Entities.Users.User.User entity)
         {
             var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
-            string hash = hasher.HashPassword(null!, entity.passwordHash);
+            string hash = hasher.HashPassword(null!, entity.passwordHash!);
 
             var result = await  _context.Users.Where(us => us.IdUser == entity.Id)
                 .ExecuteUpdateAsync(setters => setters
