@@ -1,4 +1,5 @@
-﻿
+﻿using MediatR;
+
 namespace AeroVeloz.Domain.Events.Aiport
 {
     public record AirportReactivatedDomainEvent(
@@ -6,6 +7,6 @@ namespace AeroVeloz.Domain.Events.Aiport
          string? codeAiportIATA,
          bool isActive,
          Guid IdUserMaster
-        ) : INotificaion
+        ) : INotification;
     
 }

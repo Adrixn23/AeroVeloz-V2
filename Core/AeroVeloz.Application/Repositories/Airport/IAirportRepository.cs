@@ -6,5 +6,7 @@ namespace AeroVeloz.Application.Repositories.Airport
     {
         Task<IReadOnlyCollection<AirportModel>> GetAllAirport();
         Task<AirportModel> GetAirportByCode(string? codeAirport);
+        Task<bool> GenerateApiKey(string? codeAirport);
     }
+
 }

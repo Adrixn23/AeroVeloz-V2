@@ -1,5 +1,5 @@
-﻿using AeroVeloz.Domain.TransitionPolices;
-
+﻿
+using MediatR;
 namespace AeroVeloz.Domain.Events.Aiport
 {
     public record AirportRegisteredDomainEvent(

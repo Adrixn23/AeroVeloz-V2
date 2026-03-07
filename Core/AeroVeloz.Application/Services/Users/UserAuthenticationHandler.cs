@@ -1,5 +1,5 @@
 ﻿using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
-using AeroVeloz.Domain.DomainServices.Interfaces.User.security;
+using AeroVeloz.Application.Repositories.Users.security;
 using AeroVeloz.Domain.Events.Result;
 using AeroVeloz.Application.DTOs.Users;
 

@@ -23,7 +23,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 CodeAirport = entity.codeAirport!
             };
 
-            await _context.AddAsync(con);
+            _context.Add(con);
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }

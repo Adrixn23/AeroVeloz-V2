@@ -1,6 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.BaseEntity;
-
-namespace AeroVeloz.Domain.Common.Enums
+﻿namespace AeroVeloz.Domain.Common.Enums
 {
    public enum TypeOrganization
     {

@@ -1,130 +1,21 @@
-﻿using AeroVeloz.Domain.Validators.interfaces.Airports;
-using AeroVeloz.Domain.Common.Validation;
-using System.Text.RegularExpressions;
-using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
+﻿using AeroVeloz.Domain.Common.Validation;
+using AeroVeloz.Domain.Services.Interfaces.Airport;
+using AeroVeloz.Domain.Validators.interfaces.Airports;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 {
-    public class AirportValidator 
+    public class AirportValidator : IAirportValidator
     {
-<<<<<<< HEAD
-
-       ///implementar los elenentos de validator del airport validator  
-       ///
-       ///
-       
-=======
-        private readonly Regex _emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-        private readonly Regex _airportCodeRegex = new Regex(@"^[A-Z]{4}$");
-        private readonly Regex _airportCodeIATA = new Regex(@"^[A-Z]{3}$");
-
-        public ValidationResult ValidateAirportRegistration(AeroVeloz.Domain.Entities.Airports.Airport  airport)
-        {
-            var errors = new List<DomainError>();
-
-            if (airport == null)
-            {
-                errors.Add(AirportErrors.AirportNotFound);
-                return new ValidationResult().Failur(errors);
-            }
-
-            if (string.IsNullOrWhiteSpace(airport.codeAiprot) || !_airportCodeRegex.IsMatch(airport.codeAiprot))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            if (string.IsNullOrWhiteSpace(airport.codeAiportIATA) || !_airportCodeRegex.IsMatch(airport.codeAiportIATA))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            if (string.IsNullOrWhiteSpace(airport.nameAirport))
-                errors.Add(AirportErrors.AirportNameRequired);
-
-            else if (airport.nameAirport.Length > 150)
-                errors.Add(AirportErrors.MaxNameLength);
-
-            if (string.IsNullOrWhiteSpace(airport.city))
-                errors.Add(AirportErrors.CityRequired);
-
-            if (string.IsNullOrWhiteSpace(airport.country))
-                errors.Add(AirportErrors.CountryRequired);
-
-            if (string.IsNullOrWhiteSpace(airport.emailOrganization) || !_emailRegex.IsMatch(airport.emailOrganization))
-                errors.Add(AirportErrors.InvalidEmailFormat);
-           
-            if (string.IsNullOrWhiteSpace(airport.apiKeyMaster) || airport.apiKeyMaster.Length < 32)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
+        private readonly IDomainServiceAirport domainServiceAirport;
+    
+        public AirportValidator() { 
+        
+        
         }
 
-        public ValidationResult ValidateAirportCode(string airportCode)
+        public Task<ValidationResult> ValidateForCreateAirport(Entities.Organization.Airports.Airport airport)
         {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
+            throw new NotImplementedException();
         }
-
-        public ValidationResult ValidateAirlineConnection(string airportCode, string airlineCode, string apiToken)
-        {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            if (string.IsNullOrWhiteSpace(airlineCode) || airlineCode.Length != 3)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            if (string.IsNullOrWhiteSpace(apiToken) || apiToken.Length < 20)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateAirportAccess(Guid userId, string airportCode)
-        {
-            var errors = new List<DomainError>();
-
-            if (userId == Guid.Empty)
-                errors.Add(AirportErrors.AirportNotFound);
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateApiKey(string airportCode, string apiKey)
-        {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            if (string.IsNullOrWhiteSpace(apiKey) || apiKey.Length < 32)
-                errors.Add(AirportErrors.InvalidApiKey);
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
-
-        public ValidationResult ValidateAirportDeactivation(string airportCode)
-        {
-            var errors = new List<DomainError>();
-
-            if (string.IsNullOrWhiteSpace(airportCode) || !_airportCodeRegex.IsMatch(airportCode))
-                errors.Add(AirportErrors.InvalidAirportCode);
-
-            // errors.Add(AirportErrors.AirportHasActiveFlights);
-            // --elemento para multiples vuelos verificando las activacion de todos
-
-            var result = new ValidationResult();
-            return errors.Any() ? result.Failur(errors) : result.Success();
-        }
->>>>>>> 122bf176a5ed04e6f77387ce809b47f1237f8f65
     }
 }
