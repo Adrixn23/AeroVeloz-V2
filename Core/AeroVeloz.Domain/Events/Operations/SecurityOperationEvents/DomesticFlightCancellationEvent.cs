@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿//using MediatR;
 
 namespace AeroVeloz.Domain.Events.Operations.SecurityOperationEvents
 {
@@ -12,6 +12,7 @@ namespace AeroVeloz.Domain.Events.Operations.SecurityOperationEvents
          DateTime CancellationDecisionTime
         //FlightState stateBefore
 
-        ) : INotification;
+        );
+        //) : INotification;
     
 }

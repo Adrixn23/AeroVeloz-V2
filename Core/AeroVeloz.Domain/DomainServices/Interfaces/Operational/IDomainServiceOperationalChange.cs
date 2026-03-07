@@ -1,5 +1,4 @@
 ﻿using AeroVeloz.Domain.Entities.Flights;
-using AeroVeloz.Domain.Entities.Security;
 
 namespace AeroVeloz.Domain.Services.Interfaces.Operational
 {

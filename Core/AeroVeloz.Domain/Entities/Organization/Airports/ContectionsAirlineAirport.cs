@@ -4,17 +4,10 @@ namespace AeroVeloz.Domain.Entities.Organization.Airport
 {
     public class ContectionsAirlineAirport : BEntity<Guid>
     {
-        public string? codeAirlines { get; private set; }
-        public string? codeAirport { get; private set;  }
-        public string? tokenApi { get; private set; }
-
-        private ContectionsAirlineAirport(Guid id, string? codeAirlines, string? codeAirport,  string? tokenApi)
-        {
-            Id = id;
-            this.codeAirlines = codeAirlines;
-            this.codeAirport  = codeAirport;
-            this.tokenApi = tokenApi;
-        }
-
+        public string? codeAirlines { get; init; }
+        public string? codeAirport { get; init;  }
+        public string? tokenApi { get; init; }
+        public bool isActive { get; init; }
+        public DateTime createAt { get; init; }
     }
 }
