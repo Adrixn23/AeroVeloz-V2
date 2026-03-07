@@ -3,34 +3,31 @@
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport { 
     public static class AirportErrors
     {
-        public static ErrosValidationResults InvalidAirportCode =>
-            ErrosValidationResults.Create("AIRPORT_01", "El código del aeropuerto debe tener exactamente 4 caracteres");
 
-        public static ErrosValidationResults AirportNameRequired =>
-            ErrosValidationResults.Create("AIRPORT_02", "El nombre del aeropuerto es obligatorio");
+        public static ErrosValidationResults AirportInvalid =>
+            ErrosValidationResults.Create("AIRPORT_01", "El Airport que ha intentado crear no cumple con los requerimientos minimos para hacer generado");
 
-        public static ErrosValidationResults InvalidEmailFormat =>
-            ErrosValidationResults.Create("AIRPORT_03", "El formato del email no es válido");
+        public static ErrosValidationResults AirportCodeMissing =>
+            ErrosValidationResults.Create("AIRPORT_02", "El aeropuerto debe tener al menos un código IATA o ICAO válido.");
 
-        public static ErrosValidationResults AirportCodeExists =>
-            ErrosValidationResults.Create("AIRPORT_04", "Ya existe un aeropuerto registrado con este código");
+        public static ErrosValidationResults AirportIataInvalid =>
+            ErrosValidationResults.Create("AIRPORT_03", "El código IATA del aeropuerto no tiene un formato válido (3 letras).");
 
-        public static ErrosValidationResults AirportNotFound =>
-            ErrosValidationResults.Create("AIRPORT_05", "El aeropuerto especificado no existe");
+        public static ErrosValidationResults AirportIcaoInvalid =>
+            ErrosValidationResults.Create("AIRPORT_04", "El código ICAO del aeropuerto no tiene un formato válido (4 letras).");
 
-        public static ErrosValidationResults AirportInactive =>
-            ErrosValidationResults.Create("AIRPORT_06", "El aeropuerto está inactivo");
+        public static ErrosValidationResults AirportNotFoundExternal =>
+            ErrosValidationResults.Create("AIRPORT_05", "El aeropuerto no fue encontrado en la fuente externa de aeropuertos reales.");
 
-        public static ErrosValidationResults InvalidApiKey =>
-            ErrosValidationResults.Create("AIRPORT_07", "La clave API proporcionada no es válida");
+        public static ErrosValidationResults AirportAlreadyExists =>
+            ErrosValidationResults.Create("AIRPORT_06", "El aeropuerto ya existe registrado en la organización.");
 
-        public static ErrosValidationResults CityRequired =>
-            ErrosValidationResults.Create("AIRPORT_08", "La ciudad es obligatoria");
+        public static ErrosValidationResults AirportCountryInvalid =>
+            ErrosValidationResults.Create("AIRPORT_07", "El país del aeropuerto es inválido o está vacío.");
 
-        public static ErrosValidationResults CountryRequired =>
-            ErrosValidationResults.Create("AIRPORT_09", "El país es obligatorio");
+        public static ErrosValidationResults AirportCityInvalid =>
+            ErrosValidationResults.Create("AIRPORT_08", "La ciudad del aeropuerto es inválida o está vacía.");
 
-        public static ErrosValidationResults MaxNameLength =>
-            ErrosValidationResults.Create("AIRPORT_10", "El nombre del aeropuerto no puede exceder los 150 caracteres");
+
     }
 }

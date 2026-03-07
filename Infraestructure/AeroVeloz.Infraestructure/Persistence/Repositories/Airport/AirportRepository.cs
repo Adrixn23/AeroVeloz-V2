@@ -4,7 +4,6 @@ using AeroVeloz.Domain.Services.Interfaces.Airport;
 using AeroVeloz.Infraestructure.Persistence.Context;
 using AeroVeloz.Infraestructure.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Cryptography;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
