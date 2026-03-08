@@ -3,9 +3,9 @@
     public sealed record AirlineConnectionByAirportModel(
         string? airportCode,
         string? airlineCode,
+        string? airlineName,
         bool isActive,
-        DateTime CreateAt,
-        string? tokenApi
+        DateTime CreateAt
         );
     
 }

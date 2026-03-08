@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Common.Enums.Organization;
-using MediatR;
+﻿using MediatR;
 
 ﻿using AeroVeloz.Domain.Entities.Users.Roles;
 

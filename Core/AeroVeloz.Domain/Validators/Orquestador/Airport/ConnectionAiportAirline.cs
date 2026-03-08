@@ -16,7 +16,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             _domainServiceAirport = domainServiceAirport;
         }
 
-        public async Task<ValidationResult> ValidationForCreateConnectionAirlineByAirport(ContectionsAirlineAirport contections)
+        public async Task<ValidationResult> ValidationForCreateConnectionAirlineByAirport(ConectionsAirlineAirport contections)
         {
             var errors = new List<ErrosValidationResults>();
 

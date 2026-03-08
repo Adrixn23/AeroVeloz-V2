@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
 namespace AeroVeloz.Domain.Entities.Flights;
 
-public partial class FlightState
+public partial class FlightState : BEntity<byte>
 {
-    public Guid StateId { get; set; }
-
-    public string StateName { get; set; } = null!;
-
-    public string Code { get; set; } = null!;
-
-    public virtual ICollection<Flight> Flights { get; set; } = new List<Flight>();
+    public string? codeFlightState { get; init; }
+    public string? name { get; init; }
 }
