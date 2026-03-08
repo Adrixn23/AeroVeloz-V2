@@ -91,11 +91,11 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
             return Array.Empty<OperationalModel>();
         }
 
-        public async Task<bool> OperationAlreadyRegisteredAsync(Guid operationId, OperationalChangeType type)
+        public async Task<bool> OperationAlreadyRegisteredAsync(Guid operationId, short typeOp)
         {
             var operation = await _context.OperationChanges.FirstOrDefaultAsync(op => op.Id == operationId);
             if(operation == null) return false;
-            if (operation.idOperationalType == type.Id) return false;
+            if (operation.idOperationalType == typeOp) return false;
        
             return true;
         }
@@ -111,6 +111,18 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
            var operation = await _context.OperationChanges.FirstOrDefaultAsync(op => op.Id == operationId);
            if (operation == null) return false; 
            return true;
+        }
+
+        public async Task<bool> OperationConsultFlightValid(short flightNumber)
+        {
+
+            var fl = await _context.Flights.FirstOrDefaultAsync(f => f.Id == flightNumber);
+            if (fl == null) return false;
+            if (DateTimeOffset.UtcNow - fl.ScheduledDeparture > TimeSpan.FromDays(2)) return false;
+            var stateF = await _context.FlightStates.FirstOrDefaultAsync(fs => fs.Id == fl.flightStateId);
+            if(stateF == null) return false;
+            if(stateF.name == "CANCELLED" || stateF.name == "InFlight") return false;
+            return true;
         }
 
         public async Task<bool> OperationExistsAsync(Guid operationId)

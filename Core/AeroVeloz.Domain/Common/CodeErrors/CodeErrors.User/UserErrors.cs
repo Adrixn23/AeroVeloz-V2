@@ -2,6 +2,10 @@
 
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User
 {
+    /// <summary>
+    /// Clase estática que centraliza todos los errores de validación relacionados con la gestión de usuarios.
+    /// que permiten identificar la causa exacta del error de forma estandarizada.
+    /// </summary>
     public static class UserErrors
     {
         public static ErrosValidationResults OrganizationNotFound =>

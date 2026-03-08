@@ -1,11 +1,12 @@
 ﻿using MediatR;
+
 namespace AeroVeloz.Domain.Events.Aiport
 {
-    public record AirportSuspendedDomainEvent(
-         string? codeAirport,
-         string? codeAiportIATA,
-         bool isActive,
-         Guid IdUserMaster
-        ) : INotification;
-    
+    public sealed record AirportSuspendedDomainEvent(
+        string? CodeAirportICAO,
+        string? CodeAirportIATA,
+        string? NameAirport,
+        Guid IdUserResponsible,
+        DateTime SuspendedAt
+    ) : INotification;
 }

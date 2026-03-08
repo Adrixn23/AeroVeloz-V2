@@ -1,15 +1,14 @@
-﻿using MediatR;
+using MediatR;
 
 namespace AeroVeloz.Domain.Events.User
 {
-    public sealed record UserCreatedDomainEvent(
+   
+    public sealed record UserDeactivatedDomainEvent(
         Guid IdUser,
         string? NameUser,
         int IdOrganization,
         string? NameOrganization,
-        string? TypeOrganization,
-        short IdRol,
-        string? NameRol,
-        DateTime CreatedAt
+        Guid IdUserResponsible,
+        DateTime DeactivatedAt
     ) : INotification;
 }

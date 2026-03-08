@@ -1,5 +1,10 @@
 ﻿namespace AeroVeloz.Domain.Common.Validation
 {
+    /// <summary>
+    /// Clase sellada e inmutable que representa un error de validación del dominio.
+    /// Cada error se compone de un código único y una descripción legible.
+    /// de reglas de negocio de forma estructurada.
+    /// </summary>
     public sealed class ErrosValidationResults
     {
         public string? code { get;}

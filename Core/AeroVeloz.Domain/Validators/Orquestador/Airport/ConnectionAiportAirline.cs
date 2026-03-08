@@ -6,16 +6,23 @@ using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 {
+    /// <summary>
+    /// Implementación del validador de conexiones entre aeropuertos y aerolíneas.
+    /// Verifica que los códigos obligatorios estén presentes y que no exista
+    /// una conexión duplicada entre el aeropuerto y la aerolínea.
+    /// </summary>
     public class ConnectionAiportAirline : IConnectionAiportAirline
     {
 
         private readonly IDomainServiceAirport _domainServiceAirport;
 
+      
         public ConnectionAiportAirline(IDomainServiceAirport domainServiceAirport)
         {
             _domainServiceAirport = domainServiceAirport;
         }
 
+        
         public async Task<ValidationResult> ValidationForCreateConnectionAirlineByAirport(ConectionsAirlineAirport contections)
         {
             var errors = new List<ErrosValidationResults>();
@@ -35,6 +42,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             if (errors.Any())
                 return new ValidationResult().Failur(errors);
 
+            // Verificar que no exista una conexión duplicada entre el aeropuerto y la aerolínea
             var exists = await _domainServiceAirport.AirportHasAirlineConnectionAsync(contections.codeAirport!, contections.codeAirlines!);
             if (exists)
                 errors.Add(ConnectionAirportErrors.ConnectionAlreadyExists);

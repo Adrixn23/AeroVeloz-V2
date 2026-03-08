@@ -2,6 +2,11 @@
 
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport
 {
+    /// <summary>
+    /// Clase estática que centraliza todos los errores de validación relacionados con
+    /// las conexiones entre aeropuertos y aerolíneas. Incluye errores de datos faltantes,
+    /// conexiones inexistentes y duplicidad de conexiones.
+    /// </summary>
     public static class ConnectionAirportErrors
     {
         public static ErrosValidationResults ConnectionInvalid =>
