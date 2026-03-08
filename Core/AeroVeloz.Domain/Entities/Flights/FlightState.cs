@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AeroVeloz.Domain.Common.Enums;
 
-namespace AeroVeloz.Domain.Entities.Flight
+public class FlightState
 {
-    internal class FlightState
-    {
-    }
+    public byte FlightStatesId { get; init; }
+    public string? CodeFlightState { get; init; }
+    public string? Name { get; init; }
+
+    
 }

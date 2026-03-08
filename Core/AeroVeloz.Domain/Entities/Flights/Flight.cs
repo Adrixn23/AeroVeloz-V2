@@ -13,7 +13,7 @@ public class Flight : BEntity<short>
     public string? DestinationAirport { get; init; }
     public DateTimeOffset ScheduledDeparture { get; init; }
 
-    public DateTimeOffset ScheduledArrival { get; init; }
+    //public DateTimeOffset ScheduledArrival { get; init; }  comentado por mientras. 
 
     public string? BoardingGate { get; init; }
     public string? BoardingGateArrived { get; init; }
