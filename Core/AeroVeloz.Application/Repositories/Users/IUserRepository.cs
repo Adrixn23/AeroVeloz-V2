@@ -9,7 +9,7 @@ namespace AeroVeloz.Application.Repositories.Users
     {
         //esta interfaz contiene los elementos basicos de consulta para el modulo de usuarios permitiendo obtener
         //los diversos usuarios dentro del  organizmo x y tambien obtener la informacion de x usuario  dentro de x organizacion
-        Task<IReadOnlyCollection<UserDetailModel>> GetUserByOrganizationsId(Guid userId, int orgId);
+        Task<IReadOnlyCollection<UserDetailModel>> GetUserByOrganizationsId(int orgId);
         Task<UserSystemModel> GetByUserName(string nameUser, int orgId);   //agregar elemento para sacar usuario solamente de una organizacion correspondiente 
 
     }

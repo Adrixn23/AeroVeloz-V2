@@ -2,7 +2,7 @@
 
 namespace AeroVeloz.Domain.Entities.Users.Permission
 {
-    public partial class Permission : BEntity<int>
+    public partial class Permission : BEntity<byte>
     {
         public string? codePermision { get; init; }
         public string? description { get; init; }

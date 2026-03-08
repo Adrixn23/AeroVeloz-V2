@@ -1,7 +1,7 @@
 ﻿using AeroVeloz.Application.Repositories.Airport;
 using AeroVeloz.Domain.Entities.Organization.Airport;
 using AeroVeloz.Domain.Models.Airports;
-using AeroVeloz.Infraestructure.Persistence.Context;
+using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
@@ -14,68 +14,61 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
             _context = context;
         }
 
-        public async Task<bool> CreateEntity(ContectionsAirlineAirport entity)
+        public async Task<bool> CreateEntity(ConectionsAirlineAirport entity)
         {
-            var con = new AeroVeloz.Infraestructure.Persistence.Entities.ConectionsAirlineAirport
-            {
-                IdConection = entity.Id,
-                CodeAirlines = entity.codeAirlines!,
-                CodeAirport = entity.codeAirport!
-            };
 
-            _context.Add(con);
+            var connection =  await _context.ConectionsAirlineAirports.AddAsync(entity);
             var result = await _context.SaveChangesAsync();
-            return result > 0;
-        }
-
-        public async Task<bool> DeleteEntity(ContectionsAirlineAirport entity)
-        {
-
-            var result = await _context.ConectionsAirlineAirports.Where(en => en.IdConection == entity.Id)
-                .ExecuteUpdateAsync(setters => setters
-                .SetProperty(u => u.IsActive, false)
-                );
 
             return result > 0;
         }
 
-        public async Task<IReadOnlyCollection<AirlineConnectionByAirportModel>> GetAirportConnectionById(string? codeAirportIata, string? codeAirportIcao)
+        public async Task<bool> DeleteEntity(ConectionsAirlineAirport entity)
         {
-            var airport = await _context.Airports.FirstOrDefaultAsync(air => air.CodeIata.ToLower().Trim()
-            == codeAirportIata!.ToLower().Trim() && air.CodeAirport.ToLower().Trim() == codeAirportIcao);
 
-            if(airport != null && airport.IdOrganizationNavigation.IsActive != false)
-            {
-                var connection = _context.ConectionsAirlineAirports.Where(co =>
-                    co.CodeAirportNavigation.CodeIata.ToLower() == codeAirportIata!.ToLower().Trim() &&
-                    co.CodeAirportNavigation.CodeAirport.ToLower().Trim() ==
-                    codeAirportIcao!.ToLower().Trim())
-                    .Select( air =>
-                        new AirlineConnectionByAirportModel(
-                            air.CodeAirport,
-                            air.CodeAirlines,
-                            air.IsActive ?? false,
-                            air.CreateAt.GetValueOrDefault(),
-                            air.TokenApi
-                        )
-                    );
+            var connection = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
+               .SetProperty(c => c.isActive, false));
+              
+                return connection > 0;
+          
+        }
 
-                return await connection.ToListAsync();
-            }
+        public async Task<IReadOnlyCollection<AirlineConnectionByAirportModel>> GetAirportConnectionById(string? codeAirportIcao)
+        {
+
+            var conections = await(
+                from c in _context.ConectionsAirlineAirports.AsNoTracking()
+                             join a in _context.Airlines.AsNoTracking()
+                                 on c.codeAirlines equals a.codeAirlines
+                             join or in _context.Organizations.AsNoTracking()
+                                  on a.Id equals or.Id
+                                  where c.codeAirport  == codeAirportIcao
+                             select new AirlineConnectionByAirportModel(
+                                     c.codeAirport,
+                                     c.codeAirlines,
+                                     or.nameOrganization,
+                                     c.isActive,
+                                     c.createAt
+
+                                 )).ToListAsync();
+
+            if(conections.Any())
+                return  conections;
+
             return Array.Empty<AirlineConnectionByAirportModel>();
         }
 
-        public async Task<bool> UpdateEntity(ContectionsAirlineAirport entity)
+        public async Task<bool> UpdateEntity(ConectionsAirlineAirport entity)
         {
-            var collectionAirline = await _context.ConectionsAirlineAirports.Where(con => con.IdConection == entity.Id)
-                .ExecuteUpdateAsync(setters => setters
-                .SetProperty(c => c.CodeAirlines, entity.codeAirlines)
-                .SetProperty(c => c.CodeAirport, entity.codeAirport)
-                .SetProperty(c => c.IsActive, entity.isActive)
-                .SetProperty(c => c.TokenApi, entity.tokenApi)
-                );
 
-            return collectionAirline > 0;
+            var connections = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
+                .SetProperty(c =>  c.codeAirlines,  entity.codeAirlines)
+                .SetProperty(c => c.codeAirport, entity.codeAirport)
+                .SetProperty(c => c.isActive, entity.isActive)
+                .SetProperty(c => c.tokenApi, entity.tokenApi)
+            );
+         
+            return connections > 0;
         }
     }
 }

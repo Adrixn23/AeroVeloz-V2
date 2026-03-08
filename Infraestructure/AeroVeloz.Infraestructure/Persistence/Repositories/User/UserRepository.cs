@@ -1,11 +1,10 @@
 ﻿using AeroVeloz.Application.Repositories.Users;
 using AeroVeloz.Domain.Models.Users;
 using AeroVeloz.Domain.Models.UserSystem;
-using AeroVeloz.Infraestructure.Persistence.Context;
+using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AeroVeloz.Domain.DomainServices.Interfaces.User;
-using AeroVeloz.Domain.Common.Enums;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 {
@@ -21,27 +20,16 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 
         public async Task<bool> CreateEntity(Domain.Entities.Users.User.User entity)
         {
-            var hasher = new PasswordHasher<Domain.Entities.Users.User.User>()!;
-            string hash = hasher.HashPassword(null!, entity.passwordHash!);
-            var user = new AeroVeloz.Infraestructure.Persistence.Entities.User
-            {
-                IdUser = entity.Id,
-                NameUser = entity.nameUser!,
-                PasswordHash = hash,
-                IpAdress = entity.ipAdress,
-                IdOrganization = entity.idOrganization,
-                IdRol = entity.idRol
-            };
-            _context.Add(user);
+            _context.Users.Add(entity);
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
 
         public async Task<bool> DeleteEntity(Domain.Entities.Users.User.User entity)
         {
-            var result = await _context.Users.Where(us => us.IdUser == entity.Id)
+            var result = await _context.Users.Where(us => us.Id == entity.Id)
                 .ExecuteUpdateAsync(setters => setters
-                .SetProperty(u => u.IsActive, false)
+                .SetProperty(u => u.isActive, false)
                 );
                    
                 return result > 0;
@@ -49,51 +37,38 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         }
         public async Task<UserSystemModel> GetByUserName(string nameUser, int orgId) 
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == nameUser && u.IdOrganization == orgId );
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.nameUser == nameUser && u.idOrganization == orgId );
  
             if (user != null)
             {
                return new UserSystemModel(
-                    user!.IdUser,
-                    user.NameUser,
-                    (bool)user.IsActive!
+                    user!.Id,
+                    user.nameUser,
+                    (bool)user.isActive!
                 );
                    
             }
             return null!;
         }
 
-        public async Task<IReadOnlyCollection<UserDetailModel>> GetUserByOrganizationsId(Guid userId, int orgId)
+        public async Task<IReadOnlyCollection<UserDetailModel>> GetUserByOrganizationsId( int orgId)
         {
-            var organization = await _context.Organizations.FirstOrDefaultAsync(org => org.IdOrganizations == orgId);
-            if (organization == null)
-            {
-                return Array.Empty<UserDetailModel>();
-            }
-            var users = await _context
-               .Users
-               .Where(u => u.IdUser == userId && u.IdOrganization == orgId)
-               .Select(u => new UserDetailModel(
-                   u.IdUser,
-                   u.NameUser,
-                   organization.NameOrganization,
-                   Enum.Parse<TypeOrganization>(organization.TypeOrganization),
-                   u.IsActive ?? false,
-                   new Domain.Entities.Users.Roles.Roles
-                   {
-                       Id = u.IdRol,
-                       nameRol = u.IdRolNavigation.NameRol
-                   },
-                   u.IdRolNavigation.RolPermissions.Select(rp => new Domain.Entities.Users.Permission.Permission {
-                      Id = rp.IdPermissionNavigation.IdPermission,
-                      codePermision = rp.IdPermissionNavigation.CodePermission,
-                      description = rp.IdPermissionNavigation.Description
-                       }
-                       ).ToList(), 
-                   u.CreateAt ?? DateTime.MinValue
-               ))
-               .ToListAsync();
-            return users;
+
+            var users = await (
+                 from u in _context.Users.AsNoTracking()
+                 join r in _context.Roles.AsNoTracking()
+                 on u.idRol  equals r.Id
+                 join o in _context.Organizations.AsNoTracking()
+                 on  u.idOrganization equals o.Id
+                 where u.idOrganization == orgId
+                 select  new UserDetailModel(u.Id, u.nameUser, o.nameOrganization, o.typeOrganization, u.isActive, r.nameRol , u.createAt )
+                
+                ).ToListAsync();
+            if (users.Any())
+                return users;
+
+            return Array.Empty<UserDetailModel>();  
+              
         }
 
 
@@ -102,13 +77,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
             var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
             string hash = hasher.HashPassword(null!, entity.passwordHash!);
 
-            var result = await  _context.Users.Where(us => us.IdUser == entity.Id)
+            var result = await  _context.Users.Where(us => us.Id == entity.Id)
                 .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(u => u.NameUser, entity.nameUser!)
-                  .SetProperty(u => u.IsActive, entity.isActive)
-                  .SetProperty(u => u.PasswordHash, hash )
-                  .SetProperty(u => u.IdOrganization, entity.idOrganization)
-                  .SetProperty(u => u.IdRol, entity.idRol)
+                  .SetProperty(u => u.nameUser, entity.nameUser!)
+                  .SetProperty(u => u.isActive, entity.isActive)
+                  .SetProperty(u => u.passwordHash, hash )
+                  .SetProperty(u => u.idOrganization, entity.idOrganization)
+                  .SetProperty(u => u.idRol, entity.idRol)
                 
                 );
             return result > 0;
@@ -116,13 +91,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
 
         public async Task<bool> ExistActiveUserAsync(Guid userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUser == userId);
-            return user?.IsActive ?? false;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user!.isActive;
         }
 
         public async Task<bool> UserNameExistOrganization(string? userName, int orgId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.NameUser == userName && u.IdOrganization == orgId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.nameUser == userName && u.idOrganization == orgId);
             return user != null;
         }
     }

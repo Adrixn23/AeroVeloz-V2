@@ -1,19 +1,16 @@
-﻿using AeroVeloz.Domain.Entities.Flights;
-using System;
-using System.Collections.Generic;
+﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
 namespace AeroVeloz.Domain.Entities.Subscriptions;
 
-public partial class Subscription
+public partial class Subscription : BEntity<Guid>
 {
-    public Guid SubscriptionId { get; set; }
-
-    public Guid FlightId { get; set; }
-
-    public string Email { get; set; } = null!;
-
-    public bool? IsActive { get; set; }
-
-    public virtual Flight Flight { get; set; } = null!;
-
+   public short flightNumber { get; init; }
+   public string? codeAirlines { get; init; }
+   public byte codeChannel { get; init; }
+   public int numberInterested { get; init; }
+   public DateTime createDate { get; init; }
+   public DateTime endingDate { get; init; }
+   public bool activeSubscription { get; init; }
+   public string? contactValue { get; init; }
+  
 }

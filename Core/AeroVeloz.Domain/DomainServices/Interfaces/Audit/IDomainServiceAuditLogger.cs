@@ -12,9 +12,9 @@ namespace AeroVeloz.Domain.Services.Interfaces.Audits
 
         //estos eleemento el editor no quiere reconocer el namespace tienen el mismo nombre en clase y namespace pero aunque lo cambie
         //y elimine el registro del namespace como quiera no lo reconoce.
-        Task<IEnumerable<Entities.Audits.Audits>> GetAuditTrailAsync(string entityName, DateTime? from = null, DateTime? to = null);
-        Task<IEnumerable<Entities.Audits.Audits>> GetUserAuditTrailAsync(Guid userId, DateTime? from = null, DateTime? to = null);
-        bool ValidateAuditIntegrity(Entities.Audits.Audits auditEntry);
+        Task<IEnumerable<Entities.Audits.Audit>> GetAuditTrailAsync(string entityName, DateTime? from = null, DateTime? to = null);
+        Task<IEnumerable<Entities.Audits.Audit>> GetUserAuditTrailAsync(Guid userId, DateTime? from = null, DateTime? to = null);
+        bool ValidateAuditIntegrity(Entities.Audits.Audit auditEntry);
         Task<bool> IsAuditRetentionCompliantAsync(DateTime cutoffDate);
     }
 }

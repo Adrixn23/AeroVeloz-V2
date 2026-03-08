@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Common.Enums;
-using AeroVeloz.Domain.Entities.Users.Permission;
+﻿using AeroVeloz.Domain.Entities.Users.Permission;
 using AeroVeloz.Domain.Entities.Users.Roles;
 
 namespace AeroVeloz.Domain.Models.Users
@@ -8,10 +7,9 @@ namespace AeroVeloz.Domain.Models.Users
          Guid idUser,
          string? userName,
          string? nameOrganization,
-         TypeOrganization OrganizationType,
+         string? OrganizationType,
          bool isActive,
-         Roles nameRol,
-         List<Permission> Permissions,
+         string? nameRol,
          DateTime createAt
         );
    

@@ -9,7 +9,7 @@ namespace AeroVeloz.Domain.Entities.Organization.Airports
         public string? country { get; init; }
         public string? city { get; init; }
         public string? apiKeyMaster {  get; init; }
-       public DateTimeOffset timeOffset { get; init; }
+        public DateTimeOffset timeOffset { get; init; }
   
     }
 
