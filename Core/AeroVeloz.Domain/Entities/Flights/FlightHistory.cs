@@ -15,5 +15,5 @@ public partial class FlightHistory
     public FlightStateEnum FlightStatesIdAfter { get; init; }
     public FlightStateEnum FlightStatedsIdBefore { get; init; }
 
-
+    // creo que no se considerara una entidad 
 }

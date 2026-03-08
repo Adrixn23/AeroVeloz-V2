@@ -14,6 +14,6 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Flight
         // Genera y verifica que el número de vuelo no esté en uso
         Task<short> GetFlightIdNumberAsync(string airlineCode);
 
-        Task<ValidationResult> IsValidStatusTransitionAsync(Flights flight, FlightStateEnum newStatus); // verifica si la transicion de estado es valido
+        Task<ValidationResult> IsValidStatusTransitionAsync(Entities.Flights.Flight flight, FlightStateEnum newStatus); // verifica si la transicion de estado es valido
     }
 }

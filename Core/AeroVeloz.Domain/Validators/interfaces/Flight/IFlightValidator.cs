@@ -10,14 +10,14 @@ namespace AeroVeloz.Domain.Validators.interfaces.Flight
 
         // Valida todas las reglas de negocio antes de crear un vuelo
  
-        Task<ValidationResult> ValidateCreateAsync(Flights flight);
+        Task<ValidationResult> ValidateCreateAsync(Entities.Flights.Flight flight);
 
-       Task<ValidationResult> ValidateFlightRowAsync(Flights flight);
+       Task<ValidationResult> ValidateFlightRowAsync(Entities.Flights.Flight flight);
 
 
 
         // Valida las reglas antes de actualizar el estado de un vuelo
-        Task<ValidationResult> ValidateStateTransitionAsync(Flights flight);
+        Task<ValidationResult> ValidateStateTransitionAsync(Entities.Flights.Flight flight);
 
 
       

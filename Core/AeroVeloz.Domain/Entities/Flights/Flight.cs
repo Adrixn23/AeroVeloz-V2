@@ -1,10 +1,10 @@
 using AeroVeloz.Domain.Entities.BaseEntity;
-namespace AeroVeloz.Domain.Entities.Flight;
+namespace AeroVeloz.Domain.Entities.Flights;
 using AeroVeloz.Domain.Common.Enums;
 
 
 
-public class Flights : BEntity<short>
+public class Flight : BEntity<short>
 {
 
     public string? codeAirlines { get; init; }
