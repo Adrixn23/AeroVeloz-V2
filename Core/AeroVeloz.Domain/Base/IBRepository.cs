@@ -1,4 +1,4 @@
-﻿namespace AeroVeloz.Application.Repositories.Base
+﻿namespace AeroVeloz.Application.DTOs.Flights.Base
 {
     public interface  IBRepository<TEntity, TId> 
     {

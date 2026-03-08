@@ -41,10 +41,4 @@
     <ProjectReference Include="..\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-
-    <Folder Include="DTOs\" />
-
-  </ItemGroup>
-
 </Project>

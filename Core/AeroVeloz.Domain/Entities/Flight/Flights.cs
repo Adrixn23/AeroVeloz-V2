@@ -17,4 +17,6 @@ public class Flights : BEntity<short>
 
     public string? BoardingGate { get; init; }
     public string? BoardingGateArrived { get; init; }
+
+
 }

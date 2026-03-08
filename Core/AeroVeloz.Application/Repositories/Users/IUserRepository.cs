@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.Repositories.Base;
+﻿using AeroVeloz.Application.DTOs.Flights.Base;
 using AeroVeloz.Domain.Entities.Airlines;
 using AeroVeloz.Domain.Entities.Airports;
 using AeroVeloz.Domain.Entities.Users;

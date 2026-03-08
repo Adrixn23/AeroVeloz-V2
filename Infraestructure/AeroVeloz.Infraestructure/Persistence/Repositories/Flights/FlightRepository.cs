@@ -6,7 +6,7 @@
 
 //namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
 //{
-//    public class FlightRepository : IFlightRepository, IFlightDomainRepository// tanto la interfaz de iflightrepository y iflightdomainService,
+//    public class FlightRepository : IFlightRepository, IFlightDomainRepository // tanto la interfaz de iflightrepository y iflightdomainService,
 //                                                                              // pasar por inyeccion de dependencias las politicas y las interfaces de las politicas
 //    {
 //        private readonly AeroVelozDbContext _context;

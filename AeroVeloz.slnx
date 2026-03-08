@@ -9,7 +9,9 @@
   <Folder Name="/Infraestructure/">
     <Project Path="Infraestructure/AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj" />
   </Folder>
-  <Folder Name="/IOC/" />
+  <Folder Name="/IOC/">
+    <Project Path="../Users/hxdes/source/repos/aeroVeloz.IOC/aeroVeloz.IOC.csproj" Id="da3a5123-603c-4cc5-84ca-21365247389c" />
+  </Folder>
   <Folder Name="/presentacion/">
     <Project Path="Presentacion/AeroVeloz.Web/AeroVeloz.Web.csproj" />
   </Folder>
