@@ -1,12 +1,13 @@
-﻿using MediatR;
+using MediatR;
 
 namespace AeroVeloz.Domain.Events.Aiport
 {
-    public sealed record AirportReactivatedDomainEvent(
+  
+    public sealed record AirportApiKeyGeneratedDomainEvent(
         string? CodeAirportICAO,
         string? CodeAirportIATA,
         string? NameAirport,
         Guid IdUserResponsible,
-        DateTime ReactivatedAt
+        DateTime GeneratedAt
     ) : INotification;
 }

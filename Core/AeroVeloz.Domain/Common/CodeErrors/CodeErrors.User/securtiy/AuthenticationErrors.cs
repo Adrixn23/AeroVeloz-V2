@@ -3,6 +3,13 @@
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User.securtiy
 
 {
+
+    {
+    /// <summary>
+    /// Clase estática que centraliza todos los errores de autenticación del sistema.
+    /// Contiene errores relacionados con credenciales inválidas, cuentas bloqueadas,
+    /// sesiones expiradas y requisitos de acceso a organizaciones.
+    /// </summary>
     public static class AuthenticationErrors
     {
         public static ErrosValidationResults InvalidCredentials =>

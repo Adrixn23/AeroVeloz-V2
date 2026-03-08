@@ -5,6 +5,6 @@ namespace AeroVeloz.Domain.Validators.interfaces.Operations
 {
     public interface IOperationalChangeValidator
     {
-        ValidationResult ValidateForCreateOperational(OperationChange operation);
+        Task<ValidationResult> ValidateForCreateOperational(OperationChange operation);
     }
 }

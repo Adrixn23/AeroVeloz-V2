@@ -6,16 +6,24 @@ using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 {
+    /// <summary>
+    /// Implementación del validador de aeropuertos que orquesta las reglas de negocio
+    /// para la creación de aeropuertos. Realiza validaciones de formato (códigos IATA/ICAO),
+    /// datos geográficos, verificación contra fuentes externas y duplicidad en la organización.
+    /// </summary>
     public class AirportValidator : IAirportValidator
     {
         private readonly IDomainServiceAirport _domainServiceAirport;
         private readonly IAiportExternarDomainServiceValidator _aiportExternarDomainServiceValidator;
+
         public AirportValidator(IDomainServiceAirport domainServiceAirport, IAiportExternarDomainServiceValidator aiportExternarDomainServiceValidator)
         {
 
             _domainServiceAirport = domainServiceAirport;
             _aiportExternarDomainServiceValidator = aiportExternarDomainServiceValidator;
         }
+
+  
         public async Task<ValidationResult> ValidateForCreateAirport(Entities.Organization.Airports.Airport airport)
         {
             var errors = new List<ErrosValidationResults>();
@@ -26,13 +34,14 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
                 return new ValidationResult().Failur(errors);
             }
 
-            // Validar campos basicos
+            // Validar que al menos un código de aeropuerto esté presente
             var hasIata = !string.IsNullOrWhiteSpace(airport.codeAirportIata);
             var hasIcao = !string.IsNullOrWhiteSpace(airport.codeAirportIcao);
 
             if (!hasIata && !hasIcao)
                 errors.Add(AirportErrors.AirportCodeMissing);
 
+            // Validar formato del código IATA (3 letras)
             if (hasIata)
             {
                 var iata = airport.codeAirportIata!.Trim();
@@ -40,6 +49,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
                     errors.Add(AirportErrors.AirportIataInvalid);
             }
 
+            // Validar formato del código ICAO (4 letras)
             if (hasIcao)
             {
                 var icao = airport.codeAirportIcao!.Trim();
@@ -57,12 +67,12 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             if (errors.Any())
                 return new ValidationResult().Failur(errors);
 
-            // Validacion externa: verificar que el aeropuerto existe en la fuente externa
+            // Validación externa: verificar que el aeropuerto existe en la fuente externa de aviación
             var existsExternal = await _aiportExternarDomainServiceValidator.ValidateAirport(airport.codeAirportIata ?? string.Empty, airport.codeAirportIcao ?? string.Empty);
             if (!existsExternal)
                 errors.Add(AirportErrors.AirportNotFoundExternal);
 
-            // Validacion en base de datos: verificar si ya existe en la organización
+            // Validación en base de datos: verificar duplicidad en la organización
             var existsInDb = await _domainServiceAirport.ExistAirportByOrganizations(airport.codeAirportIata, airport.codeAirportIcao);
             if (existsInDb)
                 errors.Add(AirportErrors.AirportAlreadyExists);

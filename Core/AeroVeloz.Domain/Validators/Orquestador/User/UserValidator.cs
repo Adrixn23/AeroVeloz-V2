@@ -8,6 +8,11 @@ using AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
 {
+    /// <summary>
+    /// Implementación del validador de usuarios que orquesta las reglas de negocio
+    /// para la creación de usuarios. Verifica la existencia y estado de la organización,
+    /// la duplicidad del usuario en el sistema y dentro de la organización.
+    /// </summary>
     public class UserValidator : IUserValidator
     {
 
@@ -20,16 +25,19 @@ namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
             _domainServiceUser = domainServiceUser;
         }
 
+      
         public async Task<ValidationResult> ValidateForCreateUser(User user)
         {
             var errors = new List<ErrosValidationResults>();
-            //si el usuario llega en blanco se returna el mismo y no se recibe ni se agrega
+
+            // Si el usuario llega nulo se retorna inmediatamente con error de invalidez
             if (user == null)
             {
                 errors.Add(UserErrors.UserInvalid);
                 return new ValidationResult().Failur(errors);
             }
-            //verifico que la organziacion a la que se esta intentando vincular el usuario ya exista  y se encuentra activa
+
+            // Verificar que la organización a la que se vincula el usuario exista y esté activa
             var org = await _domainServiceOrganization.ExistByOrgAsync(user.idOrganization);
             if(org == null)
             {
@@ -38,8 +46,8 @@ namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
             }
             if (!org.isActived)
                 errors.Add(UserErrors.UserAssociateWithOrganization);
-         
-            //validar si el usuario ya se encuentra registrado en la organizacion y si esta activo
+
+            // Validar si el usuario ya se encuentra registrado en el sistema y en la organización
             var exitsUser = await _domainServiceUser.ExistActiveUserAsync(user.Id);
             var existUserInOrg = await _domainServiceUser.UserNameExistOrganization(user.nameUser, org.Id);
 
@@ -47,10 +55,10 @@ namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
                 errors.Add(UserErrors.UserIsExist);
             if (!existUserInOrg)
                 errors.Add(UserErrors.UserExistInOrganization);
-       
-            var result = new ValidationResult(); // object que contiene la lista de errores 
+
+            var result = new ValidationResult();
             return errors.Any() ? result.Failur(errors) : result.Success();
-                
+
         }
     }
 

@@ -2,6 +2,11 @@
 
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Audit
 {
+    /// <summary>
+    /// Clase estática que centraliza todos los errores de validación relacionados con la auditoría.
+    /// Incluye errores de tipo de auditoría inválido, datos obligatorios faltantes,
+    /// integridad de registros y políticas de retención de datos.
+    /// </summary>
     public static class AuditErrors
     {
         public static ErrosValidationResults InvalidAuditType =>

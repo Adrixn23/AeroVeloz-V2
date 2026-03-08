@@ -3,6 +3,12 @@ using AeroVeloz.Domain.Common.Validation;
 
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport
 {
+
+    /// <summary>
+    /// Clase estática que centraliza todos los errores de validación relacionados con la gestión de aeropuertos.
+    /// Incluye errores de formato de códigos IATA/ICAO, validaciones de datos geográficos,
+    /// verificación contra fuentes externas y duplicidad de registros.
+    /// </summary>
     public static class AirportErrors
     {
 

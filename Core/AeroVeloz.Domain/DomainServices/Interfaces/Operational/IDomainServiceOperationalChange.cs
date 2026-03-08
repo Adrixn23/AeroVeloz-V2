@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.Flights;
-using AeroVeloz.Domain.Entities.Operations;
+﻿using AeroVeloz.Domain.Entities.Operations;
 
 namespace AeroVeloz.Domain.Services.Interfaces.Operational
 {
@@ -8,9 +7,11 @@ namespace AeroVeloz.Domain.Services.Interfaces.Operational
 
         Task<bool> OperationExistsAsync(Guid operationId);
 
-        Task<bool> OperationAlreadyRegisteredAsync(Guid operationId, OperationalChangeType type );
+        Task<bool> OperationAlreadyRegisteredAsync(Guid operationId, short typeOp);
 
         Task<bool> OperationBelongsToOrganizationAsync(Guid operationId, int organizationId);
+
+        Task<bool> OperationConsultFlightValid(short flightNumber);
 
     }
 }

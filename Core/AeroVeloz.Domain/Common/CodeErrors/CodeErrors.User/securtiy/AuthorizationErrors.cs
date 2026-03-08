@@ -2,6 +2,11 @@
 
 namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User.securtiy
 {
+    /// <summary>
+    /// Clase estática que centraliza todos los errores de autorización del sistema.
+    /// Contiene errores relacionados con permisos insuficientes, acceso denegado
+    /// a recursos específicos y requisitos de roles administrativos.
+    /// </summary>
     public static class AuthorizationErrors
     {
         public static ErrosValidationResults InsufficientPermissions =>
