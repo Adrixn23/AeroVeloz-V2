@@ -1,14 +1,9 @@
-using AeroVeloz.Domain.DomainServices.Interfaces.User;
-using AeroVeloz.Domain.Services.Interfaces.Airport;
-using AeroVeloz.Domain.Services.Interfaces.Operational;
-using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
-using AeroVeloz.Domain.Validators.interfaces.Airports;
-using AeroVeloz.Domain.Validators.interfaces.Airport;
-using AeroVeloz.Domain.Validators.interfaces.Operations;
-using AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator;
-using AeroVeloz.Domain.Validators.Orquestador.Airport;
-using AeroVeloz.Domain.Validators.Orquestador.Operational;
-using AeroVeloz.Domain.Validators.Orquestador.SuperAdmin;
+using AeroVeloz.Domain.Validators.interfaces.Airlines;
+using AeroVeloz.Domain.Validators.interfaces.Flight;
+using AeroVeloz.Domain.Validators.interfaces.Subscriptions;
+using AeroVeloz.Domain.Validators.Orquestador.Airlines;
+using AeroVeloz.Domain.Validators.Orquestador.Flights;
+using AeroVeloz.Domain.Validators.Orquestador.Subscriptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AeroVeloz.IOC.Dependencies
@@ -17,10 +12,9 @@ namespace AeroVeloz.IOC.Dependencies
     {
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
-            services.AddScoped<IAirportValidator, AirportValidator>();
-            services.AddScoped<IConnectionAiportAirline, ConnectionAiportAirline>();
-            services.AddScoped<IUserValidator, UserValidator>();
-            services.AddScoped<IOperationalChangeValidator, OperationalChangeValidator>();
+            services.AddScoped<IFlightValidator, FlightValidatorImpl>();
+            services.AddScoped<ISubscriptionValidator, SubscriptionValidatorImpl>();
+            services.AddScoped<IAirlineValidator, AirlineValidatorImpl>();
 
             return services;
         }

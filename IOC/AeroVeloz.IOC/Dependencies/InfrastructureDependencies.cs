@@ -1,18 +1,21 @@
-using AeroVeloz.Application.Repositories.Airport;
 using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
-using AeroVeloz.Application.Repositories.Operational;
-using AeroVeloz.Application.Repositories.Users;
-using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
-using AeroVeloz.Domain.DomainServices.Interfaces.User;
-using AeroVeloz.Domain.Services.Interfaces.Airport;
-using AeroVeloz.Domain.Services.Interfaces.Operational;
-using AeroVeloz.Infraestructure.Persistence.Repositories.Airport;
+using AeroVeloz.Application.Repositories.Flights;
+using AeroVeloz.Application.Repositories.Notifications;
+using AeroVeloz.Application.Repositories.Subscriptions;
+using AeroVeloz.Domain.DomainService.Interfaces.Airlines;
+using AeroVeloz.Domain.DomainService.Interfaces.Flights;
+using AeroVeloz.Domain.DomainService.Interfaces.Organization;
+using AeroVeloz.Domain.DomainService.Interfaces.Subscriptions;
+using AeroVeloz.Infraestructure.Persistence.Monitoring;
+using AeroVeloz.Infraestructure.Persistence.Repositories.Airlines;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Audit;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Auth;
-using AeroVeloz.Infraestructure.Persistence.Repositories.Operational;
+using AeroVeloz.Infraestructure.Persistence.Repositories.Flights;
+using AeroVeloz.Infraestructure.Persistence.Repositories.Notifications;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Organization;
-using AeroVeloz.Infraestructure.Persistence.Repositories.User;
+using AeroVeloz.Infraestructure.Persistence.Repositories.Subscription;
+using AeroVeloz.Transversal.Contracts.Monitoring;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AeroVeloz.IOC.Dependencies
@@ -21,19 +24,24 @@ namespace AeroVeloz.IOC.Dependencies
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped<IAirportRepository, AirportRepository>();
-            services.AddScoped<IAirportConnectionAirline, AirportConnectionAirline>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IOperationalRepository, OperationalRepository>();
-            services.AddScoped<IAuditRepository, AuditRepository>();
+            // Auth repositories
             services.AddScoped<IUserRepositoryAuthenticacion, UserAuthenticationRepository>();
             services.AddScoped<IUserRepositoryAuthorization, UserRepositoryAuthorization>();
 
-            // Domain services implementados en Infrastructure
-            services.AddScoped<IDomainServiceAirport, AirportRepository>();
-            services.AddScoped<IDomainServiceUser, UserRepository>();
-            services.AddScoped<IDomainServiceOperationalChange, OperationalRepository>();
+            // Module repositories
+            services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IAuditWriteRepository, AuditWriteRepository>();
+
+            // Domain services implemented in Infrastructure
             services.AddScoped<IDomainServiceOrganization, OrganizationRepository>();
+            services.AddScoped<IFlightDomainService, FlightDomainServiceImpl>();
+            services.AddScoped<IAirlineDomainService, AirlineDomainServiceImpl>();
+            services.AddScoped<ISubscriptionsDomainService, SubscriptionDomainServiceImpl>();
+
+            // Transversal monitoring
+            services.AddScoped<IOrganizationMonitoringLogger, OrganizationMonitoringLogger>();
 
             return services;
         }

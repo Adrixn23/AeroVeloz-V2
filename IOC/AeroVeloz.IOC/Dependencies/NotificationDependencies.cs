@@ -1,27 +1,27 @@
+using AeroVeloz.Application.Contracts.Flights;
+using AeroVeloz.Application.Repositories.Notifications;
+using AeroVeloz.Infraestructure.Integrations.Channels;
 using AeroVeloz.Infraestructure.Integrations.Notifications;
 using AeroVeloz.Infraestructure.Integrations.OneSignal;
-using AeroVeloz.Transversal.Contracts.Notifications;
-using Microsoft.Extensions.Configuration;
+using AeroVeloz.Infraestructure.Persistence.Repositories.Notifications;
+using AeroVeloz.Infraestructure.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AeroVeloz.IOC.Dependencies
 {
     public static class NotificationDependencies
     {
-        public static IServiceCollection AddNotificationServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddNotificationServices(this IServiceCollection services)
         {
-            services.Configure<OneSignalOptions>(options =>
-            {
-                options.AppId = configuration["OneSignal:AppId"] ?? string.Empty;
-                options.RestApiKey = configuration["OneSignal:RestApiKey"] ?? string.Empty;
-            });
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
 
-            services.AddHttpClient<OneSignalPushChannel>();
-            services.AddHttpClient<OneSignalInAppChannel>();
+            services.AddScoped<INotificationChannel, EmailNotificationChannel>();
+            services.AddScoped<INotificationChannel, SmsNotificationChannel>();
+            services.AddScoped<INotificationChannel, OneSignalPushChannel>();
+            services.AddScoped<INotificationChannel, OneSignalInAppChannel>();
 
-            services.AddSingleton<INotificationChannel, OneSignalPushChannel>();
-            services.AddSingleton<INotificationChannel, OneSignalInAppChannel>();
-            services.AddSingleton<INotificationDispatcher, NotificationDispatcher>();
+            services.AddScoped<ICsvFlightParser, CsvFlightParser>();
 
             return services;
         }

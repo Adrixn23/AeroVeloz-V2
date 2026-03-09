@@ -1,4 +1,4 @@
-using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
+using AeroVeloz.Domain.DomainService.Interfaces.Organization;
 using AeroVeloz.Domain.Models.Organization;
 using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;

@@ -1,9 +1,8 @@
-﻿using AeroVeloz.Domain.Common.Validation;
+using AeroVeloz.Domain.Common.Validation;
 using MediatR;
 
-namespace AeroVeloz.Application.Handlers.Result
+namespace AeroVeloz.Application.Services.Result
 {
-  
     public sealed class OperationResult<T>
     {
         public T? Value { get; private init; }
@@ -27,15 +26,13 @@ namespace AeroVeloz.Application.Handlers.Result
         public bool HasDomainEvents => _domainEvents.Count > 0;
 
         private OperationResult() { }
-      
+
         public static OperationResult<T> Ok(T value, string? message = null)
             => new() { Value = value, Success = true, Message = message };
 
-     
         public static OperationResult<T> Fail(string errorCode, string message)
             => new() { Success = false, ErrorCode = errorCode, Message = message };
 
-   
         public static OperationResult<T> FromValidation(ValidationResult validationResult)
         {
             var result = new OperationResult<T> { Success = false, Message = "Errores de validación del dominio" };
@@ -55,7 +52,6 @@ namespace AeroVeloz.Application.Handlers.Result
             return result;
         }
 
-  
         public void AddEvent(INotification @event) => _domainEvents.Add(@event);
 
         public void AddEvents(IEnumerable<INotification> events) => _domainEvents.AddRange(events);

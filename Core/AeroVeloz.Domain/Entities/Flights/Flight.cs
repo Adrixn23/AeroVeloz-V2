@@ -1,7 +1,5 @@
-﻿using AeroVeloz.Domain.Entities.Airlines;
-using AeroVeloz.Domain.Entities.BaseEntity;
-using AeroVeloz.Domain.Entities.Operations;
-using AeroVeloz.Domain.Entities.Subscriptions;
+﻿using AeroVeloz.Domain.Entities.BaseEntity;
+
 namespace AeroVeloz.Domain.Entities.Flights;
 
 /// <summary>

@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using AeroVeloz.Domain.Entities.BaseEntity;
 
 namespace AeroVeloz.Domain.Entities.Subscriptions;
 
@@ -17,5 +17,4 @@ public partial class Subscription : BEntity<Guid>
    public DateTime endingDate { get; init; }
    public bool activeSubscription { get; init; }
    public string? contactValue { get; init; }
-  
 }

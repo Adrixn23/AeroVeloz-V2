@@ -1,4 +1,4 @@
-using AeroVeloz.Application.Handlers.Result;
+using AeroVeloz.Application.Services.Result;
 
 namespace AeroVeloz.Application.Contracts.Base
 {

@@ -10,12 +10,21 @@
     <Compile Remove="interfaces\**" />
     <Compile Remove="Services\Airports\**" />
     <Compile Remove="Services\Base\**" />
+    <Compile Remove="DTOs\BaseDto\**" />
+    <Compile Remove="Services\interface\**" />
+    <Compile Remove="Services\UseCases\**" />
     <EmbeddedResource Remove="interfaces\**" />
     <EmbeddedResource Remove="Services\Airports\**" />
     <EmbeddedResource Remove="Services\Base\**" />
+    <EmbeddedResource Remove="DTOs\BaseDto\**" />
+    <EmbeddedResource Remove="Services\interface\**" />
+    <EmbeddedResource Remove="Services\UseCases\**" />
     <None Remove="interfaces\**" />
     <None Remove="Services\Airports\**" />
     <None Remove="Services\Base\**" />
+    <None Remove="DTOs\BaseDto\**" />
+    <None Remove="Services\interface\**" />
+    <None Remove="Services\UseCases\**" />
   </ItemGroup>
 
   <ItemGroup>

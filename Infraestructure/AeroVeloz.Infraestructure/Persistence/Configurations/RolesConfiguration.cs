@@ -9,10 +9,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Roles> builder)
         {
             builder.HasData(
-                new Roles { Id = 1, nameRol = "SYSTEMADMIN" },
-                new Roles { Id = 2, nameRol = "AIRPORTADMIN" },
-                new Roles { Id = 3, nameRol = "AIRLINEADMIN" },
-                new Roles { Id = 4, nameRol = "OPERATIONAIRPORT" }
+                new Roles { Id = 3, nameRol = "AIRLINEADMIN" }
             );
         }
     }

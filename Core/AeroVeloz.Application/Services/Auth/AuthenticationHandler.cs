@@ -1,28 +1,24 @@
 using AeroVeloz.Application.Contracts.Auth;
 using AeroVeloz.Application.DTOs.Auth;
 using AeroVeloz.Application.DTOs.Users;
-using AeroVeloz.Application.Handlers.Result;
+using AeroVeloz.Application.Services.Result;
 using AeroVeloz.Application.Repositories.Auth;
-using AeroVeloz.Application.Repositories.Users;
-using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
+using AeroVeloz.Domain.DomainService.Interfaces.Organization;
 
-namespace AeroVeloz.Application.Handlers.Auth
+namespace AeroVeloz.Application.Services.Auth
 {
     public class AuthenticationHandler : IAuthenticationServicie
     {
         private readonly IUserRepositoryAuthenticacion _authRepo;
-        private readonly IUserRepository _userRepo;
         private readonly IUserRepositoryAuthorization _authzRepo;
         private readonly IDomainServiceOrganization _orgService;
 
         public AuthenticationHandler(
             IUserRepositoryAuthenticacion authRepo,
-            IUserRepository userRepo,
             IUserRepositoryAuthorization authzRepo,
             IDomainServiceOrganization orgService)
         {
             _authRepo = authRepo;
-            _userRepo = userRepo;
             _authzRepo = authzRepo;
             _orgService = orgService;
         }
@@ -41,7 +37,7 @@ namespace AeroVeloz.Application.Handlers.Auth
             if (!credentials.IsValid)
                 return OperationResult<UserLoginResultDto>.FromValidation(credentials);
 
-            var userSystem = await _userRepo.GetByUserName(dto.nameUser!, org.Id);
+            var userSystem = await _authRepo.GetByUserNameAsync(dto.nameUser!, org.Id);
 
             var isActive = await _authRepo.IsUserActiveAsync(userSystem.userId, org.Id);
             if (!isActive.IsValid)
@@ -52,6 +48,9 @@ namespace AeroVeloz.Application.Handlers.Auth
                 return OperationResult<UserLoginResultDto>.FromValidation(isLocked);
 
             var role = await _authzRepo.GetUserRolesAsync(userSystem.userId, org.Id);
+
+            if (role.nameRol != "AIRLINEADMIN")
+                return OperationResult<UserLoginResultDto>.Fail("LOGIN_ROLE", "Este aplicativo es exclusivo para administradores de aerolínea");
 
             var loginResult = new UserLoginResultDto(
                 userSystem.userId,
