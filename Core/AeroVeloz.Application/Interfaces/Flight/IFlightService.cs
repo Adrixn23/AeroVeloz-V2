@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AeroVeloz.Application.Interfaces.Flight
 {
-    internal class IFlightService
+     class IFlightService
     {
+
     }
 }

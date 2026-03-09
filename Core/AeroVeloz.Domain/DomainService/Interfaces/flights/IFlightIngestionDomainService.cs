@@ -1,6 +1,6 @@
 ﻿
 using AeroVeloz.Domain.Common.Validation;
-using AeroVeloz.Domain.Entities.Flight;
+using AeroVeloz.Domain.Entities.Flights;
 namespace AeroVeloz.Domain.DomainService.Interfaces.flight
 {
     public interface IFlightIngestionDomainService

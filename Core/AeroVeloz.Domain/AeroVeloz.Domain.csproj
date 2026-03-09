@@ -8,14 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Audit\**" />
-    <Compile Remove="Validators\Orquestador\Airlines\**" />
-    <Compile Remove="Validators\Orquestador\Flights\**" />
     <EmbeddedResource Remove="Audit\**" />
-    <EmbeddedResource Remove="Validators\Orquestador\Airlines\**" />
-    <EmbeddedResource Remove="Validators\Orquestador\Flights\**" />
     <None Remove="Audit\**" />
-    <None Remove="Validators\Orquestador\Airlines\**" />
-    <None Remove="Validators\Orquestador\Flights\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +18,8 @@
   <Compile Remove="Execeptions\**" />
     <EmbeddedResource Remove="Audit\**" />
     <EmbeddedResource Remove="Execeptions\**" />
+    <Folder Include="entities\" />
+    <Folder Include="Validators\Orquestador\" />
     <Folder Include="Validators\Orquestador\" />
     <None Remove="Audit\**" />
     <None Remove="Execeptions\**" />

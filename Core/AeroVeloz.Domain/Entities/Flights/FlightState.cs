@@ -1,10 +1,9 @@
-﻿using AeroVeloz.Domain.Common.Enums;
+﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
-public class FlightState
+namespace AeroVeloz.Domain.Entities.Flights;
+
+public partial class FlightState : BEntity<byte>
 {
-    public byte FlightStatesId { get; init; }
-    public string? CodeFlightState { get; init; }
-    public string? Name { get; init; }
-
-    
+    public string? codeFlightState { get; init; }
+    public string? name { get; init; }
 }

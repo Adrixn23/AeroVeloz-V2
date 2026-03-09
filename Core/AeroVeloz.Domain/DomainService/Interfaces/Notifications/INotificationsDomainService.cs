@@ -4,7 +4,8 @@ using AeroVeloz.Domain.Common.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AeroVeloz.Domain.Entities.Notifications;
+
+using AeroVeloz.Domain.Entities.Notification;
 namespace AeroVeloz.Domain.DomainService.Interfaces.Notifications
 {
     public interface INotificationsDomainService

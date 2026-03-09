@@ -13,9 +13,7 @@
     <EmbeddedResource Remove="DTOs\BaseDto\**" />
     <EmbeddedResource Remove="Services\interface\**" />
     <EmbeddedResource Remove="Services\UseCases\**" />
-    <None Remove="DTOs\BaseDto\**" />
-    <None Remove="Services\interface\**" />
-    <None Remove="Services\UseCases\**" />
+
   </ItemGroup>
 
   <ItemGroup>
