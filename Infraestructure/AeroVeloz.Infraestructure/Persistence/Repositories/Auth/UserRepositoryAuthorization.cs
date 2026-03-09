@@ -17,8 +17,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
     {
 
         /*
-           var user = await _context.Users.FirstOrDefaultAsync(us => us.IdUser == userId && us.IdOrganization == orgId); 
-             NOTA SE DEBE MODIFICAR ESTOS METODOS DENTRO DE ESTA INTERFACE
+          
                                                                                                                     
             Y LA AUTHENTICATION QUE SE REPITE PARA TENER UNA NO REPETICION DEL CODIGO;
          */
@@ -76,7 +75,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             //validar el tipo de organization que esta intentando realizar cambios en el vuelo ya que solo pueden
             //hacerlos los clientes airports y airlines
 
-            if (org.typeOrganization  != "AIRPORT" || org.typeOrganization !=  "AIRLINE")
+            if (org.typeOrganization  != "AIRPORT" && org.typeOrganization !=  "AIRLINE")
             {
                 errors.Add(AuthorizationErrors.OrganizationsNoValid);
                 errors.Add(AuthorizationErrors.InsufficientPermissions);
@@ -94,7 +93,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             var user = await _context.Users.FirstOrDefaultAsync(us => us.Id == userId && us.idOrganization == orgId);
             var errors = new List<ErrosValidationResults>();
 
-            if (user != null)
+            if (user == null)
             {
                 errors.Add(AuthenticationErrors.UserNotFound);
                 errors.Add(AuthenticationErrors.NoExistOrgByUsers);
@@ -127,7 +126,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             //de la modificaciondel usuario 
             var rol = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.idRol);
 
-            if (rol!.nameRol!.Contains("ADMIN"))
+            if (!rol!.nameRol!.Contains("ADMIN"))
             {
                 errors.Add(AuthorizationErrors.AdminAccessRequired);
                 errors.Add(AuthorizationErrors.InsufficientPermissions);
@@ -150,7 +149,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             }
             var rol = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.idRol);
 
-            if (rol!.nameRol!.Contains("ADMIN"))
+            if (!rol!.nameRol!.Contains("ADMIN"))
             {
                 errors.Add(AuthorizationErrors.AdminAccessRequired);
                 errors.Add(AuthorizationErrors.InsufficientPermissions);
@@ -198,7 +197,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
                 join r in _context.Roles.AsNoTracking()
                    on u.idRol equals r.Id
                 where 
-                u.idRol == r.Id && 
+                u.Id == userId && 
                 u.idOrganization == orgId
                 && r.nameRol == rolName
                 select r.Id
@@ -214,6 +213,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
                       on u.idRol equals r.idRol
                      join p in _context.Permissions
                        on r.idPermission equals p.Id
+                     where u.Id == userId && u.idOrganization == orgId
                      select new PermissionModel(
                            p.Id,
                            p.codePermision

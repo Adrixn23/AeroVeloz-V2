@@ -4,7 +4,7 @@ using AeroVeloz.Domain.Models.Operational;
 
 namespace AeroVeloz.Application.Repositories.Operational
 {
-    public  interface IOperationalRepository : IBRepository<Domain.Entities.Operations.OperationChange, Guid>
+    public  interface IOperationalRepository : IBRepository<Domain.Entities.Operations.OperationChange>
     {
    
         Task<OperationalModel> GetByOperationAsync(Guid operationId);
