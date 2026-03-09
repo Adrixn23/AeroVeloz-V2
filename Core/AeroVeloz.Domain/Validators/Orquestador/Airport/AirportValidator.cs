@@ -1,5 +1,4 @@
 ﻿using AeroVeloz.Domain.Common.Validation;
-using AeroVeloz.Domain.DomainServices.Interfaces.Airport;
 using AeroVeloz.Domain.Services.Interfaces.Airport;
 using AeroVeloz.Domain.Validators.interfaces.Airports;
 using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
@@ -14,13 +13,12 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
     public class AirportValidator : IAirportValidator
     {
         private readonly IDomainServiceAirport _domainServiceAirport;
-        private readonly IAiportExternarDomainServiceValidator _aiportExternarDomainServiceValidator;
-
-        public AirportValidator(IDomainServiceAirport domainServiceAirport, IAiportExternarDomainServiceValidator aiportExternarDomainServiceValidator)
+      
+        public AirportValidator(IDomainServiceAirport domainServiceAirport)
         {
 
             _domainServiceAirport = domainServiceAirport;
-            _aiportExternarDomainServiceValidator = aiportExternarDomainServiceValidator;
+           
         }
 
   
@@ -66,11 +64,6 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             // Si ya existen errores de formato o datos faltantes, retornar de inmediato
             if (errors.Any())
                 return new ValidationResult().Failur(errors);
-
-            // Validación externa: verificar que el aeropuerto existe en la fuente externa de aviación
-            var existsExternal = await _aiportExternarDomainServiceValidator.ValidateAirport(airport.codeAirportIata ?? string.Empty, airport.codeAirportIcao ?? string.Empty);
-            if (!existsExternal)
-                errors.Add(AirportErrors.AirportNotFoundExternal);
 
             // Validación en base de datos: verificar duplicidad en la organización
             var existsInDb = await _domainServiceAirport.ExistAirportByOrganizations(airport.codeAirportIata, airport.codeAirportIcao);

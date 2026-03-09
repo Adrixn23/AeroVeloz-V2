@@ -19,20 +19,14 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User.securtiy
         public static ErrosValidationResults UserInactive =>
             ErrosValidationResults.Create("AUTH_04", "La cuenta de usuario está inactiva");
 
-        public static ErrosValidationResults WeakPassword =>
-            ErrosValidationResults.Create("AUTH_05", "La contraseña no cumple con los requisitos mínimos de seguridad");
-
-        public static ErrosValidationResults UsernameRequired =>
-            ErrosValidationResults.Create("AUTH_06", "El nombre de usuario es obligatorio");
-
-        public static ErrosValidationResults PasswordRequired =>
-            ErrosValidationResults.Create("AUTH_07", "La contraseña es obligatoria");
-
-        public static ErrosValidationResults SessionExpired =>
-            ErrosValidationResults.Create("AUTH_08", "La sesión ha expirado, debe autenticarse nuevamente");
-
         public static ErrosValidationResults NoExistOrgByUsers =>
-            ErrosValidationResults.Create("AUTH_09", "La organización a la cual esta intentando acceder no existe o se encuentra desactivada");
+            ErrosValidationResults.Create("AUTH_05", "La organización a la cual esta intentando acceder no existe o se encuentra desactivada");
+
+        public static ErrosValidationResults DesktopAccessDenied =>
+            ErrosValidationResults.Create("AUTH_06", "Este usuario no tiene acceso al portal de escritorio. Solo usuarios AIRPORTADMIN, SYSTEMADMIN y OPERATIONAIRPORT pueden acceder");
+
+        public static ErrosValidationResults AccountLockedByAttempts =>
+            ErrosValidationResults.Create("AUTH_07", "La cuenta ha sido bloqueada por 15 minutos debido a múltiples intentos fallidos de inicio de sesión");
 
     }
 

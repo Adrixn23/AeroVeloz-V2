@@ -3,10 +3,10 @@ using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.DomainServices.Interfaces.User;
 using AeroVeloz.Domain.Entities.Users.User;
-using AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator;
+using AeroVeloz.Domain.Validators.interfaces.Users;
 
 
-namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
+namespace AeroVeloz.Domain.Validators.Orquestador.Users
 {
     /// <summary>
     /// Implementación del validador de usuarios que orquesta las reglas de negocio

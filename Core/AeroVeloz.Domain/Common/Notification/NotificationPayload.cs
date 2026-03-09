@@ -6,6 +6,7 @@ namespace AeroVeloz.Domain.Common.Notification
         public string Message { get; init; } = string.Empty;
         public string? Detail { get; init; }
         public int? OrganizationId { get; init; }
+        public string? EmailAddress { get; init; }
         public IReadOnlyCollection<string> TargetExternalIds { get; init; } = [];
         public ChannelType Channel { get; init; }
     }

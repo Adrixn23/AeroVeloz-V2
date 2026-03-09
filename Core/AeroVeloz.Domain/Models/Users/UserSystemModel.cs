@@ -3,7 +3,9 @@
     public sealed record UserSystemModel(
         Guid userId,
         string? nameUser,
-        bool isActiveUser
+        bool isActiveUser,
+        int failedLoginAttempts,
+        DateTime? lockedUntil
         );
- 
+
 }

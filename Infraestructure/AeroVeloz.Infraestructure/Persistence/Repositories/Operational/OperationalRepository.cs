@@ -145,8 +145,16 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
                 );
 
             return operationUpdate > 0;
-                
 
+
+        }
+
+        public async Task<string?> GetOperationalTypeNameAsync(short typeId)
+        {
+            var type = await _context.OperationalChangeTypes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == typeId);
+            return type?.name;
         }
     }
 }

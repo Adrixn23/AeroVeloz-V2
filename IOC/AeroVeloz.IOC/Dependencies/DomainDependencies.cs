@@ -5,10 +5,10 @@ using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.Validators.interfaces.Airports;
 using AeroVeloz.Domain.Validators.interfaces.Airport;
 using AeroVeloz.Domain.Validators.interfaces.Operations;
-using AeroVeloz.Domain.Validators.interfaces.SuperAdminValidator;
+using AeroVeloz.Domain.Validators.interfaces.Users;
 using AeroVeloz.Domain.Validators.Orquestador.Airport;
 using AeroVeloz.Domain.Validators.Orquestador.Operational;
-using AeroVeloz.Domain.Validators.Orquestador.SuperAdmin;
+using AeroVeloz.Domain.Validators.Orquestador.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AeroVeloz.IOC.Dependencies

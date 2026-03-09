@@ -6,10 +6,11 @@ namespace AeroVeloz.Application.Repositories.Operational
 {
     public  interface IOperationalRepository : IBRepository<Domain.Entities.Operations.OperationChange>
     {
-   
+
         Task<OperationalModel> GetByOperationAsync(Guid operationId);
         Task<IReadOnlyCollection<OperationalModel>> GetFlightChangesAsync(short flightNumber);
         Task<IReadOnlyCollection<OperationalDetailModel>> GetAirportChangesAsync(int orgId);
-      
+        Task<string?> GetOperationalTypeNameAsync(short typeId);
+
     }
 }

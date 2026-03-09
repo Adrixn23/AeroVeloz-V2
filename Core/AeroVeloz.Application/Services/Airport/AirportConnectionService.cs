@@ -7,6 +7,8 @@ using AeroVeloz.Domain.Entities.Organization.Airport;
 using AeroVeloz.Domain.Events.Aiport;
 using AeroVeloz.Domain.Models.Airports;
 using AeroVeloz.Domain.Validators.interfaces.Airport;
+using AeroVeloz.Transversal.Contracts.Monitoring;
+using AeroVeloz.Transversal.Monitoring;
 using MediatR;
 
 namespace AeroVeloz.Application.Handlers.Airport
@@ -16,83 +18,134 @@ namespace AeroVeloz.Application.Handlers.Airport
         private readonly IAirportConnectionAirline _repo;
         private readonly IConnectionAiportAirline _validator;
         private readonly IUserRepositoryAuthorization _auth;
+        private readonly IOrganizationMonitoringLogger _monitoringLogger;
         private readonly IMediator _mediator;
 
         public AirportConnectionService(
             IAirportConnectionAirline repo,
             IConnectionAiportAirline validator,
             IUserRepositoryAuthorization auth,
+            IOrganizationMonitoringLogger monitoringLogger,
             IMediator mediator)
         {
             _repo = repo;
             _validator = validator;
             _auth = auth;
+            _monitoringLogger = monitoringLogger;
             _mediator = mediator;
         }
 
         public async Task<OperationResult<bool>> CreateConnectionAsync(ConnectionAirlineByAirportSaveDto dto, Guid userId, int orgId)
         {
-            var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<bool>.FromValidation(authResult);
-
-            var connection = new ConectionsAirlineAirport
+            try
             {
-                Id = Guid.NewGuid(),
-                codeAirlines = dto.codeAirline,
-                codeAirport = dto.codeAirport,
-                isActive = true,
-                createAt = DateTime.UtcNow
-            };
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
-            var validation = await _validator.ValidationForCreateConnectionAirlineByAirport(connection);
-            if (!validation.IsValid)
-                return OperationResult<bool>.FromValidation(validation);
+                var connection = new ConectionsAirlineAirport
+                {
+                    Id = Guid.NewGuid(),
+                    codeAirlines = dto.codeAirline,
+                    codeAirport = dto.codeAirport,
+                    isActive = true,
+                    createAt = DateTime.UtcNow
+                };
 
-            var created = await _repo.CreateEntity(connection);
-            if (!created)
-                return OperationResult<bool>.Fail("CONN_PERSIST", "No se pudo crear la conexión");
+                var validation = await _validator.ValidationForCreateConnectionAirlineByAirport(connection);
+                if (!validation.IsValid)
+                    return OperationResult<bool>.FromValidation(validation);
 
-            var result = OperationResult<bool>.Ok(true, "Conexión creada exitosamente");
-            result.AddEvent(new AirportConnectionCreatedDomainEvent(
-                connection.Id, dto.codeAirport, dto.codeAirline, userId, DateTime.UtcNow));
+                var created = await _repo.CreateEntity(connection);
+                if (!created)
+                    return OperationResult<bool>.Fail("CONN_PERSIST", "No se pudo crear la conexión");
 
-            foreach (var evt in result.DomainEvents)
-                await _mediator.Publish(evt);
+                var result = OperationResult<bool>.Ok(true, "Conexión creada exitosamente");
+                result.AddEvent(new AirportConnectionCreatedDomainEvent(
+                    connection.Id, dto.codeAirport, dto.codeAirline, userId, DateTime.UtcNow));
 
-            return result;
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportConnectionService.CreateConnectionAsync",
+                    Message = "Error inesperado al crear conexión aeropuerto-aerolínea"
+                }, ex);
+                return OperationResult<bool>.Fail("CONN_ERROR", "Error inesperado al crear la conexión");
+            }
         }
 
         public async Task<OperationResult<bool>> DeactivateConnectionAsync(Guid connectionId, Guid userId, int orgId)
         {
-            var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<bool>.FromValidation(authResult);
+            try
+            {
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
-            var connection = new ConectionsAirlineAirport { Id = connectionId, isActive = false };
-            var deactivated = await _repo.DeleteEntity(connection);
-            if (!deactivated)
-                return OperationResult<bool>.Fail("CONN_DEACTIVATE", "No se pudo desactivar la conexión");
+                var connections = await _repo.GetAirportConnectionById(null);
+                var connData = connections.FirstOrDefault(c => c.airportCode != null);
 
-            var result = OperationResult<bool>.Ok(true, "Conexión desactivada");
-            result.AddEvent(new AirportConnectionDeactivatedDomainEvent(
-                connectionId, null, null, userId, DateTime.UtcNow));
+                var allConnections = await _repo.GetAirportConnectionById(connData?.airportCode);
+                var targetConn = allConnections.FirstOrDefault();
 
-            foreach (var evt in result.DomainEvents)
-                await _mediator.Publish(evt);
+                var connection = new ConectionsAirlineAirport { Id = connectionId, isActive = false };
+                var deactivated = await _repo.DeleteEntity(connection);
+                if (!deactivated)
+                    return OperationResult<bool>.Fail("CONN_DEACTIVATE", "No se pudo desactivar la conexión");
 
-            return result;
+                var result = OperationResult<bool>.Ok(true, "Conexión desactivada");
+                result.AddEvent(new AirportConnectionDeactivatedDomainEvent(
+                    connectionId, targetConn?.airportCode ?? "N/A", targetConn?.airlineCode ?? "N/A", userId, DateTime.UtcNow));
+
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportConnectionService.DeactivateConnectionAsync",
+                    Message = $"Error inesperado al desactivar conexión: {connectionId}"
+                }, ex);
+                return OperationResult<bool>.Fail("CONN_ERROR", "Error inesperado al desactivar la conexión");
+            }
         }
 
         public async Task<OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>> GetConnectionsAsync(
             string codeAirportIcao, Guid userId, int orgId)
         {
-            var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.FromValidation(authResult);
+            try
+            {
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.FromValidation(authResult);
 
-            var connections = await _repo.GetAirportConnectionById(codeAirportIcao);
-            return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.Ok(connections);
+                var connections = await _repo.GetAirportConnectionById(codeAirportIcao);
+                return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.Ok(connections);
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportConnectionService.GetConnectionsAsync",
+                    Message = $"Error inesperado al obtener conexiones: {codeAirportIcao}"
+                }, ex);
+                return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.Fail("CONN_ERROR", "Error inesperado al obtener conexiones");
+            }
         }
     }
 }

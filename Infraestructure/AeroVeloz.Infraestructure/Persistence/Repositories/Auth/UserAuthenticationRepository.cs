@@ -64,7 +64,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
                 errors.Add(AuthenticationErrors.UserNotFound);
                 return new ValidationResult().Failur(errors);
             }
-            if(user.lockedUntil != null)
+            if(user.lockedUntil != null && user.lockedUntil > DateTime.UtcNow)
             {
                 errors.Add(AuthenticationErrors.UserLocked);
                 return new ValidationResult().Failur(errors);

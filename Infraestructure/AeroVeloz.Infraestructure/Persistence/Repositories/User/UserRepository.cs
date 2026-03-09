@@ -38,15 +38,17 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         public async Task<UserSystemModel> GetByUserName(string nameUser, int orgId) 
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.nameUser == nameUser && u.idOrganization == orgId );
- 
+
             if (user != null)
             {
                return new UserSystemModel(
                     user!.Id,
                     user.nameUser,
-                    (bool)user.isActive!
+                    (bool)user.isActive!,
+                    user.failedLoginAttempts,
+                    user.lockedUntil
                 );
-                   
+
             }
             return null!;
         }

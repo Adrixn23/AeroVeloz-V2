@@ -28,6 +28,19 @@ namespace AeroVeloz.Application.EventHandlers
                 Message = $"Se ha registrado el aeropuerto {notification.NameAirport} ({notification.CodeAirportICAO})",
                 Channel = ChannelType.Push
             });
+
+            if (!string.IsNullOrWhiteSpace(notification.EmailOrganization))
+            {
+                await _dispatcher.DispatchAsync(new NotificationPayload
+                {
+                    Title = "Bienvenido a AeroVeloz - Credenciales de acceso",
+                    Message = $"Su aeropuerto {notification.NameAirport} ({notification.CodeAirportICAO}) ha sido registrado exitosamente. " +
+                              $"Usuario: {notification.DefaultUserName} | Contraseña: {notification.DefaultPasswordHash}",
+                    Detail = "Por favor cambie su contraseña después del primer inicio de sesión. La contraseña proporcionada está encriptada y solo es visible en su servicio de mensajería.",
+                    EmailAddress = notification.EmailOrganization,
+                    Channel = ChannelType.Email
+                });
+            }
         }
 
         public async Task Handle(AirportUpdatedDomainEvent notification, CancellationToken ct)

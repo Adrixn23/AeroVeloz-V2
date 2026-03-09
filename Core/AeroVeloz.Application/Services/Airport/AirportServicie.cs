@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text.Json;
 using AeroVeloz.Application.Contracts.Airport;
 using AeroVeloz.Application.DTOs.Organization.Airports;
@@ -5,10 +6,15 @@ using AeroVeloz.Application.Handlers.Result;
 using AeroVeloz.Application.Repositories.Airport;
 using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
+using AeroVeloz.Application.Repositories.Users;
+using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.Events.Aiport;
 using AeroVeloz.Domain.Models.Airports;
 using AeroVeloz.Domain.Validators.interfaces.Airports;
+using AeroVeloz.Transversal.Contracts.Monitoring;
+using AeroVeloz.Transversal.Monitoring;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
@@ -18,6 +24,9 @@ namespace AeroVeloz.Application.Handlers.Airport
         private readonly IAirportValidator _validator;
         private readonly IUserRepositoryAuthorization _auth;
         private readonly IAuditRepository _auditRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IDomainServiceOrganization _orgService;
+        private readonly IOrganizationMonitoringLogger _monitoringLogger;
         private readonly IMediator _mediator;
 
         public AirportServicie(
@@ -25,180 +34,301 @@ namespace AeroVeloz.Application.Handlers.Airport
             IAirportValidator validator,
             IUserRepositoryAuthorization auth,
             IAuditRepository auditRepo,
+            IUserRepository userRepo,
+            IDomainServiceOrganization orgService,
+            IOrganizationMonitoringLogger monitoringLogger,
             IMediator mediator)
         {
             _repo = repo;
             _validator = validator;
             _auth = auth;
             _auditRepo = auditRepo;
+            _userRepo = userRepo;
+            _orgService = orgService;
+            _monitoringLogger = monitoringLogger;
             _mediator = mediator;
         }
 
         public async Task<OperationResult<bool>> CreateAsync(AirportSaveDto dto, Guid userId, int orgId)
         {
-            var authResult = await _auth.CanModifyOrganizations(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<bool>.FromValidation(authResult);
-
-            var airport = new Domain.Entities.Organization.Airports.Airport
+            try
             {
-                codeAirportIcao = dto.codeICAO,
-                codeAirportIata = dto.codeIATA,
-                country = dto.country,
-                city = dto.city,
-                timeOffset = dto.timeOffset,
-                nameOrganization = dto.nameOrganization,
-                typeOrganization = dto.typeOrganization ?? "AIRPORT",
-                emailOrganization = dto.emailOrganization,
-                isActived = true,
-                createAt = DateTime.UtcNow
-            };
+                var authResult = await _auth.CanModifyOrganizations(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
-            var validation = await _validator.ValidateForCreateAirport(airport);
-            if (!validation.IsValid)
-                return OperationResult<bool>.FromValidation(validation);
+                var airport = new Domain.Entities.Organization.Airports.Airport
+                {
+                    codeAirportIcao = dto.codeICAO,
+                    codeAirportIata = dto.codeIATA,
+                    country = dto.country,
+                    city = dto.city,
+                    timeOffset = dto.timeOffset,
+                    nameOrganization = dto.nameOrganization,
+                    typeOrganization = dto.typeOrganization ?? "AIRPORT",
+                    emailOrganization = dto.emailOrganization,
+                    isActived = true,
+                    createAt = DateTime.UtcNow
+                };
 
-            var created = await _repo.CreateEntity(airport);
-            if (!created)
-                return OperationResult<bool>.Fail("AIRPORT_PERSIST", "No se pudo registrar el aeropuerto");
+                var validation = await _validator.ValidateForCreateAirport(airport);
+                if (!validation.IsValid)
+                    return OperationResult<bool>.FromValidation(validation);
 
-            await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                var created = await _repo.CreateEntity(airport);
+                if (!created)
+                    return OperationResult<bool>.Fail("AIRPORT_PERSIST", "No se pudo registrar el aeropuerto");
+
+                var rawPassword = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
+                var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
+                var hash = hasher.HashPassword(null!, rawPassword);
+                var defaultUserName = $"admin_{dto.codeICAO}";
+
+                var org = await _orgService.GetByEmailAsync(dto.emailOrganization!);
+
+                if (org != null)
+                {
+                    var defaultUser = new Domain.Entities.Users.User.User
+                    {
+                        Id = Guid.NewGuid(),
+                        nameUser = defaultUserName,
+                        passwordHash = hash,
+                        idOrganization = org.Id,
+                        idRol = 2,
+                        isActive = true,
+                        createAt = DateTime.UtcNow,
+                        failedLoginAttempts = 0
+                    };
+
+                    await _userRepo.CreateEntity(defaultUser);
+                }
+
+                await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                {
+                    Id = Guid.NewGuid(),
+                    IdAuditType = 1,
+                    idUser = userId,
+                    nameEntity = "Airport",
+                    occurentAt = DateTime.UtcNow,
+                    DataNew = JsonSerializer.Serialize(dto)
+                });
+
+                var result = OperationResult<bool>.Ok(true, "Aeropuerto registrado exitosamente");
+                result.AddEvent(new AirportRegisteredDomainEvent(
+                    dto.codeICAO, dto.codeIATA, dto.nameOrganization,
+                    dto.country, dto.city, dto.emailOrganization,
+                    defaultUserName, rawPassword, DateTime.UtcNow));
+
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
+                return result;
+            }
+            catch (Exception ex)
             {
-                Id = Guid.NewGuid(),
-                IdAuditType = 1,
-                idUser = userId,
-                nameEntity = "Airport",
-                occurentAt = DateTime.UtcNow,
-                DataNew = JsonSerializer.Serialize(dto)
-            });
-
-            var result = OperationResult<bool>.Ok(true, "Aeropuerto registrado exitosamente");
-            result.AddEvent(new AirportRegisteredDomainEvent(
-                dto.codeICAO, dto.codeIATA, dto.nameOrganization,
-                dto.country, dto.city, dto.emailOrganization, DateTime.UtcNow));
-
-            foreach (var evt in result.DomainEvents)
-                await _mediator.Publish(evt);
-
-            return result;
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.CreateAsync",
+                    Message = "Error inesperado al registrar aeropuerto"
+                }, ex);
+                return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al registrar el aeropuerto");
+            }
         }
 
         public async Task<OperationResult<bool>> UpdateAsync(AirportUpdateDto dto, Guid userId, int orgId)
         {
-            var authResult = await _auth.CanModifyOrganizations(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<bool>.FromValidation(authResult);
-
-            var oldAirport = await _repo.GetAirportByCode(dto.codeICAO);
-
-            var airport = new Domain.Entities.Organization.Airports.Airport
+            try
             {
-                Id = orgId,
-                codeAirportIcao = dto.codeICAO,
-                codeAirportIata = dto.codeIATA,
-                country = dto.country,
-                city = dto.city,
-                timeOffset = dto.timeOffset,
-                nameOrganization = dto.nameOrganization,
-                typeOrganization = dto.typeOrganization ?? "AIRPORT",
-                emailOrganization = dto.emailOrganization,
-                isActived = true,
-                createAt = DateTime.UtcNow
-            };
+                var authResult = await _auth.CanModifyOrganizations(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
-            var updated = await _repo.UpdateEntity(airport);
-            if (!updated)
-                return OperationResult<bool>.Fail("AIRPORT_UPDATE", "No se pudo actualizar el aeropuerto");
+                var oldAirport = await _repo.GetAirportByCode(dto.codeICAO);
 
-            await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit 
+                var airport = new Domain.Entities.Organization.Airports.Airport
+                {
+                    Id = orgId,
+                    codeAirportIcao = dto.codeICAO,
+                    codeAirportIata = dto.codeIATA,
+                    country = dto.country,
+                    city = dto.city,
+                    timeOffset = dto.timeOffset,
+                    nameOrganization = dto.nameOrganization,
+                    typeOrganization = dto.typeOrganization ?? "AIRPORT",
+                    emailOrganization = dto.emailOrganization,
+                    isActived = true,
+                    createAt = DateTime.UtcNow
+                };
+
+                var updated = await _repo.UpdateEntity(airport);
+                if (!updated)
+                    return OperationResult<bool>.Fail("AIRPORT_UPDATE", "No se pudo actualizar el aeropuerto");
+
+                await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                {
+                    Id = Guid.NewGuid(),
+                    IdAuditType = 2,
+                    idUser = userId,
+                    nameEntity = "Airport",
+                    occurentAt = DateTime.UtcNow,
+                    DataOld = JsonSerializer.Serialize(oldAirport),
+                    DataNew = JsonSerializer.Serialize(dto)
+                });
+
+                var result = OperationResult<bool>.Ok(true, "Aeropuerto actualizado exitosamente");
+                result.AddEvent(new AirportUpdatedDomainEvent(
+                    dto.codeICAO, dto.codeIATA, dto.nameOrganization,
+                    dto.country, dto.city, userId, DateTime.UtcNow));
+
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
+                return result;
+            }
+            catch (Exception ex)
             {
-                Id = Guid.NewGuid(),
-                IdAuditType = 2,
-                idUser = userId,
-                nameEntity = "Airport",
-                occurentAt = DateTime.UtcNow,
-                DataOld = JsonSerializer.Serialize(oldAirport),
-                DataNew = JsonSerializer.Serialize(dto)
-            });
-
-            var result = OperationResult<bool>.Ok(true, "Aeropuerto actualizado exitosamente");
-            result.AddEvent(new AirportUpdatedDomainEvent(
-                dto.codeICAO, dto.codeIATA, dto.nameOrganization,
-                dto.country, dto.city, userId, DateTime.UtcNow));
-
-            foreach (var evt in result.DomainEvents)
-                await _mediator.Publish(evt);
-
-            return result;
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.UpdateAsync",
+                    Message = "Error inesperado al actualizar aeropuerto"
+                }, ex);
+                return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al actualizar el aeropuerto");
+            }
         }
 
         public async Task<OperationResult<bool>> DeactivateAsync(int entityId, Guid userId, int orgId)
         {
-            var authResult = await _auth.CanModifyOrganizations(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<bool>.FromValidation(authResult);
-
-            var airport = new Domain.Entities.Organization.Airports.Airport { Id = entityId, isActived = false };
-            var deactivated = await _repo.DeleteEntity(airport);
-            if (!deactivated)
-                return OperationResult<bool>.Fail("AIRPORT_DEACTIVATE", "No se pudo desactivar el aeropuerto");
-
-            await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+            try
             {
-                Id = Guid.NewGuid(),
-                IdAuditType = 3,
-                idUser = userId,
-                nameEntity = "Airport",
-                occurentAt = DateTime.UtcNow,
-                DataOld = JsonSerializer.Serialize(new { Id = entityId })
-            });
+                var authResult = await _auth.CanModifyOrganizations(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
-            var result = OperationResult<bool>.Ok(true, "Aeropuerto desactivado");
-            result.AddEvent(new AirportSuspendedDomainEvent(null, null, null, userId, DateTime.UtcNow));
+                var orgData = await _orgService.GetByIdAsync(entityId);
 
-            foreach (var evt in result.DomainEvents)
-                await _mediator.Publish(evt);
+                var airport = new Domain.Entities.Organization.Airports.Airport { Id = entityId, isActived = false };
+                var deactivated = await _repo.DeleteEntity(airport);
+                if (!deactivated)
+                    return OperationResult<bool>.Fail("AIRPORT_DEACTIVATE", "No se pudo desactivar el aeropuerto");
 
-            return result;
+                await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                {
+                    Id = Guid.NewGuid(),
+                    IdAuditType = 3,
+                    idUser = userId,
+                    nameEntity = "Airport",
+                    occurentAt = DateTime.UtcNow,
+                    DataOld = JsonSerializer.Serialize(new { Id = entityId, orgData?.NameOrganization })
+                });
+
+                var result = OperationResult<bool>.Ok(true, "Aeropuerto desactivado");
+                result.AddEvent(new AirportSuspendedDomainEvent(
+                    null, null, orgData?.NameOrganization, userId, DateTime.UtcNow));
+
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.DeactivateAsync",
+                    Message = "Error inesperado al desactivar aeropuerto"
+                }, ex);
+                return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al desactivar el aeropuerto");
+            }
         }
 
         public async Task<OperationResult<IReadOnlyCollection<AirportModel>>> GetAllAsync(Guid userId, int orgId)
         {
-            var authResult = await _auth.CanModifyOrganizations(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<IReadOnlyCollection<AirportModel>>.FromValidation(authResult);
+            try
+            {
+                var authResult = await _auth.CanModifyOrganizations(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<IReadOnlyCollection<AirportModel>>.FromValidation(authResult);
 
-            var airports = await _repo.GetAllAirport();
-            return OperationResult<IReadOnlyCollection<AirportModel>>.Ok(airports);
+                var airports = await _repo.GetAllAirport();
+                return OperationResult<IReadOnlyCollection<AirportModel>>.Ok(airports);
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.GetAllAsync",
+                    Message = "Error inesperado al obtener aeropuertos"
+                }, ex);
+                return OperationResult<IReadOnlyCollection<AirportModel>>.Fail("AIRPORT_ERROR", "Error inesperado al obtener aeropuertos");
+            }
         }
 
         public async Task<OperationResult<AirportModel>> GetByCodeAsync(string codeAirport, Guid userId, int orgId)
         {
-            var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<AirportModel>.FromValidation(authResult);
+            try
+            {
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<AirportModel>.FromValidation(authResult);
 
-            var airport = await _repo.GetAirportByCode(codeAirport);
-            return OperationResult<AirportModel>.Ok(airport);
+                var airport = await _repo.GetAirportByCode(codeAirport);
+                return OperationResult<AirportModel>.Ok(airport);
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.GetByCodeAsync",
+                    Message = $"Error inesperado al obtener aeropuerto por código: {codeAirport}"
+                }, ex);
+                return OperationResult<AirportModel>.Fail("AIRPORT_ERROR", "Error inesperado al obtener el aeropuerto");
+            }
         }
 
         public async Task<OperationResult<bool>> GenerateApiKeyAsync(string codeAirport, Guid userId, int orgId)
         {
-            var authResult = await _auth.CanModifyOrganizations(userId, orgId);
-            if (!authResult.IsValid)
-                return OperationResult<bool>.FromValidation(authResult);
+            try
+            {
+                var authResult = await _auth.CanModifyOrganizations(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
-            var generated = await _repo.GenerateApiKey(codeAirport);
-            if (!generated)
-                return OperationResult<bool>.Fail("AIRPORT_APIKEY", "No se pudo generar la API Key");
+                var airportData = await _repo.GetAirportByCode(codeAirport);
 
-            var result = OperationResult<bool>.Ok(true, "API Key generada exitosamente");
-            result.AddEvent(new AirportApiKeyGeneratedDomainEvent(codeAirport, null, null, userId, DateTime.UtcNow));
+                var generated = await _repo.GenerateApiKey(codeAirport);
+                if (!generated)
+                    return OperationResult<bool>.Fail("AIRPORT_APIKEY", "No se pudo generar la API Key");
 
-            foreach (var evt in result.DomainEvents)
-                await _mediator.Publish(evt);
+                var result = OperationResult<bool>.Ok(true, "API Key generada exitosamente");
+                result.AddEvent(new AirportApiKeyGeneratedDomainEvent(
+                    codeAirport, airportData?.codeAirportIata, airportData?.nameAirport, userId, DateTime.UtcNow));
 
-            return result;
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.GenerateApiKeyAsync",
+                    Message = $"Error inesperado al generar API Key: {codeAirport}"
+                }, ex);
+                return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al generar la API Key");
+            }
         }
     }
 }
