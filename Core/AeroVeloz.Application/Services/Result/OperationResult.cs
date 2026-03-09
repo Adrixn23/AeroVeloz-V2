@@ -1,25 +1,59 @@
-﻿namespace AeroVeloz.Domain.Events.Result
+using AeroVeloz.Domain.Common.Validation;
+using MediatR;
+
+namespace AeroVeloz.Application.Services.Result
 {
     public sealed class OperationResult<T>
     {
-        public T? Value { get; private set; }
-        
-        public bool Success {get; private set;}
+        public T? Value { get; private init; }
 
-        public string? Message { get; private set;}
+        public bool Success { get; private init; }
 
-        public string? errorCode { get; private set; }
+        public string? Message { get; private init; }
 
+        public string? ErrorCode { get; private init; }
 
-        public List<Object> DomainEvents { get; private set; } = new();
+        private readonly List<INotification> _domainEvents = [];
 
-        public static OperationResult<T> Ok (T value) => new() { Value = value, Success = true };
-       
-        public void AddEvent(Object @event) => DomainEvents.Add(@event);
-        
-        //agregar elemento de operation result para los fallos del sistema 
-        //es decir registrar cuando no se pudo lanzar el evento por x problema para notificar entonces
-        // al elemento que intento realizar la accion en cuestion
- 
+        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
+
+        private readonly List<ErrosValidationResults> _validationErrors = [];
+
+        public IReadOnlyCollection<ErrosValidationResults> ValidationErrors => _validationErrors.AsReadOnly();
+
+        public bool HasValidationErrors => _validationErrors.Count > 0;
+
+        public bool HasDomainEvents => _domainEvents.Count > 0;
+
+        private OperationResult() { }
+
+        public static OperationResult<T> Ok(T value, string? message = null)
+            => new() { Value = value, Success = true, Message = message };
+
+        public static OperationResult<T> Fail(string errorCode, string message)
+            => new() { Success = false, ErrorCode = errorCode, Message = message };
+
+        public static OperationResult<T> FromValidation(ValidationResult validationResult)
+        {
+            var result = new OperationResult<T> { Success = false, Message = "Errores de validación del dominio" };
+            result._validationErrors.AddRange(validationResult.domainErrors);
+            return result;
+        }
+
+        public static OperationResult<T> Fail(ErrosValidationResults error)
+        {
+            var result = new OperationResult<T>
+            {
+                Success = false,
+                ErrorCode = error.code,
+                Message = error.description
+            };
+            result._validationErrors.Add(error);
+            return result;
+        }
+
+        public void AddEvent(INotification @event) => _domainEvents.Add(@event);
+
+        public void AddEvents(IEnumerable<INotification> events) => _domainEvents.AddRange(events);
     }
 }

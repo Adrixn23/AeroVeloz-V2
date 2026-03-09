@@ -15,11 +15,20 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+<<<<<<< HEAD
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />	
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infraestructure\AeroVeloz.Infraestructure\AeroVeloz.Infraestructure.csproj" />
+    <ProjectReference Include="..\..\IOC\AeroVeloz.IOC\AeroVeloz.IOC.csproj" />
+=======
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>	
+>>>>>>> app-web
   </ItemGroup>
 
 </Project>

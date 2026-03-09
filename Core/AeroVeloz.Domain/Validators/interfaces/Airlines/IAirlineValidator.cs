@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Common.Validation;
+using AeroVeloz.Domain.Entities.Organization.Airlines;
 
 namespace AeroVeloz.Domain.Validators.interfaces.Airlines
 {
@@ -6,11 +7,11 @@ namespace AeroVeloz.Domain.Validators.interfaces.Airlines
     {
 
 
-        Task<ValidationResult> ValidateCreateAsync(Entities.Airlines.Airline airline);
+        Task<ValidationResult> ValidateCreateAsync(Airline airline);
 
 
         // Valida las reglas antes de procesar un lote de vuelos
-        Task<ValidationResult> ValidateProcessBatchAsync(Entities.Airlines.Airline airline);
+        Task<ValidationResult> ValidateProcessBatchAsync(Airline airline);
 
 
 

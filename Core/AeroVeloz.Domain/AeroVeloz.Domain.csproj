@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="Audit\**" />
+ 
     <EmbeddedResource Remove="Audit\**" />
     <None Remove="Audit\**" />
   </ItemGroup>
@@ -19,31 +20,17 @@
     <EmbeddedResource Remove="Audit\**" />
     <EmbeddedResource Remove="Execeptions\**" />
     <Folder Include="entities\" />
+
+    <Compile Remove="Execeptions\**" />
+    <EmbeddedResource Remove="Audit\**" />
+    <EmbeddedResource Remove="Execeptions\**" />
+
     <None Remove="Audit\**" />
     <None Remove="Execeptions\**" />
-  </ItemGroup>
+    </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.0.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.11" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.0" />
-    <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
-
-
 
 </Project>

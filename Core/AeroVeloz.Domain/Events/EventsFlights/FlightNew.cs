@@ -1,4 +1,3 @@
-using AeroVeloz.Domain.Common.Enums;
 using MediatR;
 
 namespace AeroVeloz.Domain.Events.EventsFlights

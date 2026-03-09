@@ -1,30 +1,33 @@
-﻿using AeroVeloz.Domain.Common.Validation;
-
 namespace AeroVeloz.Domain.Common.Validation
-
 {
+    /// <summary>
+    /// Clase sellada que encapsula el resultado de una validación de dominio.
+    /// Permite acumular errores de validación y determinar si la operación es válida.
+    /// </summary>
     public sealed class ValidationResult
     {
         public ValidationResult() { } 
 
-        public ValidationResult Success() => new(); //
-        public ValidationResult Failur(ErrosValidationResults error) { // este elemento es para agregar los errores uno a uno
-                var result = new ValidationResult();
-                result._errors.Add(error);
-                return result;
+        public ValidationResult Success() => new();
+
+        public ValidationResult Failur(ErrosValidationResults error)
+        {
+            var result = new ValidationResult();
+            result._errors.Add(error);
+            return result;
         }
 
-        public ValidationResult Failur(IEnumerable<ErrosValidationResults> errores) // y este otro para agregar un conjunto de errores
+        public ValidationResult Failur(IEnumerable<ErrosValidationResults> errores)
         {
             var result = new ValidationResult();
             result._errors.AddRange(errores);
             return result;
         }
 
-        private readonly List<ErrosValidationResults> _errors = new(); //list internta de los errores que seran pasados  al layered application
-        public bool IsValid => !_errors.Any(); // determina si hay elementos en la list de errores
-        public IReadOnlyCollection<ErrosValidationResults> domainErrors => _errors; // returna la lectura completa de los errores.
-       
+        private readonly List<ErrosValidationResults> _errors = new();
 
+        public bool IsValid => !_errors.Any();
+
+        public IReadOnlyCollection<ErrosValidationResults> domainErrors => _errors;
     }
 }

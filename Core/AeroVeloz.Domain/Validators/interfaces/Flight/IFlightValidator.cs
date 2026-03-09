@@ -1,6 +1,8 @@
 ﻿using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Flights;
+ 
 using System.Threading.Tasks;
+
 
 
 namespace AeroVeloz.Domain.Validators.interfaces.Flight
@@ -19,5 +21,9 @@ namespace AeroVeloz.Domain.Validators.interfaces.Flight
 
       
         
+
+      
+     
+
     }
 }

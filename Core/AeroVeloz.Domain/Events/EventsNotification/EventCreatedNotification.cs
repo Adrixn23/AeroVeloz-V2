@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.Subscriptions;
-using MediatR;
+﻿using MediatR;
 using System;
 
 namespace AeroVeloz.Domain.Events.EventsNotification
