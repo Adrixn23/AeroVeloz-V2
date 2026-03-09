@@ -6,12 +6,12 @@ using AeroVeloz.Domain.Models.Audit;
 
 namespace AeroVeloz.Application.Handlers.Audit
 {
-    public class AuditHandler : IAuditHandler
+    public class AuditService : IAuditServicie
     {
         private readonly IAuditRepository _repo;
         private readonly IUserRepositoryAuthorization _auth;
 
-        public AuditHandler(IAuditRepository repo, IUserRepositoryAuthorization auth)
+        public AuditService(IAuditRepository repo, IUserRepositoryAuthorization auth)
         {
             _repo = repo;
             _auth = auth;

@@ -1,4 +1,4 @@
-namespace AeroVeloz.Transversal.Contracts.Notifications
+namespace AeroVeloz.Domain.Common.Notification
 {
     public sealed record NotificationPayload
     {

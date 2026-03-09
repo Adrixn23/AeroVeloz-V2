@@ -11,14 +11,14 @@ using MediatR;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
-    public class AirportConnectionHandler : IAirportConnectionHandler
+    public class AirportConnectionService : IAirportConnectionServicie
     {
         private readonly IAirportConnectionAirline _repo;
         private readonly IConnectionAiportAirline _validator;
         private readonly IUserRepositoryAuthorization _auth;
         private readonly IMediator _mediator;
 
-        public AirportConnectionHandler(
+        public AirportConnectionService(
             IAirportConnectionAirline repo,
             IConnectionAiportAirline validator,
             IUserRepositoryAuthorization auth,

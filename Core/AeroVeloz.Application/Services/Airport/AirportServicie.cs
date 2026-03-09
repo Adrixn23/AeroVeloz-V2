@@ -12,7 +12,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
-    public class AirportHandler : IAirportHandler
+    public class AirportServicie : IAirportServicie
     {
         private readonly IAirportRepository _repo;
         private readonly IAirportValidator _validator;
@@ -20,7 +20,7 @@ namespace AeroVeloz.Application.Handlers.Airport
         private readonly IAuditRepository _auditRepo;
         private readonly IMediator _mediator;
 
-        public AirportHandler(
+        public AirportServicie(
             IAirportRepository repo,
             IAirportValidator validator,
             IUserRepositoryAuthorization auth,

@@ -4,7 +4,7 @@ using AeroVeloz.Domain.Models.Operational;
 
 namespace AeroVeloz.Application.Contracts.Operations
 {
-    public interface IOperationalHandler
+    public interface IOperationalServicie
     {
         Task<OperationResult<bool>> RegisterAsync(OperationalChangeSaveDto dto, Guid userId, int orgId);
         Task<OperationResult<OperationalModel>> GetByIdAsync(Guid operationId, Guid userId, int orgId);

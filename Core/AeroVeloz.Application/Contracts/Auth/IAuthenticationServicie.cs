@@ -4,7 +4,7 @@ using AeroVeloz.Application.Handlers.Result;
 
 namespace AeroVeloz.Application.Contracts.Auth
 {
-    public interface IAuthenticationHandler
+    public interface IAuthenticationServicie
     {
         Task<OperationResult<UserLoginResultDto>> LoginAsync(UserLoginDto dto);
     }

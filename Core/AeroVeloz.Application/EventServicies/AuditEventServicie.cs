@@ -1,10 +1,11 @@
 using AeroVeloz.Domain.Events.Audit;
-using AeroVeloz.Transversal.Contracts.Notifications;
+using AeroVeloz.Application.Repositories.Notifications;
+using AeroVeloz.Domain.Common.Notification;
 using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class AuditEventHandler :
+    public class AuditEventServicie :
         INotificationHandler<AuditRecordCreatedDomainEvent>,
         INotificationHandler<AuditDeletionAttemptedDomainEvent>,
         INotificationHandler<AuditModificationAttemptedDomainEvent>,
@@ -12,7 +13,7 @@ namespace AeroVeloz.Application.EventHandlers
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public AuditEventHandler(INotificationDispatcher dispatcher)
+        public AuditEventServicie(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

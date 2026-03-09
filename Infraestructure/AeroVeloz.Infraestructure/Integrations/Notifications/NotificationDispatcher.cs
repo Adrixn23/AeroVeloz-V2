@@ -1,4 +1,5 @@
-using AeroVeloz.Transversal.Contracts.Notifications;
+using AeroVeloz.Domain.Common.Notification;
+using AeroVeloz.Application.Repositories.Notifications;
 
 namespace AeroVeloz.Infraestructure.Integrations.Notifications
 {

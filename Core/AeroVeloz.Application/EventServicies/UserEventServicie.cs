@@ -1,17 +1,18 @@
 using AeroVeloz.Domain.Events.User;
-using AeroVeloz.Transversal.Contracts.Notifications;
+using AeroVeloz.Domain.Common.Notification;
+using AeroVeloz.Application.Repositories.Notifications;
 using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class UserEventHandler :
+    public class UserEventServicie :
         INotificationHandler<UserCreatedDomainEvent>,
         INotificationHandler<UserUpdatedDomainEvent>,
         INotificationHandler<UserDeactivatedDomainEvent>
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public UserEventHandler(INotificationDispatcher dispatcher)
+        public UserEventServicie(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

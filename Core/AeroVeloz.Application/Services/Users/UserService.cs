@@ -15,7 +15,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AeroVeloz.Application.Handlers.Users
 {
-    public class UserHandler : IUserHandler
+
+    //moficar elementos de los events que tienen valores null inyecta por dependecia la obtencion del organizmo de la organizacion para consulta
+
+    public class UserService : IUserServicie
     {
         private readonly IUserRepository _repo;
         private readonly IUserValidator _validator;
@@ -23,7 +26,7 @@ namespace AeroVeloz.Application.Handlers.Users
         private readonly IAuditRepository _auditRepo;
         private readonly IMediator _mediator;
 
-        public UserHandler(
+        public UserService(
             IUserRepository repo,
             IUserValidator validator,
             IUserRepositoryAuthorization auth,

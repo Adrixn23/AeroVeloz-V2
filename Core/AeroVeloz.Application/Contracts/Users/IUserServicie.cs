@@ -5,7 +5,7 @@ using AeroVeloz.Domain.Models.Users;
 
 namespace AeroVeloz.Application.Contracts.Users
 {
-    public interface IUserHandler : IBaseHandler<UserSaveDto, UserUpdateDto, Guid>
+    public interface IUserServicie : IBaseServicie<UserSaveDto, UserUpdateDto, Guid>
     {
         Task<OperationResult<IReadOnlyCollection<UserDetailModel>>> GetUsersByOrganizationAsync(Guid userId, int orgId);
     }

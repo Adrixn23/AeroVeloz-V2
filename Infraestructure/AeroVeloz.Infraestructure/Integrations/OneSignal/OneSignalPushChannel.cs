@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
-using AeroVeloz.Transversal.Contracts.Notifications;
+using AeroVeloz.Application.Repositories.Notifications;
+using AeroVeloz.Domain.Common.Notification;
 using Microsoft.Extensions.Options;
 
 namespace AeroVeloz.Infraestructure.Integrations.OneSignal
