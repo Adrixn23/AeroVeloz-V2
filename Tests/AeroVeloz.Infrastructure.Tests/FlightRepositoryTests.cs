@@ -40,7 +40,7 @@ namespace AeroVeloz.Infrastructure.Tests
                 codeAirlines = "AA",
                 OriginAirport = "JFK",
                 DestinationAirport = "LAX",
-                flightStateId = 1, // Scheduled
+                flightStateId = FlightState.Scheduled,
                 ScheduledDeparture = DateTimeOffset.UtcNow
             };
 
@@ -95,11 +95,11 @@ namespace AeroVeloz.Infrastructure.Tests
             // Arrange
             var flight = new Flight
             {
-                flightStateId = 7 // Cancelled
+                flightStateId = FlightState.Cancelled
             };
 
             // Act
-            var validationResult = await _repository.IsValidStatusTransitionAsync(flight, 1); // To Scheduled
+            var validationResult = await _repository.IsValidStatusTransitionAsync(flight, FlightState.Scheduled);
 
             // Assert
             Assert.False(validationResult.IsValid);
@@ -139,7 +139,7 @@ namespace AeroVeloz.Infrastructure.Tests
                 codeAirlines = "AA",
                 OriginAirport = "JFK",
                 DestinationAirport = "LAX",
-                flightStateId = 1, // Scheduled
+                flightStateId = FlightState.Scheduled,
                 ScheduledDeparture = DateTimeOffset.UtcNow
             };
 

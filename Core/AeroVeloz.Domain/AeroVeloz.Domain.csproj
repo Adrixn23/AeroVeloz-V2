@@ -19,8 +19,6 @@
     <EmbeddedResource Remove="Audit\**" />
     <EmbeddedResource Remove="Execeptions\**" />
     <Folder Include="entities\" />
-    <Folder Include="Validators\Orquestador\" />
-    <Folder Include="Validators\Orquestador\" />
     <None Remove="Audit\**" />
     <None Remove="Execeptions\**" />
   </ItemGroup>

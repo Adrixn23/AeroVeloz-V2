@@ -22,27 +22,28 @@ namespace AeroVeloz.Domain.Common.codeError.codeErrorFlights
     public static ErrosValidationResults DepartureInPast =>
         ErrosValidationResults.Create("Flight_05", "No se puede programar un vuelo con una fecha de salida en el pasado.");
 
-    public static ErrosValidationResults ArrivalBeforeDeparture =>
-        ErrosValidationResults.Create("Flight_06", "La fecha de llegada debe ser posterior a la fecha de salida.");
+ 
 
     public static ErrosValidationResults DepartureRequired =>
-        ErrosValidationResults.Create("Flight_07", "La fecha de salida programada es obligatoria para crear el vuelo.");
+        ErrosValidationResults.Create("Flight_06", "La fecha de salida programada es obligatoria para crear el vuelo.");
 
-   
-    public static ErrosValidationResults InvalidBoardingGate =>
-        ErrosValidationResults.Create("Flight_08", "La puerta de embarque proporcionada no es válida.");
-
-    public static ErrosValidationResults InvalidArrivalGate =>
-        ErrosValidationResults.Create("Flight_09", "La puerta de llegada no puede ser asignada antes del aterrizaje o es inválida.");
+        public static ErrosValidationResults InvalidBoardingGate =>
+    ErrosValidationResults.Create("Flight_07", "La puerta de embarque proporcionada no es válida.");
 
         public static ErrosValidationResults InvalidOrigin =>
-            ErrosValidationResults.Create("Flight_10", "El aeropuerto de origen no es válido");
+                ErrosValidationResults.Create("Flight_08", "El aeropuerto de origen no es válido.");
 
-        public static ErrosValidationResults InvalidOwner =>
-            ErrosValidationResults.Create("Flight_11", "La aerolínea no es dueña de este vuelo.");
+           
+            public static ErrosValidationResults InvalidDestination =>
+                ErrosValidationResults.Create("Flight_09", "El aeropuerto de destino no es válido.");
 
-        public static ErrosValidationResults FlightNotFound => ErrosValidationResults.Create("Flight_12", "Vuelo no encontrado en el sistema");
+            public static ErrosValidationResults InvalidOwner =>
+                ErrosValidationResults.Create("Flight_10", "La aerolínea no es dueña de este vuelo.");
 
+            public static ErrosValidationResults FlightNotFound =>
+                ErrosValidationResults.Create("Flight_11", "Vuelo no encontrado en el sistema.");
+        public static ErrosValidationResults InvalidArrivalGate =>
+        ErrosValidationResults.Create("Flight_12", "La puerta de llegada proporcionada no es válida.");
 
     }
 

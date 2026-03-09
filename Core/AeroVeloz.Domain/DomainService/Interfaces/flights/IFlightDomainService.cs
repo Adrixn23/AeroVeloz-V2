@@ -14,5 +14,6 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Flight
         Task<short> GetFlightIdNumberAsync(string airlineCode);
 
         Task<ValidationResult> IsValidStatusTransitionAsync(Entities.Flights.Flight flight, short newStatus); // verifica si la transicion de estado es valido
+        Task<bool> IsAirlineOwnerOfFlightAsync(short id, string? codeAirlines);
     }
 }

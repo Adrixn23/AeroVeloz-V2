@@ -13,7 +13,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
 {
-    public class FlightRepository : IFlightRepository, IFlightDomainService // tanto la interfaz de iflightrepository y iflightdomainService,
+    public class FlightRepository : IFlightRepository// tanto la interfaz de iflightrepository y iflightdomainService,
                                                                               
     {
         private readonly AeroVelozContext _context;
@@ -118,50 +118,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
                 .FirstOrDefaultAsync();
         }
 
-        
-        public async Task<ValidationResult> IsValidDestinationAirportAsync(string airportCode)
-        {
-            var result = new ValidationResult();
-            var exists = await _context.Airports
-                .AnyAsync(a => a.codeAirportIata == airportCode || a.codeAirportIcao == airportCode);
-
-            if (!exists)
-            {
-                return result.Failur(ErrosValidationResults.Create("Airport.NotFound", "The destination airport does not exist."));
-            }
-
-            return result.Success();
-        }
-
-        public async Task<ValidationResult> IsValidOriginAirportAsync(string airportCode)
-        {
-            var result = new ValidationResult();
-            var exists = await _context.Airports
-                .AnyAsync(a => (a.codeAirportIata == airportCode || a.codeAirportIcao == airportCode) && a.isActived);
-
-            if (!exists)
-            {
-                return result.Failur(ErrosValidationResults.Create("Airport.Invalid", "The origin airport is not valid or is inactive."));
-            }
-
-            return result.Success();
-        }
-        public Task<ValidationResult> IsValidStatusTransitionAsync(Flight flight, short newStatus)
-        {
-            var result = new ValidationResult();
-            var currentState = flight.flightStateId;
-
-            // Se impide transicionar desde estados terminales a otros que no sean ellos mismos
-            // 6: Finished, 7: Cancelled
-            if ((currentState == 7 || currentState == 6) 
-                && currentState != newStatus)
-            {
-                return Task.FromResult(result.Failur(ErrosValidationResults.Create("Flight.InvalidTransition", "Cannot transition from a terminal state.")));
-            }
-
-            return Task.FromResult(result.Success());
-        }
-       
         public async Task<short> GetFlightIdNumberAsync(string airlineCode)
         {
             var maxId = await _context.Flights
@@ -194,5 +150,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task IsValidStatusTransitionAsync(Flight flight, int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
