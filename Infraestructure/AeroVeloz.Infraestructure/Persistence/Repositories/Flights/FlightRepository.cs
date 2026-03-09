@@ -66,9 +66,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
 
             return resultExists;
         }
-
-
-
         public async Task<IReadOnlyCollection<FlightReadModel>> GetActiveFlightsByAirlineAsync(string iataCode)
         {
             var query  =  from airline in _context.Airlines.AsNoTracking()
@@ -103,8 +100,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
             //string? nameOrganization,
             //int OrgId
         }
-
-
         public async Task<bool> IsAirlineOwnerOfFlightAsync(short flightNumber, string airlineCode)
         {
             var exists = await (from airline in _context.Airlines.AsNoTracking()
@@ -115,14 +110,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
             return exists;
         }
 
-
-
-        
-
-        
-
-     
-        public async Task<bool> IsOriginAirportActiveAsync(string airportCode)
+   public async Task<bool> IsOriginAirportActiveAsync(string airportCode)
         {
             return await _context.Airports
                 .Where(a => a.codeAirportIata == airportCode || a.codeAirportIcao == airportCode)

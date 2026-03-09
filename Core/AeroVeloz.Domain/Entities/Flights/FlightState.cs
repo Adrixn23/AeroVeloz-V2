@@ -2,7 +2,7 @@
 
 namespace AeroVeloz.Domain.Entities.Flights;
 
-public partial class FlightState : BEntity<short>
+public partial class FlightState : BEntity<byte>
 {
     public string? code { get; init; }
     public string? StateName { get; init; }
