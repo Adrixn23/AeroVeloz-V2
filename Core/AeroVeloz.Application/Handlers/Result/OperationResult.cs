@@ -1,7 +1,7 @@
 ﻿using AeroVeloz.Domain.Common.Validation;
 using MediatR;
 
-namespace AeroVeloz.Application.Services.Result
+namespace AeroVeloz.Application.Handlers.Result
 {
   
     public sealed class OperationResult<T>
