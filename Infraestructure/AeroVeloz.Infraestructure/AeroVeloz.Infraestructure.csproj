@@ -34,6 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -45,11 +46,6 @@
     <ProjectReference Include="..\..\Core\AeroVeloz.Application\AeroVeloz.Application.csproj" />
     <ProjectReference Include="..\..\Core\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
     <ProjectReference Include="..\..\Transversal\AeroVeloz.Transversal\AeroVeloz.Transversal.csproj" />
-  </ItemGroup>
-
-	
-  <ItemGroup>
-    <Folder Include="Integrations\" />
   </ItemGroup>
 
 </Project>

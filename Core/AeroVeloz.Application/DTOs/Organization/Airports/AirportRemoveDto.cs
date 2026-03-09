@@ -1,7 +1,7 @@
-﻿
-namespace AeroVeloz.Application.DTOs.Organization.Airports
+﻿namespace AeroVeloz.Application.DTOs.Organization.Airports
 {
-    internal class AirportRemoveDto
+    public sealed record AirportRemoveDto
     {
+        public int IdOrganization { get; init; }
     }
 }

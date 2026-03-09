@@ -4,13 +4,13 @@ namespace AeroVeloz.Application.DTOs.Organization.Airports
 {
     public sealed record AirportSaveDto(
         string? nameOrganization,
-         string? typeOrganization,
+        string? typeOrganization,
         string? emailOrganization,
         string? codeIATA,
         string? codeICAO,
         string? city,
         string? country,
-        TimeZoneInfo timeZone
+        DateTimeOffset timeOffset
         ) : OrganizationBaseDto(nameOrganization, typeOrganization, emailOrganization);
-   
+
 }

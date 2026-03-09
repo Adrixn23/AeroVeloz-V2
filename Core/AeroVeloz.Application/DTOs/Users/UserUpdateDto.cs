@@ -2,9 +2,11 @@
 {
     public sealed record UserUpdateDto
     {
-        public Guid idUser { get; set; }
-        public string? nameUser { get; set; }
-        public string? password {  get; set; }
-        public bool isActive { get; set; }  
+        public Guid IdUser { get; init; }
+        public string? NameUser { get; init; }
+        public string? Password { get; init; }
+        public bool IsActive { get; init; }
+        public short IdRol { get; init; }
+        public int IdOrganization { get; init; }
     }
 }

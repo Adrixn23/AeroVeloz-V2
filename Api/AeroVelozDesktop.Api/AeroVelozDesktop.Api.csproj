@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infraestructure\AeroVeloz.Infraestructure\AeroVeloz.Infraestructure.csproj" />
+    <ProjectReference Include="..\..\IOC\AeroVeloz.IOC\AeroVeloz.IOC.csproj" />
   </ItemGroup>
 
 </Project>
