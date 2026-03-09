@@ -1,13 +1,20 @@
-﻿using AeroVeloz.Domain.Entities.Organization.Base;
+﻿using AeroVeloz.Domain.Models.Organization;
 
 namespace AeroVeloz.Domain.DomainServices.Interfaces.Organization
 {
+   
     public interface IDomainServiceOrganization
     {
-        Task<Organizations> ExistByOrgAsync(int orgId);
+       
+        Task<OrganizationModel?> GetByIdAsync(int orgId);
+
+      
         Task<bool> ExistActiveAsync(int orgId);
-        Task<bool> NameOrganizationExistAsync(int orgId);
-        Task<Organizations> GetOrganizationsByEmailAsync(string email);
-  
+
+      
+        Task<bool> ExistsByIdAsync(int orgId);
+
+    
+        Task<OrganizationModel?> GetByEmailAsync(string email);
     }
 }

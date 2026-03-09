@@ -44,6 +44,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\AeroVeloz.Application\AeroVeloz.Application.csproj" />
     <ProjectReference Include="..\..\Core\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
+    <ProjectReference Include="..\..\Transversal\AeroVeloz.Transversal\AeroVeloz.Transversal.csproj" />
   </ItemGroup>
 
 	
