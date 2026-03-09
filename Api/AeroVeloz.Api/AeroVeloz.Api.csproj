@@ -33,8 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-  
-  
+    <ProjectReference Include="..\..\Infraestructure\AeroVeloz.Infraestructure\AeroVeloz.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>

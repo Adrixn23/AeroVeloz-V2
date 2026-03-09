@@ -1,4 +1,3 @@
-using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Flights; 
 
@@ -14,6 +13,6 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Flight
         // Genera y verifica que el n�mero de vuelo no est� en uso
         Task<short> GetFlightIdNumberAsync(string airlineCode);
 
-        Task<ValidationResult> IsValidStatusTransitionAsync(Entities.Flights.Flight flight, byte newStatus); // verifica si la transicion de estado es valido
+        Task<ValidationResult> IsValidStatusTransitionAsync(Entities.Flights.Flight flight, short newStatus); // verifica si la transicion de estado es valido
     }
 }

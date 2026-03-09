@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Domain.Common.Enums;
-using MediatR;
+﻿using MediatR;
 
 
 namespace AeroVeloz.Domain.Events.EventsAirlines
@@ -9,7 +8,7 @@ namespace AeroVeloz.Domain.Events.EventsAirlines
          
     public record FlightStateChangedByAirline(
           string FlightNumber,
-           byte NewState,         string AirlineCode,
+           short NewState,         string AirlineCode,
           DateTime UpdatedAt
        ) : INotification;
 }

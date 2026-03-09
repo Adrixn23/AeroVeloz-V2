@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Domain.Entities.Airlines;
+using AeroVeloz.Domain.Entities.Airlines;
 using Microsoft.EntityFrameworkCore;
 
 using AeroVeloz.Domain.Entities.Flights;
@@ -20,6 +20,7 @@ using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Entities.Audits;
 
 using AeroVeloz.Domain.Entities.Users.RolesPermision;
+using AeroVeloz.Infraestructure.Persistence.Configurations;
 
 namespace AeroVeloz.Infraestructure.Persistence.context
 {

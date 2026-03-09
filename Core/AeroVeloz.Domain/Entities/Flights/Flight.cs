@@ -8,7 +8,7 @@ public partial class Flight: BEntity<short>
 {
 
     public string? codeAirlines { get; init; }
-    public byte flightStateId { get; init; }
+    public short flightStateId { get; init; }
 
    
     public string? OriginAirport { get; init; }

@@ -8,7 +8,7 @@ namespace AeroVeloz.Domain.Models.Flights
            string Origin,
             string Destination,
             DateTime DepartureTime,
-           byte FlightStatus,
+           short FlightStatus,
            string? nameOrganization,
            int OrgId
      );

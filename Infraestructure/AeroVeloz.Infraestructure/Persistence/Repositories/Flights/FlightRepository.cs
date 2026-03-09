@@ -7,7 +7,6 @@ using AeroVeloz.Infraestructure.Persistence.context;
 using AeroVeloz.Domain.DomainService.Interfaces.Flight;
 using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Flights;
-using AeroVeloz.Domain.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using AeroVeloz.Domain.Entities.Airlines;
 using System.Threading.Tasks.Dataflow;
@@ -159,14 +158,14 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
 
             return result.Success();
         }
-
-        public Task<ValidationResult> IsValidStatusTransitionAsync(Flight flight, FlightStateEnum newStatus)
+        public Task<ValidationResult> IsValidStatusTransitionAsync(Flight flight, short newStatus)
         {
             var result = new ValidationResult();
-            var currentState = (FlightStateEnum)flight.flightStateId;
+            var currentState = flight.flightStateId;
 
             // Se impide transicionar desde estados terminales a otros que no sean ellos mismos
-            if ((currentState == FlightStateEnum.Cancelado || currentState == FlightStateEnum.Finalizado) 
+            // 6: Finished, 7: Cancelled
+            if ((currentState == 7 || currentState == 6) 
                 && currentState != newStatus)
             {
                 return Task.FromResult(result.Failur(ErrosValidationResults.Create("Flight.InvalidTransition", "Cannot transition from a terminal state.")));
@@ -174,7 +173,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
 
             return Task.FromResult(result.Success());
         }
-
        
         public async Task<short> GetFlightIdNumberAsync(string airlineCode)
         {

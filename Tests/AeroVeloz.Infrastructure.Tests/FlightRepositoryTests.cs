@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Entities.Airlines;
 using AeroVeloz.Domain.Entities.Flights;
 using AeroVeloz.Domain.Entities.Organization.Airports;
@@ -41,7 +40,7 @@ namespace AeroVeloz.Infrastructure.Tests
                 codeAirlines = "AA",
                 OriginAirport = "JFK",
                 DestinationAirport = "LAX",
-                flightStateId = (byte)FlightStateEnum.Scheduled,
+                flightStateId = 1, // Scheduled
                 ScheduledDeparture = DateTimeOffset.UtcNow
             };
 
@@ -96,11 +95,11 @@ namespace AeroVeloz.Infrastructure.Tests
             // Arrange
             var flight = new Flight
             {
-                flightStateId = (byte)FlightStateEnum.Cancelled
+                flightStateId = 7 // Cancelled
             };
 
             // Act
-            var validationResult = await _repository.IsValidStatusTransitionAsync(flight, (byte)FlightStateEnum.Scheduled);
+            var validationResult = await _repository.IsValidStatusTransitionAsync(flight, 1); // To Scheduled
 
             // Assert
             Assert.False(validationResult.IsValid);
@@ -140,7 +139,7 @@ namespace AeroVeloz.Infrastructure.Tests
                 codeAirlines = "AA",
                 OriginAirport = "JFK",
                 DestinationAirport = "LAX",
-                flightStateId = (byte)FlightStateEnum.Scheduled,
+                flightStateId = 1, // Scheduled
                 ScheduledDeparture = DateTimeOffset.UtcNow
             };
 

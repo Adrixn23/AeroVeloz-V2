@@ -6,6 +6,6 @@ public partial class FlightHistory
     public short codeAirlines { get; init; }
     public DateTime changeAt { get; init; }
     public string? reason { get; init; }
-    public byte flightStatesIdAfter { get; init; }
-    public byte flightStatesIdBefore { get; init; }
+    public short flightStatesIdAfter { get; init; }
+    public short flightStatesIdBefore { get; init; }
 }

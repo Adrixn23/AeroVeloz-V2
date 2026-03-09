@@ -1,40 +1,23 @@
 using AeroVeloz.Domain.Entities.Flights;
-using AeroVeloz.Domain.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AeroVeloz.Infraestructure.Persistence.Configurations;
-
-public class FlightStateConfiguration : IEntityTypeConfiguration<FlightState>
+namespace AeroVeloz.Infraestructure.Persistence.Configurations
 {
-    public void Configure(EntityTypeBuilder<FlightState> builder)
+    public class FlightStateConfiguration : IEntityTypeConfiguration<FlightState>
     {
-        builder.ToTable("FlightStates");
-
-        builder.HasKey(fs => fs.Id);
-
-        builder.Property(fs => fs.Id)
-            .HasColumnName("StateID")
-            .HasColumnType("tinyint")
-            .ValueGeneratedNever();
-
-        builder.Property(fs => fs.code)
-            .HasColumnName("code")
-            .HasMaxLength(50);
-
-        builder.Property(fs => fs.StateName)
-            .HasColumnName("StateName")
-            .HasMaxLength(100);
-
-        builder.HasData(
-            new FlightState { Id = (byte)FlightStateEnum.Scheduled, code = "Scheduled", StateName = "Scheduled" },
-            new FlightState { Id = (byte)FlightStateEnum.InProgress, code = "InProgress", StateName = "In Progress" },
-            new FlightState { Id = (byte)FlightStateEnum.Delayed, code = "Delayed", StateName = "Delayed" },
-            new FlightState { Id = (byte)FlightStateEnum.InFlight, code = "InFlight", StateName = "In Flight" },
-            new FlightState { Id = (byte)FlightStateEnum.Landed, code = "Landed", StateName = "Landed/Arrived" },
-            new FlightState { Id = (byte)FlightStateEnum.Finished, code = "Finished", StateName = "Finished" },
-            new FlightState { Id = (byte)FlightStateEnum.Cancelled, code = "Cancelled", StateName = "Cancelled" },
-            new FlightState { Id = (byte)FlightStateEnum.Diverted, code = "Diverted", StateName = "Diverted" }
-        );
+        public void Configure(EntityTypeBuilder<FlightState> builder)
+        {
+            builder.HasData(
+                new FlightState { Id = Guid.Parse("1"), code = "SCH", StateName = "Scheduled" },
+                new FlightState { Id = Guid.Parse("2"), code = "PRO", StateName = "InProcess" },
+                new FlightState { Id = Guid.Parse("3"), code = "DEL", StateName = "Delayed" },
+                new FlightState { Id = Guid.Parse("4"), code = "INF", StateName = "InFlight" },
+                new FlightState { Id = Guid.Parse("5"), code = "ARR", StateName = "LandedArrived" },
+                new FlightState { Id = Guid.Parse("6"), code = "FIN", StateName = "Completed" },
+                new FlightState { Id = Guid.Parse("7"), code = "CAN", StateName = "Cancelled" },
+                new FlightState { Id = Guid.Parse("8"), code = "DIV", StateName = "Diverted" }
+            );
+        }
     }
 }
