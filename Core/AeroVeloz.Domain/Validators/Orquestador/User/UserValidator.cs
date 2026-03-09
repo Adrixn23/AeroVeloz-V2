@@ -38,13 +38,13 @@ namespace AeroVeloz.Domain.Validators.Orquestador.SuperAdmin
             }
 
             // Verificar que la organización a la que se vincula el usuario exista y esté activa
-            var org = await _domainServiceOrganization.ExistByOrgAsync(user.idOrganization);
+            var org = await _domainServiceOrganization.GetByIdAsync(user.idOrganization);
             if(org == null)
             {
                 errors.Add(UserErrors.OrganizationNotFound);
                 return new ValidationResult().Failur(errors);
             }
-            if (!org.isActived)
+            if (!org.IsActive)
                 errors.Add(UserErrors.UserAssociateWithOrganization);
 
             // Validar si el usuario ya se encuentra registrado en el sistema y en la organización
