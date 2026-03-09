@@ -4,7 +4,7 @@ using AeroVeloz.Domain.Models.Airports;
 
 namespace AeroVeloz.Application.Repositories.Airport
 {
-    public interface IAirportConnectionAirline : IBRepository<ConectionsAirlineAirport, Guid>
+    public interface IAirportConnectionAirline : IBRepository<ConectionsAirlineAirport>
     {
         Task<IReadOnlyCollection<AirlineConnectionByAirportModel>> GetAirportConnectionById(string? codeAirportIcao);
         

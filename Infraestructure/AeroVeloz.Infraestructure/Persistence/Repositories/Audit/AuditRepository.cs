@@ -18,7 +18,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
         }
 
 
-        public async Task<bool> CreateAsync(Domain.Entities.Audits.Audit audit)
+        public async Task<bool> CreateAsync(Domain.Entities.Audit.Audit audit)
         {
             _context.Audits.Add(audit);
             var result = await _context.SaveChangesAsync();

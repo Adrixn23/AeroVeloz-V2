@@ -7,7 +7,7 @@ namespace AeroVeloz.Domain.Entities.Users.Roles
     /// Los roles determinan el nivel de acceso y las acciones que un usuario puede realizar
     /// (ej: SYSTEMADMIN, AIRPORTADMIN, AIRLINEADMIN).
     /// </summary>
-    public partial class Roles : BEntity<int>
+    public partial class Roles : BEntity<short>
     {
         public string? nameRol { get; init; }
     }

@@ -64,10 +64,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 codeIacao && airp.codeAirportIata  == codeIata
             );
 
-            var org = await _context.Organizations.FirstOrDefaultAsync(org => org.Id == airport!.Id);
-            if(airport != null && org != null) return true;
-            return false;
+            if (airport == null) return false;
 
+            var org = await _context.Organizations.FirstOrDefaultAsync(org => org.Id == airport.Id);
+            return org != null;
         }
 
         //metodo para generar api key de comunicacion del aeropuerto de manera segura
@@ -80,8 +80,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 .ExecuteUpdateAsync(setters => setters
                       .SetProperty(a => a.apiKeyMaster, apiKey)
                 );
-                var result = await _context.SaveChangesAsync();
-                return result > 0;
+                return airport > 0;
          
         }
 

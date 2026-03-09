@@ -1,6 +1,6 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
 
-namespace AeroVeloz.Domain.Entities.Audits;
+namespace AeroVeloz.Domain.Entities.Audit;
 
 /// <summary>
 /// Entidad de dominio que representa un registro de auditoría del sistema.
@@ -17,8 +17,6 @@ public partial class Audit : BEntity<Guid>
     public string? nameEntity { get;  init; }
 
     public DateTime occurentAt { get;  init; }
-
-    public string? oldValues { get;  init; }
 
     public string? DataOld { get; init; }
 
