@@ -18,4 +18,7 @@
   <Folder Name="/Transversal/">
     <Project Path="Transversal/AeroVeloz.Transversal/AeroVeloz.Transversal.csproj" Id="38de2245-eb9e-404f-896f-188278cf4c35" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/AeroVeloz.Infrastructure.Tests/AeroVeloz.Infrastructure.Tests.csproj" />
+  </Folder>
 </Solution>

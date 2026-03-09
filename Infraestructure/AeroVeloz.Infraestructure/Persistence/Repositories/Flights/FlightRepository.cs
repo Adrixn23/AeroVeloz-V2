@@ -58,6 +58,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
             return await _context.SaveChangesAsync() > 0;
             
         }
+
+
         public async Task<bool> ExistsFlightAsync(short flightNumber, string airlineCode)
         {
             
@@ -104,15 +106,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         }
 
 
-
-
-        
-
-
-     
-
-
-
         public async Task<bool> IsAirlineOwnerOfFlightAsync(short flightNumber, string airlineCode)
         {
             var exists = await (from airline in _context.Airlines.AsNoTracking()
@@ -127,41 +120,93 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
 
         
 
-        public Task<bool> IsOrganizationActiveAsync(int idOrganization)
+        
+
+     
+        public async Task<bool> IsOriginAirportActiveAsync(string airportCode)
         {
-            throw new NotImplementedException();
+            return await _context.Airports
+                .Where(a => a.codeAirportIata == airportCode || a.codeAirportIcao == airportCode)
+                .Select(a => a.isActived)
+                .FirstOrDefaultAsync();
         }
 
-        public Task<bool> IsOriginAirportActiveAsync(string airportCode)
+        
+        public async Task<ValidationResult> IsValidDestinationAirportAsync(string airportCode)
         {
-            throw new NotImplementedException();
+            var result = new ValidationResult();
+            var exists = await _context.Airports
+                .AnyAsync(a => a.codeAirportIata == airportCode || a.codeAirportIcao == airportCode);
+
+            if (!exists)
+            {
+                return result.Failur(ErrosValidationResults.Create("Airport.NotFound", "The destination airport does not exist."));
+            }
+
+            return result.Success();
         }
 
-        public Task<ValidationResult> IsValidDestinationAirportAsync(string airportCode)
+        public async Task<ValidationResult> IsValidOriginAirportAsync(string airportCode)
         {
-            throw new NotImplementedException();
-        }
+            var result = new ValidationResult();
+            var exists = await _context.Airports
+                .AnyAsync(a => (a.codeAirportIata == airportCode || a.codeAirportIcao == airportCode) && a.isActived);
 
-        public Task<ValidationResult> IsValidOriginAirportAsync(string airportCode)
-        {
-            throw new NotImplementedException();
+            if (!exists)
+            {
+                return result.Failur(ErrosValidationResults.Create("Airport.Invalid", "The origin airport is not valid or is inactive."));
+            }
+
+            return result.Success();
         }
 
         public Task<ValidationResult> IsValidStatusTransitionAsync(Flight flight, FlightStateEnum newStatus)
         {
-            throw new NotImplementedException();
+            var result = new ValidationResult();
+            var currentState = (FlightStateEnum)flight.flightStateId;
+
+            // Se impide transicionar desde estados terminales a otros que no sean ellos mismos
+            if ((currentState == FlightStateEnum.Cancelado || currentState == FlightStateEnum.Finalizado) 
+                && currentState != newStatus)
+            {
+                return Task.FromResult(result.Failur(ErrosValidationResults.Create("Flight.InvalidTransition", "Cannot transition from a terminal state.")));
+            }
+
+            return Task.FromResult(result.Success());
         }
 
-    
-        public Task<short> GetFlightIdNumberAsync(string airlineCode)
+       
+        public async Task<short> GetFlightIdNumberAsync(string airlineCode)
         {
-            throw new NotImplementedException();
+            var maxId = await _context.Flights
+                .Where(f => f.codeAirlines == airlineCode)
+                .Select(f => (short?)f.Id)
+                .MaxAsync() ?? 0;
+                
+            return (short)(maxId + 1);
         }
 
-
-        public Task<FlightReadModel?> GetByFlightAndAirlineAsync(short flightNumber, string iataCode)
+        
+        public async Task<FlightReadModel?> GetByFlightAndAirlineAsync(short flightNumber, string iataCode)
         {
-            throw new NotImplementedException();
+            var query = from airline in _context.Airlines.AsNoTracking()
+                        join flight in _context.Flights.AsNoTracking()
+                        on airline.codeIATA equals flight.codeAirlines
+                        where flight.Id == flightNumber && airline.codeIATA == iataCode
+                        select new FlightReadModel
+                        (
+                            flight.Id,
+                            airline.codeIATA!,
+                            flight.OriginAirport!,
+                            flight.DestinationAirport!,
+                            flight.ScheduledDeparture.DateTime,
+                            flight.flightStateId,
+                            airline.nameOrganization,
+                            airline.Id
+                        );
+
+            return await query.FirstOrDefaultAsync();
         }
+
     }
 }

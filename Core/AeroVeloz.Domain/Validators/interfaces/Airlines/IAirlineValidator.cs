@@ -13,6 +13,8 @@ namespace AeroVeloz.Domain.Validators.interfaces.Airlines
         Task<ValidationResult> ValidateProcessBatchAsync(Entities.Airlines.Airline airline);
 
 
+
+
       
 
     }

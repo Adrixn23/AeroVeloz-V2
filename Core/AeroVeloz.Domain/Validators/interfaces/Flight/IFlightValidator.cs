@@ -17,10 +17,6 @@ namespace AeroVeloz.Domain.Validators.interfaces.Flight
        // Valida las reglas antes de actualizar el estado de un vuelo
        Task<ValidationResult> ValidateStateTransitionAsync(Entities.Flights.Flight flight);
 
-        // 
-
-
-
       // airline, subscripciones consultas de vuelo
         
     }

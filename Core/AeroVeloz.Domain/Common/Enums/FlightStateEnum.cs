@@ -1,14 +1,13 @@
 namespace AeroVeloz.Domain.Common.Enums;
 
-
-public enum FlightStateEnum 
+public enum FlightStateEnum : byte
 {
-    Programado = 1,
-    EnProceso = 2,
-    Retrasado = 3,
-    EnVuelo = 4,
-    AterrizadoArribado = 5,
-    Finalizado = 6,
-    Cancelado = 7,
-    Desviado = 8
+    Scheduled = 1,
+    InProgress = 2,
+    Delayed = 3,
+    InFlight = 4,
+    Landed = 5,
+    Finished = 6,
+    Cancelled = 7,
+    Diverted = 8
 }

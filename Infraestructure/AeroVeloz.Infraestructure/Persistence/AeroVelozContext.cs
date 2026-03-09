@@ -49,5 +49,18 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         public DbSet<Audit> Audits { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<ChannelSubscriptionNotification> ChannelSubscriptionNotifications { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            // Definiendo llaves primarias o entidades sin llave para las que no siguen la convención por defecto
+            modelBuilder.Entity<FlightHistory>().HasNoKey();
+            modelBuilder.Entity<ConectionsAirlineAirport>().HasNoKey();
+            modelBuilder.Entity<ProviderResponse>().HasNoKey();
+            modelBuilder.Entity<OperationChange>().HasNoKey();
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

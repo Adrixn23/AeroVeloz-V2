@@ -9,11 +9,11 @@ namespace AeroVeloz.Domain.DomainService.Interfaces.Flight
         // este verifica si el aeropuerto de origen es vlido
         Task<ValidationResult> IsValidOriginAirportAsync(string airportCode);
 
-        Task<ValidationResult> IsValidDestinationAirportAsync(string airportCode);// Verifica si el aeropuerto de destino es válido
+        Task<ValidationResult> IsValidDestinationAirportAsync(string airportCode);// Verifica si el aeropuerto de destino es vï¿½lido
 
-        // Genera y verifica que el número de vuelo no esté en uso
+        // Genera y verifica que el nï¿½mero de vuelo no estï¿½ en uso
         Task<short> GetFlightIdNumberAsync(string airlineCode);
 
-        Task<ValidationResult> IsValidStatusTransitionAsync(Entities.Flights.Flight flight, FlightStateEnum newStatus); // verifica si la transicion de estado es valido
+        Task<ValidationResult> IsValidStatusTransitionAsync(Entities.Flights.Flight flight, byte newStatus); // verifica si la transicion de estado es valido
     }
 }

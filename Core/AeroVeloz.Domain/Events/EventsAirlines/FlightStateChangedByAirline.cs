@@ -9,8 +9,7 @@ namespace AeroVeloz.Domain.Events.EventsAirlines
          
     public record FlightStateChangedByAirline(
           string FlightNumber,
-           FlightStateEnum NewState,
-         string AirlineCode,
+           byte NewState,         string AirlineCode,
           DateTime UpdatedAt
        ) : INotification;
 }
