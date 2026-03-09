@@ -4,7 +4,7 @@ using AeroVeloz.Domain.Models.Airports;
 
 namespace AeroVeloz.Application.Contracts.Airport
 {
-    public interface IAirportConnectionHandler
+    public interface IAirportConnectionServicie
     {
         Task<OperationResult<bool>> CreateConnectionAsync(ConnectionAirlineByAirportSaveDto dto, Guid userId, int orgId);
         Task<OperationResult<bool>> DeactivateConnectionAsync(Guid connectionId, Guid userId, int orgId);

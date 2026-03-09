@@ -10,7 +10,6 @@ namespace AeroVeloz.Transversal.Contracts.Monitoring
 
         Task LogSecurityAlertAsync(MonitoringLogEntry entry);
 
-      
         Task LogSystemFaultAsync(MonitoringLogEntry entry, Exception? exception = null);
     }
 }

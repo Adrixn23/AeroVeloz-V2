@@ -43,7 +43,6 @@ namespace AeroVeloz.Application.Handlers.Result
             return result;
         }
 
-      
         public static OperationResult<T> Fail(ErrosValidationResults error)
         {
             var result = new OperationResult<T>
@@ -56,7 +55,7 @@ namespace AeroVeloz.Application.Handlers.Result
             return result;
         }
 
-        
+  
         public void AddEvent(INotification @event) => _domainEvents.Add(@event);
 
         public void AddEvents(IEnumerable<INotification> events) => _domainEvents.AddRange(events);

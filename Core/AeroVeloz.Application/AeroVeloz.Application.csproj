@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="interfaces\**" />
+    <Compile Remove="Services\Airports\**" />
+    <Compile Remove="Services\Base\**" />
+    <EmbeddedResource Remove="interfaces\**" />
+    <EmbeddedResource Remove="Services\Airports\**" />
+    <EmbeddedResource Remove="Services\Base\**" />
+    <None Remove="interfaces\**" />
+    <None Remove="Services\Airports\**" />
+    <None Remove="Services\Base\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.3" />
@@ -15,13 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
     <ProjectReference Include="..\..\Transversal\AeroVeloz.Transversal\AeroVeloz.Transversal.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="interfaces\Airports\" />
-    <Folder Include="Services\Airports\" />
-    <Folder Include="Services\Base\" />
-	
   </ItemGroup>
 
 </Project>

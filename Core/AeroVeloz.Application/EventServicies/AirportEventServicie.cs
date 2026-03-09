@@ -1,10 +1,11 @@
 using AeroVeloz.Domain.Events.Aiport;
-using AeroVeloz.Transversal.Contracts.Notifications;
+using AeroVeloz.Application.Repositories.Notifications;
+using AeroVeloz.Domain.Common.Notification;
 using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class AirportEventHandler :
+    public class AirportEventServicie :
         INotificationHandler<AirportRegisteredDomainEvent>,
         INotificationHandler<AirportUpdatedDomainEvent>,
         INotificationHandler<AirportSuspendedDomainEvent>,
@@ -14,7 +15,7 @@ namespace AeroVeloz.Application.EventHandlers
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public AirportEventHandler(INotificationDispatcher dispatcher)
+        public AirportEventServicie(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

@@ -13,7 +13,7 @@ using AeroVeloz.Application.Handlers.Result;
 
 namespace AeroVeloz.Application.Handlers.Operations
 {
-    public class OperationalHandler : IOperationalHandler
+    public class OperationalService : IOperationalServicie
     {
         private readonly IOperationalRepository _repo;
         private readonly IOperationalChangeValidator _validator;
@@ -21,7 +21,7 @@ namespace AeroVeloz.Application.Handlers.Operations
         private readonly IAuditRepository _auditRepo;
         private readonly IMediator _mediator;
 
-        public OperationalHandler(
+        public OperationalService(
             IOperationalRepository repo,
             IOperationalChangeValidator validator,
             IUserRepositoryAuthorization auth,

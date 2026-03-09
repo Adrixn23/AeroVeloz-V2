@@ -1,4 +1,6 @@
-namespace AeroVeloz.Transversal.Contracts.Notifications
+using AeroVeloz.Domain.Common.Notification;
+
+namespace AeroVeloz.Application.Repositories.Notifications
 {
     public interface INotificationDispatcher
     {
