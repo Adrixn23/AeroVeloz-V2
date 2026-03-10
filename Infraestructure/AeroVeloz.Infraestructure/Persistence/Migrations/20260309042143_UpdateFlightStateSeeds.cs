@@ -4,10 +4,8 @@
 
 namespace AeroVeloz.Infraestructure.Persistence.Migrations
 {
-    /// <inheritdoc />
     public partial class UpdateFlightStateSeeds : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -49,24 +47,23 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 type: "smallint",
                 nullable: false,
                 oldClrType: typeof(short),
-                oldType: "smallint")
-                .Annotation("SqlServer:Identity", "1, 1");
+                oldType: "smallint");
 
-            migrationBuilder.AlterColumn<short>(
-                name: "flightStatesIdBefore",
-                table: "FlightHistories",
-                type: "smallint",
-                nullable: false,
-                oldClrType: typeof(byte),
-                oldType: "tinyint");
+            //migrationBuilder.AlterColumn<short>(
+            //    name: "flightStatesIdBefore",
+            //    table: "FlightHistory",
+            //    type: "smallint",
+            //    nullable: false,
+            //    oldClrType: typeof(byte),
+            //    oldType: "tinyint");
 
-            migrationBuilder.AlterColumn<short>(
-                name: "flightStatesIdAfter",
-                table: "FlightHistories",
-                type: "smallint",
-                nullable: false,
-                oldClrType: typeof(byte),
-                oldType: "tinyint");
+            //migrationBuilder.AlterColumn<short>(
+            //    name: "flightStatesIdAfter",
+            //    table: "FlightHistory",
+            //    type: "smallint",
+            //    nullable: false,
+            //    oldClrType: typeof(byte),
+            //    oldType: "tinyint");
 
             migrationBuilder.UpdateData(
                 table: "FlightStates",
@@ -123,11 +120,31 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 keyValue: (short)8,
                 column: "code",
                 value: "DIV");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Flights_flightStateId",
+                table: "Flights",
+                column: "flightStateId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Flights_FlightStates_flightStateId",
+                table: "Flights",
+                column: "flightStateId",
+                principalTable: "FlightStates",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Flights_FlightStates_flightStateId",
+                table: "Flights");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Flights_flightStateId",
+                table: "Flights");
+
             migrationBuilder.RenameColumn(
                 name: "Id",
                 table: "FlightStates",
@@ -159,12 +176,11 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 type: "smallint",
                 nullable: false,
                 oldClrType: typeof(short),
-                oldType: "smallint")
-                .OldAnnotation("SqlServer:Identity", "1, 1");
+                oldType: "smallint");
 
             migrationBuilder.AlterColumn<byte>(
                 name: "flightStatesIdBefore",
-                table: "FlightHistories",
+                table: "FlightHistory",
                 type: "tinyint",
                 nullable: false,
                 oldClrType: typeof(short),
@@ -172,67 +188,11 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
             migrationBuilder.AlterColumn<byte>(
                 name: "flightStatesIdAfter",
-                table: "FlightHistories",
+                table: "FlightHistory",
                 type: "tinyint",
                 nullable: false,
                 oldClrType: typeof(short),
                 oldType: "smallint");
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)1,
-                column: "code",
-                value: "Scheduled");
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)2,
-                columns: new[] { "StateName", "code" },
-                values: new object[] { "In Progress", "InProgress" });
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)3,
-                column: "code",
-                value: "Delayed");
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)4,
-                columns: new[] { "StateName", "code" },
-                values: new object[] { "In Flight", "InFlight" });
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)5,
-                columns: new[] { "StateName", "code" },
-                values: new object[] { "Landed/Arrived", "Landed" });
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)6,
-                columns: new[] { "StateName", "code" },
-                values: new object[] { "Finished", "Finished" });
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)7,
-                column: "code",
-                value: "Cancelled");
-
-            migrationBuilder.UpdateData(
-                table: "FlightStates",
-                keyColumn: "StateID",
-                keyValue: (short)8,
-                column: "code",
-                value: "Diverted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Flights_flightStateId",

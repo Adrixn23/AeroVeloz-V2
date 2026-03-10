@@ -22,23 +22,7 @@ namespace AeroVeloz.Infraestructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Audit.AuditType", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
-
-                    b.Property<string>("nameAudit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuditTypes");
-                });
-
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Audits.Audit", b =>
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Audit.Audit", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,12 +46,42 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.Property<DateTime>("occurentAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("oldValues")
+                    b.HasKey("Id");
+
+                    b.ToTable("Audits");
+                });
+
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Audit.AuditType", b =>
+                {
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
+
+                    b.Property<string>("nameAudit")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Audits");
+                    b.ToTable("AuditTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            nameAudit = "FlightStateChange"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            nameAudit = "FlightBatchUpload"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            nameAudit = "SubscriptionChange"
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.Flight", b =>
@@ -96,8 +110,8 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.Property<string>("codeAirlines")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<short>("flightStateId")
-                        .HasColumnType("smallint");
+                    b.Property<byte>("flightStateId")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -106,39 +120,40 @@ namespace AeroVeloz.Infraestructure.Migrations
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.FlightHistory", b =>
                 {
-                    b.Property<DateTime>("changeAt")
-                        .HasColumnType("datetime2");
+                    b.Property<short>("flightNumber")
+                        .HasColumnType("smallint");
 
                     b.Property<short>("codeAirlines")
                         .HasColumnType("smallint");
 
-                    b.Property<short>("flightNumber")
-                        .HasColumnType("smallint");
+                    b.Property<DateTime>("changeAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<short>("flightStatesIdAfter")
-                        .HasColumnType("smallint");
+                    b.Property<byte>("flightStatesIdAfter")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("flightStatesIdAfter");
 
-                    b.Property<short>("flightStatesIdBefore")
-                        .HasColumnType("smallint");
+                    b.Property<byte>("flightStatesIdBefore")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("flightStatesIdBefore");
 
                     b.Property<string>("reason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("FlightHistories");
+                    b.HasKey("flightNumber", "codeAirlines", "changeAt");
+
+                    b.ToTable("FlightHistory");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.FlightState", b =>
                 {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
-
-                    b.Property<string>("StateName")
+                    b.Property<string>("codeFlightState")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("code")
+                    b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -148,51 +163,51 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = (short)1,
-                            StateName = "Scheduled",
-                            code = "SCH"
+                            Id = (byte)1,
+                            codeFlightState = "SCHEDULED",
+                            name = "Scheduled"
                         },
                         new
                         {
-                            Id = (short)2,
-                            StateName = "InProcess",
-                            code = "PRO"
+                            Id = (byte)2,
+                            codeFlightState = "BOARDING",
+                            name = "Boarding"
                         },
                         new
                         {
-                            Id = (short)3,
-                            StateName = "Delayed",
-                            code = "DEL"
+                            Id = (byte)3,
+                            codeFlightState = "DELAYED",
+                            name = "Delayed"
                         },
                         new
                         {
-                            Id = (short)4,
-                            StateName = "InFlight",
-                            code = "INF"
+                            Id = (byte)4,
+                            codeFlightState = "INFLIGHT",
+                            name = "In Flight"
                         },
                         new
                         {
-                            Id = (short)5,
-                            StateName = "LandedArrived",
-                            code = "ARR"
+                            Id = (byte)5,
+                            codeFlightState = "LANDED",
+                            name = "Landed"
                         },
                         new
                         {
-                            Id = (short)6,
-                            StateName = "Completed",
-                            code = "FIN"
+                            Id = (byte)6,
+                            codeFlightState = "COMPLETED",
+                            name = "Completed"
                         },
                         new
                         {
-                            Id = (short)7,
-                            StateName = "Cancelled",
-                            code = "CAN"
+                            Id = (byte)7,
+                            codeFlightState = "CANCELLED",
+                            name = "Cancelled"
                         },
                         new
                         {
-                            Id = (short)8,
-                            StateName = "Diverted",
-                            code = "DIV"
+                            Id = (byte)8,
+                            codeFlightState = "DIVERTED",
+                            name = "Diverted"
                         });
                 });
 
@@ -230,66 +245,32 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("ProviderResponses");
-                });
-
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Operations.OperationChange", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("cause")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("changeAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("codeAirline")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("codeAirport")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<short?>("flightNumber")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("idOperationalType")
-                        .HasColumnType("smallint");
-
-                    b.Property<Guid>("idUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("isActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("newValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("previosValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("OperationChanges");
-                });
-
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Operations.OperationalChangeType", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("OperationalChangeTypes");
+                    b.ToTable("ProviderResponses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            name = "SMS"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            name = "Email"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            name = "Push Notification"
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airport.ConectionsAirlineAirport", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("codeAirlines")
@@ -306,6 +287,8 @@ namespace AeroVeloz.Infraestructure.Migrations
 
                     b.Property<string>("tokenApi")
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("ConectionsAirlineAirports");
                 });
@@ -358,6 +341,23 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChannelSubscriptionNotifications");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            name = "Email"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            name = "SMS"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            name = "Push"
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Subscriptions.Subscription", b =>
@@ -409,15 +409,53 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            codePermision = "FLIGHT_UPLOAD_BATCH",
+                            description = "Upload flight batch via CSV"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            codePermision = "FLIGHT_UPDATE_STATE",
+                            description = "Update flight state"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            codePermision = "FLIGHT_VIEW_OWN",
+                            description = "View own airline flights"
+                        },
+                        new
+                        {
+                            Id = (byte)4,
+                            codePermision = "FLIGHT_VIEW_SUBSCRIPTIONS",
+                            description = "View flight subscription count"
+                        },
+                        new
+                        {
+                            Id = (byte)5,
+                            codePermision = "CONNECTION_REQUEST",
+                            description = "Request airport connection"
+                        },
+                        new
+                        {
+                            Id = (byte)6,
+                            codePermision = "CONNECTION_VIEW",
+                            description = "View airline connections"
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Roles.Roles", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("smallint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("nameRol")
                         .HasColumnType("nvarchar(max)");
@@ -425,6 +463,13 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)3,
+                            nameRol = "AIRLINEADMIN"
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.RolesPermision.RolPermission", b =>
@@ -444,6 +489,44 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RolPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            idPermission = (short)1,
+                            idRol = (short)3
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            idPermission = (short)2,
+                            idRol = (short)3
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            idPermission = (short)3,
+                            idRol = (short)3
+                        },
+                        new
+                        {
+                            Id = (short)4,
+                            idPermission = (short)4,
+                            idRol = (short)3
+                        },
+                        new
+                        {
+                            Id = (short)5,
+                            idPermission = (short)5,
+                            idRol = (short)3
+                        },
+                        new
+                        {
+                            Id = (short)6,
+                            idPermission = (short)6,
+                            idRol = (short)3
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.User.User", b =>
@@ -487,7 +570,7 @@ namespace AeroVeloz.Infraestructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Airlines.Airline", b =>
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airlines.Airline", b =>
                 {
                     b.HasBaseType("AeroVeloz.Domain.Entities.Organization.Base.Organizations");
 
@@ -498,31 +581,6 @@ namespace AeroVeloz.Infraestructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Airline");
-                });
-
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airports.Airport", b =>
-                {
-                    b.HasBaseType("AeroVeloz.Domain.Entities.Organization.Base.Organizations");
-
-                    b.Property<string>("apiKeyMaster")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("codeAirportIata")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("codeAirportIcao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("timeOffset")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasDiscriminator().HasValue("Airport");
                 });
 #pragma warning restore 612, 618
         }
