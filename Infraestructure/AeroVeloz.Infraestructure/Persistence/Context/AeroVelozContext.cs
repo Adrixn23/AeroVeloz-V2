@@ -25,7 +25,7 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         public DbSet<Airline> Airlines { get; set; }
         public DbSet<ConectionsAirlineAirport> ConectionsAirlineAirports { get; set; }
         public DbSet<Flight> Flights { get; set; }
-        public DbSet<FlightHistory> FlightHistories { get; set; }
+        public DbSet<FlightHistory> FlightHistory { get; set; }
         public DbSet<FlightState> FlightStates { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<ChannelSubscriptionNotification> ChannelSubscriptionNotifications { get; set; }

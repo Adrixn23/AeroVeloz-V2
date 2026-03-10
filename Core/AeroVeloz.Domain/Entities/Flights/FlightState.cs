@@ -14,4 +14,5 @@ public partial class FlightState : BEntity<byte>
 
     public string? name { get; init; }
 
+
 }
