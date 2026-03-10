@@ -1,32 +1,8 @@
-<<<<<<< HEAD
-﻿
-using AeroVeloz.Domain.Models.Flights;
-using AeroVeloz.Domain.Entities.Flights;
 
+
+﻿using AeroVeloz.Application.DTOs.Flights;
 using AeroVeloz.Application.DTOs.Flights.Base;
 
-namespace AeroVeloz.Application.Repositories.Flights
-{
-    public interface IFlightRepository : IBRepository<Flight, short>
-    {
-        // Filtro blindado por número + IATA (regla Joel)
-        Task<FlightReadModel?> GetByFlightAndAirlineAsync(short flightNumber, string iataCode);
-
-        
-
-        //  Vuelos activos por aerolínea
-        Task<IReadOnlyCollection<FlightReadModel>> GetActiveFlightsByAirlineAsync(string iataCode);
-
-      
-    }
-}
-
-
-
-
-=======
-﻿using AeroVeloz.Application.DTOs.Flights;
-using AeroVeloz.Application.Repositories.Base;
 using AeroVeloz.Domain.Entities.Flights;
 
 namespace AeroVeloz.Application.Repositories.Flights
@@ -44,4 +20,4 @@ namespace AeroVeloz.Application.Repositories.Flights
         Task<bool> HasActiveConnectionAsync(string codeAirlines, string airportCode);
     }
 }
->>>>>>> origin/testeo-branch
+

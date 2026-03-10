@@ -2,9 +2,14 @@
 
 namespace AeroVeloz.Domain.Entities.Users.RolesPermision
 {
+    /// <summary>
+    /// Entidad de dominio que representa la relación muchos-a-muchos entre roles y permisos.
+    /// permitiendo configurar qué permisos tiene cada rol dentro del sistema.
+    /// </summary>
     public class RolPermission : BEntity<short>
     {
         public short idRol { get; init; }
+
         public short idPermission { get; init; }    
     }
 }

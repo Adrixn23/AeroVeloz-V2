@@ -8,7 +8,7 @@ using AeroVeloz.Application.Services.Result;
 using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.DomainService.Interfaces.Flights;
 using AeroVeloz.Domain.Entities.Audit;
-using AeroVeloz.Domain.Entities.Flights;
+
 using AeroVeloz.Domain.Events.EventsAirlines;
 using AeroVeloz.Domain.Events.EventsFlights;
 using AeroVeloz.Domain.Validators.interfaces.Flight;
@@ -59,16 +59,16 @@ namespace AeroVeloz.Application.Services.Flights
                     return OperationResult<FlightBatchResultDto>.Fail("BATCH_AUTH", "Solo administradores de aerolínea pueden cargar vuelos");
 
                 var errors = new List<FlightBatchErrorDto>();
-                var validFlights = new List<Flight>();
+                var validFlights = new List<Domain.Entities.Flights.Flight>();
                 var items = batch.ToList();
-
+                
                 if (items.Count == 0)
                     return OperationResult<FlightBatchResultDto>.Fail("BATCH_EMPTY", "El lote no contiene vuelos");
 
                 for (int i = 0; i < items.Count; i++)
                 {
                     var item = items[i];
-                    var flight = new Flight
+                    var flight = new Domain.Entities.Flights.Flight
                     {
                         codeAirlines = item.CodeAirlines,
                         flightStateId = (byte)FlightStateEnum.Scheduled,
@@ -79,7 +79,7 @@ namespace AeroVeloz.Application.Services.Flights
                         BoardingGateArrived = item.BoardingGateArrived
                     };
 
-                    var rowValidation = _flightValidator.ValidateFlightRow(flight);
+                    var rowValidation = await _flightValidator.ValidateFlightRowAsync(flight);
                     if (!rowValidation.IsValid)
                     {
                         foreach (var err in rowValidation.domainErrors)
@@ -115,7 +115,7 @@ namespace AeroVeloz.Application.Services.Flights
 
                 if (validFlights.Count > 0)
                 {
-                    await _flightRepo.PersistBatchAsync(validFlights);
+                    await _flightRepo.PersistBatchAsync((IEnumerable<Domain.Entities.Flights.Flight>)validFlights);
 
                     foreach (var f in validFlights)
                         await _subscriptionRepo.AutoSubscribeAirlineAsync(f.Id, f.codeAirlines!, orgId);
@@ -192,8 +192,8 @@ namespace AeroVeloz.Application.Services.Flights
                     return OperationResult<bool>.Fail("FLIGHT_NOT_FOUND", "Vuelo no encontrado");
 
                 var sameState = _flightValidator.ValidateStateTransition(flight.flightStateId, dto.NewFlightStateId);
-                if (!sameState.IsValid)
-                    return OperationResult<bool>.FromValidation(sameState);
+                if (!sameState.IsCompleted)
+                    return OperationResult<bool>.FromValidation(await sameState);
 
                 var transition = await _flightDomain.IsValidStatusTransitionAsync(flight.flightStateId, (FlightStateEnum)dto.NewFlightStateId);
                 if (!transition.IsValid)
@@ -222,7 +222,7 @@ namespace AeroVeloz.Application.Services.Flights
 
                 var op = OperationResult<bool>.Ok(true, "Estado actualizado");
                 op.AddEvent(new FlightStateChangedByAirline(
-                    dto.FlightNumber.ToString(), (FlightStateEnum)dto.NewFlightStateId, dto.CodeAirlines!, DateTime.UtcNow));
+                    dto.FlightNumber.ToString(), (short)(FlightStateEnum)dto.NewFlightStateId, dto.CodeAirlines!, DateTime.UtcNow));
                 op.AddEvent(new FlightAuditEntryCreated(
                     Guid.NewGuid(), "Airline", $"Flight {dto.FlightNumber} state -> {dto.NewFlightStateId}",
                     $"{{\"reason\":\"{dto.Reason}\"}}", DateTime.UtcNow));

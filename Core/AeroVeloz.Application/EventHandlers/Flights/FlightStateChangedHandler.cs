@@ -43,12 +43,12 @@ namespace AeroVeloz.Application.EventHandlers.Flights
                 var subscribers = await _subscriptionRepo.GetActiveByFlightAsync(flightNumber, notification.AirlineCode);
                 if (subscribers.Count == 0) return;
 
-                bool requiresSupervision = notification.NewState == FlightStateEnum.Diverted;
+                bool requiresSupervision = notification.NewState == (short)FlightStateEnum.Diverted;
                 string statusLabel = notification.NewState.ToString();
 
                 foreach (var sub in subscribers)
                 {
-                    string messageBody = BuildPublicMessage(notification.NewState, notification.AirlineCode, flightNumber);
+                    string messageBody = BuildPublicMessage((FlightStateEnum)notification.NewState, notification.AirlineCode, flightNumber);
 
                     if (requiresSupervision && !sub.contactValue!.StartsWith("airline:"))
                     {

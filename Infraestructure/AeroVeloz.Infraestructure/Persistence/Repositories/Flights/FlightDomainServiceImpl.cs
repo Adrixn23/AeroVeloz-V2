@@ -40,7 +40,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         {
             var newStateId = (byte)newState;
 
-            // InFlight (4) / Landed (5) cannot be cancelled by airline
+           
             if (currentStateId == (byte)FlightStateEnum.InFlight && newStateId == (byte)FlightStateEnum.Cancelled)
                 return Task.FromResult(new ValidationResult().Failur(
                     ErrosValidationResults.Create("FLIGHT_TRANSITION", "No se puede cancelar un vuelo que está en el aire")));
@@ -49,17 +49,19 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
                 return Task.FromResult(new ValidationResult().Failur(
                     ErrosValidationResults.Create("FLIGHT_TRANSITION", "No se puede cancelar un vuelo que ya aterrizó")));
 
-            // Completed (6) and Cancelled (7) are terminal
+           
             if (currentStateId == (byte)FlightStateEnum.Completed || currentStateId == (byte)FlightStateEnum.Cancelled)
                 return Task.FromResult(new ValidationResult().Failur(
                     ErrosValidationResults.Create("FLIGHT_TERMINAL", "El vuelo ya está en un estado terminal y no acepta más cambios")));
 
-            // Cannot go backwards: Landed -> Boarding, etc.
+          
             if (newStateId < currentStateId && newStateId != (byte)FlightStateEnum.Cancelled && newStateId != (byte)FlightStateEnum.Diverted)
                 return Task.FromResult(new ValidationResult().Failur(
                     ErrosValidationResults.Create("FLIGHT_BACKWARD", "Transición de estado no permitida: no se puede retroceder en el flujo")));
 
             return Task.FromResult(new ValidationResult().Success());
         }
+
+        
     }
 }

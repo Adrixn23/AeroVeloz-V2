@@ -2,6 +2,7 @@ using AeroVeloz.Domain.Common.codeError.codeErrorFlights;
 using AeroVeloz.Domain.Common.Enums;
 using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Flights;
+
 using AeroVeloz.Domain.Validators.interfaces.Flight;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Flights
@@ -25,7 +26,44 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Flights
             ((byte)FlightStateEnum.Diverted,   (byte)FlightStateEnum.Cancelled),
         ];
 
-        public ValidationResult ValidateFlightRow(Flight flight)
+        public Task<ValidationResult> ValidateCreateAsync(Entities.Flights.Flight flight)
+        {
+            var errors = new List<ErrosValidationResults>();
+
+            // Si mandan un vuelo vacieo, lo rebotamos
+            if (flight == null)
+            {
+                errors.Add(ErrorFlights.FlightNotFound);
+                return Task.FromResult(new ValidationResult().Failur(errors));
+            }
+
+            
+           if (string.IsNullOrWhiteSpace(flight.codeAirlines))
+                errors.Add(ErrorFlights.InvalidCodeAirlines);
+
+        if (string.IsNullOrWhiteSpace(flight.OriginAirport))
+                errors.Add(ErrorFlights.InvalidOrigin);
+
+                    if (string.IsNullOrWhiteSpace(flight.DestinationAirport))
+                errors.Add(ErrorFlights.InvalidDestination); 
+
+                    if (flight.OriginAirport == flight.DestinationAirport
+                && !string.IsNullOrWhiteSpace(flight.OriginAirport))
+                errors.Add(ErrorFlights.SameOriginAndDestination);
+
+         if (flight.ScheduledDeparture <= DateTimeOffset.UtcNow)
+                errors.Add(ErrorFlights.DepartureInPast);
+
+            // 3. Empacamo el resultado 
+                  if (errors.Count > 0)
+                return Task.FromResult(new ValidationResult().Failur(errors));
+
+            return Task.FromResult(new ValidationResult().Success());
+        }
+
+        
+
+        public  Task<ValidationResult> ValidateFlightRowAsync(Entities.Flights.Flight flight)
         {
             var errors = new List<ErrosValidationResults>();
 
@@ -46,24 +84,40 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Flights
                 errors.Add(ErrorFlights.DepartureInPast);
 
             if (errors.Count > 0)
-                return new ValidationResult().Failur(errors);
+                return Task.FromResult(new ValidationResult().Success());
 
-            return new ValidationResult().Success();
+            return Task.FromResult(new ValidationResult().Success());
         }
 
-        public ValidationResult ValidateStateTransition(byte currentStateId, byte newStateId)
-        {
-            if (currentStateId == newStateId)
-                return new ValidationResult().Failur(ErrorFlights.InvalidFlightState);
 
+
+        public Task<ValidationResult> ValidateStateTransition(byte currentStateId, byte newStateId)
+        {
+            var result = new ValidationResult();
+
+            // No se puede cambiar al mismo estado actual
+            if (currentStateId == newStateId)
+            {
+                return Task.FromResult(result.Failur(ErrorFlights.InvalidFlightState));
+            }
+
+            // Un vuelo Cancelado o Finalizado no puede volver a cambiar de estado
+            
             if (currentStateId == (byte)FlightStateEnum.Completed ||
                 currentStateId == (byte)FlightStateEnum.Cancelled)
-                return new ValidationResult().Failur(ErrorFlights.InvalidFlightState);
+            {
+                return Task.FromResult(result.Failur(ErrorFlights.InvalidFlightState));
+            }
 
+            
+           
             if (!AllowedTransitions.Contains((currentStateId, newStateId)))
-                return new ValidationResult().Failur(ErrorFlights.InvalidFlightState);
+            {
+                return Task.FromResult(result.Failur(ErrorFlights.InvalidFlightState));
+            }
 
-            return new ValidationResult().Success();
+            // Si pasó todos los filtros, devolvemos eexito
+            return Task.FromResult(result.Success());
         }
     }
 }

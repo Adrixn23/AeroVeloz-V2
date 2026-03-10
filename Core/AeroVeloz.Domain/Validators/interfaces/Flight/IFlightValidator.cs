@@ -1,6 +1,5 @@
 ﻿using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Flights;
- 
 using System.Threading.Tasks;
 
 
@@ -16,14 +15,14 @@ namespace AeroVeloz.Domain.Validators.interfaces.Flight
 
        Task<ValidationResult> ValidateFlightRowAsync(Entities.Flights.Flight flight);
 
-       // Valida las reglas antes de actualizar el estado de un vuelo
-       Task<ValidationResult> ValidateStateTransition(Entities.Flights.Flight flight);
+        // Valida las reglas antes de actualizar el estado de un vuelo
+      Task<ValidationResult> ValidateStateTransition(byte currentStateId, byte newStateId);
 
-      
-        
 
-      
-     
+
+
+
+
 
     }
 }
