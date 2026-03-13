@@ -1,294 +1,24 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace AeroVeloz.Infraestructure.Persistence.Migrations
 {
-    /// <inheritdoc />
     public partial class SeedRolesPermissionsAuditOperationalTypes : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Audits",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdAuditType = table.Column<short>(type: "smallint", nullable: false),
-                    idUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    nameEntity = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    occurentAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataOld = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataNew = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Audits", x => x.Id);
-                });
+            migrationBuilder.EnsureSchema(
+                name: "Audits");
 
-            migrationBuilder.CreateTable(
-                name: "AuditTypes",
-                columns: table => new
-                {
-                    Id = table.Column<short>(type: "smallint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nameAudit = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuditTypes", x => x.Id);
-                });
+            migrationBuilder.EnsureSchema(
+                name: "Operations");
 
-            migrationBuilder.CreateTable(
-                name: "ChannelSubscriptionNotifications",
-                columns: table => new
-                {
-                    Id = table.Column<byte>(type: "tinyint", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChannelSubscriptionNotifications", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ConectionsAirlineAirports",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    codeAirlines = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    codeAirport = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    tokenApi = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isActive = table.Column<bool>(type: "bit", nullable: false),
-                    createAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ConectionsAirlineAirports", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FlightHistories",
-                columns: table => new
-                {
-                    flightNumber = table.Column<short>(type: "smallint", nullable: false),
-                    codeAirlines = table.Column<short>(type: "smallint", nullable: false),
-                    changeAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    flightStatesIdAfter = table.Column<byte>(type: "tinyint", nullable: false),
-                    flightStatesIdBefore = table.Column<byte>(type: "tinyint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FlightHistories", x => new { x.flightNumber, x.codeAirlines, x.changeAt });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Flights",
-                columns: table => new
-                {
-                    Id = table.Column<short>(type: "smallint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    codeAirlines = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    flightStateId = table.Column<byte>(type: "tinyint", nullable: false),
-                    OriginAirport = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DestinationAirport = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ScheduledDeparture = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    BordingGate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BoardingGateArrived = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Flights", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FlightStates",
-                columns: table => new
-                {
-                    Id = table.Column<byte>(type: "tinyint", nullable: false),
-                    codeFlightState = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FlightStates", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Notifications",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    subscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    codeProvider = table.Column<byte>(type: "tinyint", nullable: false),
-                    message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    createAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    statusNotification = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notifications", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OperationalChangeTypes",
-                columns: table => new
-                {
-                    Id = table.Column<short>(type: "smallint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OperationalChangeTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OperationChanges",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    idUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    idOperationalType = table.Column<short>(type: "smallint", nullable: false),
-                    flightNumber = table.Column<short>(type: "smallint", nullable: false),
-                    codeAirline = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    codeAirport = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    previosValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    newValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    changeAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    cause = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OperationChanges", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Organizations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nameOrganization = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    typeOrganization = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isActived = table.Column<bool>(type: "bit", nullable: false),
-                    emailOrganization = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    createAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    codeAirlines = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    codeIATA = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    codeAirportIcao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    codeAirportIata = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    city = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    apiKeyMaster = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    timeOffset = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Organizations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permissions",
-                columns: table => new
-                {
-                    Id = table.Column<byte>(type: "tinyint", nullable: false),
-                    codePermision = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permissions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProviderResponses",
-                columns: table => new
-                {
-                    Id = table.Column<byte>(type: "tinyint", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProviderResponses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<short>(type: "smallint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nameRol = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RolPermissions",
-                columns: table => new
-                {
-                    Id = table.Column<short>(type: "smallint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    idRol = table.Column<short>(type: "smallint", nullable: false),
-                    idPermission = table.Column<short>(type: "smallint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolPermissions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Subscriptions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    flightNumber = table.Column<short>(type: "smallint", nullable: false),
-                    codeAirlines = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    codeChannel = table.Column<byte>(type: "tinyint", nullable: false),
-                    numberInterested = table.Column<int>(type: "int", nullable: false),
-                    createDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    endingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    activeSubscription = table.Column<bool>(type: "bit", nullable: false),
-                    contactValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    nameUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    passwordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    createAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    isActive = table.Column<bool>(type: "bit", nullable: false),
-                    ipAdress = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    lastLoginAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    failedLoginAttempts = table.Column<int>(type: "int", nullable: false),
-                    lockedUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    idOrganization = table.Column<int>(type: "int", nullable: false),
-                    idRol = table.Column<short>(type: "smallint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
+            migrationBuilder.EnsureSchema(
+                name: "Identitys");
 
             migrationBuilder.InsertData(
-                table: "AuditTypes",
+                schema: "Audits",
+                table: "AuditType",
                 columns: new[] { "Id", "nameAudit" },
                 values: new object[,]
                 {
@@ -298,7 +28,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "OperationalChangeTypes",
+                schema: "Operations",
+                table: "OperationalChangeType",
                 columns: new[] { "Id", "name" },
                 values: new object[,]
                 {
@@ -308,6 +39,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                schema: "Identitys",
                 table: "Permissions",
                 columns: new[] { "Id", "codePermision", "description" },
                 values: new object[,]
@@ -329,6 +61,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                schema: "Identitys",
                 table: "RolPermissions",
                 columns: new[] { "Id", "idPermission", "idRol" },
                 values: new object[,]
@@ -358,7 +91,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Roles",
+                schema: "Identitys",
+                table: "Rol",
                 columns: new[] { "Id", "nameRol" },
                 values: new object[,]
                 {
@@ -369,59 +103,283 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 });
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Audits");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)1);
 
-            migrationBuilder.DropTable(
-                name: "AuditTypes");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)2);
 
-            migrationBuilder.DropTable(
-                name: "ChannelSubscriptionNotifications");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)3);
 
-            migrationBuilder.DropTable(
-                name: "ConectionsAirlineAirports");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)4);
 
-            migrationBuilder.DropTable(
-                name: "FlightHistories");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)5);
 
-            migrationBuilder.DropTable(
-                name: "Flights");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)6);
 
-            migrationBuilder.DropTable(
-                name: "FlightStates");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)7);
 
-            migrationBuilder.DropTable(
-                name: "Notifications");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)8);
 
-            migrationBuilder.DropTable(
-                name: "OperationalChangeTypes");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)9);
 
-            migrationBuilder.DropTable(
-                name: "OperationChanges");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)10);
 
-            migrationBuilder.DropTable(
-                name: "Organizations");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)11);
 
-            migrationBuilder.DropTable(
-                name: "Permissions");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)12);
 
-            migrationBuilder.DropTable(
-                name: "ProviderResponses");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)13);
 
-            migrationBuilder.DropTable(
-                name: "Roles");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)14);
 
-            migrationBuilder.DropTable(
-                name: "RolPermissions");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)15);
 
-            migrationBuilder.DropTable(
-                name: "Subscriptions");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)16);
 
-            migrationBuilder.DropTable(
-                name: "Users");
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)17);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)18);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)19);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)20);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)21);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "RolPermissions",
+                keyColumn: "Id",
+                keyValue: (short)22);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Rol",
+                keyColumn: "Id",
+                keyValue: (short)1);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Rol",
+                keyColumn: "Id",
+                keyValue: (short)2);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Rol",
+                keyColumn: "Id",
+                keyValue: (short)3);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Rol",
+                keyColumn: "Id",
+                keyValue: (short)4);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)1);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)2);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)3);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)4);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)5);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)6);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)7);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)8);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)9);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)10);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)11);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)12);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)13);
+
+            migrationBuilder.DeleteData(
+                schema: "Identitys",
+                table: "Permissions",
+                keyColumn: "Id",
+                keyValue: (byte)14);
+
+            migrationBuilder.DeleteData(
+                schema: "Audits",
+                table: "AuditType",
+                keyColumn: "Id",
+                keyValue: (short)1);
+
+            migrationBuilder.DeleteData(
+                schema: "Audits",
+                table: "AuditType",
+                keyColumn: "Id",
+                keyValue: (short)2);
+
+            migrationBuilder.DeleteData(
+                schema: "Audits",
+                table: "AuditType",
+                keyColumn: "Id",
+                keyValue: (short)3);
+
+            migrationBuilder.DeleteData(
+                schema: "Operations",
+                table: "OperationalChangeType",
+                keyColumn: "Id",
+                keyValue: (short)1);
+
+            migrationBuilder.DeleteData(
+                schema: "Operations",
+                table: "OperationalChangeType",
+                keyColumn: "Id",
+                keyValue: (short)2);
+
+            migrationBuilder.DeleteData(
+                schema: "Operations",
+                table: "OperationalChangeType",
+                keyColumn: "Id",
+                keyValue: (short)3);
         }
     }
 }

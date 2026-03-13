@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.Organization.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace AeroVeloz.Domain.Entities.Organization.Airports
 {
 
@@ -6,6 +7,10 @@ namespace AeroVeloz.Domain.Entities.Organization.Airports
     /// Entidad de dominio que representa un aeropuerto registrado en el sistema.
     /// los códigos ICAO/IATA, ubicación geográfica y la API key maestra para integraciones.
     /// </summary>
+    /// 
+
+    [Table("Airports", Schema = "Airport")]
+
     public partial class Airport : Organizations
     {
         public string? codeAirportIcao { get; init; }

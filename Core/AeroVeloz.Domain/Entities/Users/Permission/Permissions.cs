@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Users.Permission
 {
@@ -7,7 +8,12 @@ namespace AeroVeloz.Domain.Entities.Users.Permission
     /// Los permisos se asignan a los roles mediante la entidad <see cref="RolesPermision.RolPermission"/>
     /// y determinan las acciones específicas que un usuario puede ejecutar.
     /// </summary>
-    public partial class Permission : BEntity<byte>
+    /// 
+
+
+    [Table("Permissions", Schema ="Identitys")]
+
+    public partial class Permissions : BEntity<byte>
     {
         public string? codePermision { get; init; }
 

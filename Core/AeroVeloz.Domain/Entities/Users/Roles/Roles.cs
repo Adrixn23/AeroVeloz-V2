@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Users.Roles
 {
@@ -7,6 +8,11 @@ namespace AeroVeloz.Domain.Entities.Users.Roles
     /// Los roles determinan el nivel de acceso y las acciones que un usuario puede realizar
     /// (ej: SYSTEMADMIN, AIRPORTADMIN, AIRLINEADMIN).
     /// </summary>
+    /// 
+
+
+    [Table("Rol", Schema = "Identitys")]
+
     public partial class Roles : BEntity<short>
     {
         public string? nameRol { get; init; }

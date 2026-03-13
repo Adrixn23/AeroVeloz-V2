@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Organization.Base
 {
@@ -7,6 +8,11 @@ namespace AeroVeloz.Domain.Entities.Organization.Base
     /// Todas las organizaciones (aeropuertos, aerolíneas, etc.) heredan de esta clase
     /// y comparten propiedades comunes como nombre, tipo, correo electrónico y estado activo.
     /// </summary>
+    /// 
+
+
+    [Table("Organizations", Schema ="Identitys")]
+
     public abstract class Organizations : BEntity<int>
     {
         public string? nameOrganization { get; init; }

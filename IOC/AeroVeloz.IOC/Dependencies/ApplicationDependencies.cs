@@ -23,8 +23,7 @@ namespace AeroVeloz.IOC.Dependencies
             services.AddScoped<IAuthenticationServicie, AuthenticationService>();
             services.AddScoped<IAuditServicie, AuditService>();
 
-            services.AddMediatR(cfg =>
-                cfg.RegisterServicesFromAssembly(typeof(AirportServicie).Assembly));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AirportServicie).Assembly));
 
             return services;
         }

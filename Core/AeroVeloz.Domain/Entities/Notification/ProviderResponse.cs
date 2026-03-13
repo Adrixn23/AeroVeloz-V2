@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Notification
 {
@@ -7,6 +8,10 @@ namespace AeroVeloz.Domain.Entities.Notification
     /// Define los canales disponibles para el despacho de notificaciones
     /// (ej: Email, SMS, Push Notification).
     /// </summary>
+    /// 
+
+    [Table("ProviderResponse", Schema = "Notifications")]
+
     public partial class ProviderResponse: BEntity<byte>
     {
         public string? name { get; init; }

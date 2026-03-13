@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Subscriptions;
 
@@ -7,6 +8,11 @@ namespace AeroVeloz.Domain.Entities.Subscriptions;
 /// Permite a los usuarios registrarse para recibir notificaciones sobre cambios en vuelos específicos
 /// a través de un canal determinado (email, SMS, etc.) durante un período de tiempo definido.
 /// </summary>
+/// 
+
+
+[Table("Subscription", Schema = "Subscriptions")]
+
 public partial class Subscription : BEntity<Guid>
 {
    public short flightNumber { get; init; }

@@ -13,6 +13,7 @@ using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Entities.Subscriptions;
 using AeroVeloz.Domain.Entities.Users.RolesPermision;
 
+
 namespace AeroVeloz.Infraestructure.Persistence.context
 {
     public class AeroVelozContext : DbContext
@@ -24,7 +25,7 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         public DbSet<Airport> Airports { get; set; }
         public  DbSet<User> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Permissions> Permissions { get; set; }
         public DbSet<RolPermission> RolPermissions { get; set; }
         public DbSet<ConectionsAirlineAirport> ConectionsAirlineAirports { get; set; }
         public DbSet<Organizations> Organizations { get; set; }
@@ -44,10 +45,6 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<FlightHistory>()
-                .HasKey(fh => new { fh.flightNumber, fh.codeAirlines, fh.changeAt });
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AeroVelozContext).Assembly);
         }
     }

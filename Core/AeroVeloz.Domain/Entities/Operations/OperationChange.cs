@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Operations;
 
@@ -7,6 +8,12 @@ namespace AeroVeloz.Domain.Entities.Operations;
 /// Registra quién realizó el cambio, qué tipo de cambio fue, los valores anteriores y nuevos,
 /// y la causa del cambio. Permite la trazabilidad completa de todas las operaciones del sistema.
 /// </summary>
+/// 
+
+
+
+[Table("OperationChange", Schema ="Operations")]
+
 public partial class OperationChange :  BEntity<Guid>
 {
       public Guid idUser { get; init; }

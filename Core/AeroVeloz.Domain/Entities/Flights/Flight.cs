@@ -2,6 +2,7 @@
 using AeroVeloz.Domain.Entities.BaseEntity;
 using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Entities.Subscriptions;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace AeroVeloz.Domain.Entities.Flights;
 
 /// <summary>
@@ -9,6 +10,11 @@ namespace AeroVeloz.Domain.Entities.Flights;
 /// Contiene la información esencial del vuelo: aerolínea, aeropuertos de origen y destino,
 /// horario de salida programado y puertas de embarque.
 /// </summary>
+/// 
+
+
+[Table("Flight", Schema ="Flights")]
+
 public partial class Flight: BEntity<short>
 {
     public string? codeAirlines { get; init; }

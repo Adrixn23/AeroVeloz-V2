@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Audit
 {
@@ -7,6 +8,11 @@ namespace AeroVeloz.Domain.Entities.Audit
     /// Define las categorías de eventos auditables dentro del sistema
     /// (ej: acceso de usuario, cambio operacional, cambio de estado de vuelo, evento del sistema).
     /// </summary>
+    /// 
+
+
+    [Table("AuditType", Schema ="Audits")]
+
     public partial class AuditType : BEntity<short>
     {
         public string? nameAudit { get; init; }

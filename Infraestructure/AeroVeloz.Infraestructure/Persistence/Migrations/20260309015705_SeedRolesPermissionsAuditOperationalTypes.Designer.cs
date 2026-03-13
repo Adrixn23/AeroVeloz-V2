@@ -51,7 +51,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Audits");
+                    b.ToTable("Audit", "Audits");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Audit.AuditType", b =>
@@ -67,7 +67,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditTypes");
+                    b.ToTable("AuditType", "Audits");
 
                     b.HasData(
                         new
@@ -118,7 +118,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flight", "Flights");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.FlightHistory", b =>
@@ -143,7 +143,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("flightNumber", "codeAirlines", "changeAt");
 
-                    b.ToTable("FlightHistories");
+                    b.ToTable("FlightHistory", "Flights");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.FlightState", b =>
@@ -159,7 +159,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FlightStates");
+                    b.ToTable("FlightStates", "Flights");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Notification.Notification", b =>
@@ -185,7 +185,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notification", "Notifications");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Notification.ProviderResponse", b =>
@@ -198,7 +198,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProviderResponses");
+                    b.ToTable("ProviderResponse", "Notifications");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Operations.OperationChange", b =>
@@ -239,7 +239,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OperationChanges");
+                    b.ToTable("OperationChange", "Operations");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Operations.OperationalChangeType", b =>
@@ -255,7 +255,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OperationalChangeTypes");
+                    b.ToTable("OperationalChangeType", "Operations");
 
                     b.HasData(
                         new
@@ -298,7 +298,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConectionsAirlineAirports");
+                    b.ToTable("ConectionsAirlineAirport", "Airport");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Base.Organizations", b =>
@@ -308,11 +308,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
 
                     b.Property<DateTime>("createAt")
                         .HasColumnType("datetime2");
@@ -331,11 +326,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organizations", "Identitys");
 
-                    b.HasDiscriminator().HasValue("Organizations");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Subscriptions.ChannelSubscriptionNotification", b =>
@@ -348,7 +341,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChannelSubscriptionNotifications");
+                    b.ToTable("ChannelSubscriptionNotification", "Subscriptions");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Subscriptions.Subscription", b =>
@@ -383,10 +376,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscription", "Subscriptions");
                 });
 
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Permission.Permission", b =>
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Permission.Permissions", b =>
                 {
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
@@ -399,7 +392,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", "Identitys");
 
                     b.HasData(
                         new
@@ -501,7 +494,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Rol", "Identitys");
 
                     b.HasData(
                         new
@@ -542,7 +535,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RolPermissions");
+                    b.ToTable("RolPermissions", "Identitys");
 
                     b.HasData(
                         new
@@ -717,7 +710,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", "Identitys");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Airlines.Airline", b =>
@@ -730,7 +723,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<string>("codeIATA")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("Airline");
+                    b.ToTable("Airlines", "Flights");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airports.Airport", b =>
@@ -755,7 +748,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<DateTimeOffset>("timeOffset")
                         .HasColumnType("datetimeoffset");
 
-                    b.HasDiscriminator().HasValue("Airport");
+                    b.ToTable("Airports", "Airport");
                 });
 #pragma warning restore 612, 618
         }
