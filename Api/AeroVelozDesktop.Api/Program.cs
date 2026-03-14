@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using AeroVeloz.Infraestructure.Persistence.context;
 using AeroVeloz.IOC.Dependencies;
 
@@ -9,7 +10,9 @@ builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AeroVelozContext>(options => 
-    options.UseSqlServer(connectionString));
+    options
+        .UseSqlServer(connectionString)
+        .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
 builder.Services.AddDomainServices();
 builder.Services.AddApplicationServices();

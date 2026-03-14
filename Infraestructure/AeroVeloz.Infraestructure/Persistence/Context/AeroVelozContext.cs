@@ -31,7 +31,7 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         public DbSet<Organizations> Organizations { get; set; }
         public DbSet<Airline> Airlines { get; set; }
         public DbSet<Flight> Flights { get; set; }
-        public DbSet<FlightHistory> FlightHistories { get; set; }
+        public DbSet<FlightHistory> FlightHistory { get; set; }
         public DbSet<FlightState> FlightStates { get; set; }
         public DbSet<AuditType> AuditTypes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
@@ -45,7 +45,19 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<FlightHistory>()
+              .HasKey(fh => new { fh.flightNumber, fh.codeAirlines});
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AeroVelozContext).Assembly);
+
+            modelBuilder.Entity<Organizations>().ToTable("Organizations", "Identitys");
+            modelBuilder.Entity<Airport>().ToTable("Airports", "Airport")
+                .HasBaseType<Organizations>();
+
+            modelBuilder.Entity<Organizations>().ToTable("Organizations", "Identitys");
+            modelBuilder.Entity<Airline>().ToTable("Airlines", "Flights")
+                .HasBaseType<Organizations>();
+
         }
     }
 }

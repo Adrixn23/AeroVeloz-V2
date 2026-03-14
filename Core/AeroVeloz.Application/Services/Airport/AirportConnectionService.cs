@@ -46,8 +46,8 @@ namespace AeroVeloz.Application.Handlers.Airport
                 var connection = new ConectionsAirlineAirport
                 {
                     Id = Guid.NewGuid(),
-                    codeAirlines = dto.codeAirline,
-                    codeAirport = dto.codeAirport,
+                    codeAirlinesIcao = dto.codeAirlinesIcao,
+                    codeAirportIcao = dto.codeAirportIcao,
                     isActive = true,
                     createAt = DateTime.UtcNow
                 };
@@ -62,7 +62,7 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var result = OperationResult<bool>.Ok(true, "Conexión creada exitosamente");
                 result.AddEvent(new AirportConnectionCreatedDomainEvent(
-                    connection.Id, dto.codeAirport, dto.codeAirline, userId, DateTime.UtcNow));
+                    connection.Id, dto.codeAirportIcao, dto.codeAirlinesIcao, userId, DateTime.UtcNow));
 
                 foreach (var evt in result.DomainEvents)
                     await _mediator.Publish(evt);

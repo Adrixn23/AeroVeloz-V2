@@ -14,9 +14,10 @@ namespace AeroVeloz.Domain.Entities.Flights;
 
 public partial class FlightHistory
 {
+
     public short flightNumber { get; init; }
 
-    public short codeAirlines { get; init; }
+    public string? codeAirlines { get; init; }
 
     public DateTime changeAt { get; init; }
 

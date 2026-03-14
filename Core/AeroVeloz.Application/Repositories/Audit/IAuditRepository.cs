@@ -1,5 +1,4 @@
 using AeroVeloz.Domain.Common.Validation;
-using AeroVeloz.Domain.Entities.Audit;
 using AeroVeloz.Domain.Models.Audit;
 
 namespace AeroVeloz.Application.Repositories.Audit

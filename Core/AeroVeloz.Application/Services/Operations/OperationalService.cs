@@ -54,8 +54,8 @@ namespace AeroVeloz.Application.Handlers.Operations
                     idUser = userId,
                     idOperationalType = dto.IdOperationalType,
                     flightNumber = dto.FlightNumber,
-                    codeAirline = dto.CodeAirline,
-                    codeAirport = dto.CodeAirport,
+                    codeAirlinesIcao = dto.CodeAirline,
+                    codeAirportIcao = dto.CodeAirport,
                     previosValue = dto.PreviousValue,
                     newValue = dto.NewValue,
                     cause = dto.Cause,
@@ -79,8 +79,7 @@ namespace AeroVeloz.Application.Handlers.Operations
                     IdAuditType = 1,
                     idUser = userId,
                     nameEntity = "OperationChange",
-                    occurentAt = DateTime.UtcNow,
-                    DataNew = JsonSerializer.Serialize(dto)
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Cambio operacional registrado");

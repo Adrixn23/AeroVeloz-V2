@@ -16,7 +16,7 @@ namespace AeroVeloz.Domain.Entities.Subscriptions;
 public partial class Subscription : BEntity<Guid>
 {
    public short flightNumber { get; init; }
-   public string? codeAirlines { get; init; }
+   public string? codeAirlinesIcao { get; init; }
    public byte codeChannel { get; init; }
    public int numberInterested { get; init; }
    public DateTime createDate { get; init; }

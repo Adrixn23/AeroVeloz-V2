@@ -31,12 +31,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DataNew")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DataOld")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<short>("IdAuditType")
                         .HasColumnType("smallint");
 
@@ -46,7 +40,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<string>("nameEntity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("occurentAt")
+                    b.Property<DateTime>("ocurrentAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -56,33 +50,30 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Audit.AuditType", b =>
                 {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<short>("idAuditType")
                         .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("nameAudit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("idAuditType");
 
                     b.ToTable("AuditType", "Audits");
 
                     b.HasData(
                         new
                         {
-                            Id = (short)1,
+                            idAuditType = (short)1,
                             nameAudit = "ENTITY_CREATE"
                         },
                         new
                         {
-                            Id = (short)2,
+                            idAuditType = (short)2,
                             nameAudit = "ENTITY_UPDATE"
                         },
                         new
                         {
-                            Id = (short)3,
+                            idAuditType = (short)3,
                             nameAudit = "ENTITY_DEACTIVATE"
                         });
                 });
@@ -110,10 +101,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<DateTimeOffset>("ScheduledDeparture")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("flightStateId")
+                    b.Property<byte>("flightStatesId")
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id");
@@ -126,8 +117,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<short>("flightNumber")
                         .HasColumnType("smallint");
 
-                    b.Property<short>("codeAirlines")
-                        .HasColumnType("smallint");
+                    b.Property<string>("codeAirlines")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("changeAt")
                         .HasColumnType("datetime2");
@@ -141,7 +132,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<string>("reason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("flightNumber", "codeAirlines", "changeAt");
+                    b.HasKey("flightNumber", "codeAirlines");
 
                     b.ToTable("FlightHistory", "Flights");
                 });
@@ -168,8 +159,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte>("codeProvider")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("codeProvider")
+                        .HasColumnType("smallint");
 
                     b.Property<DateTime>("createAt")
                         .HasColumnType("datetime2");
@@ -180,7 +171,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<string>("statusNotification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("subscriptionId")
+                    b.Property<Guid>("subscripcionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -190,8 +181,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Notification.ProviderResponse", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
@@ -213,10 +204,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<DateTime>("changeAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("codeAirline")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("codeAirport")
+                    b.Property<string>("codeAirportIcao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<short>("flightNumber")
@@ -281,10 +272,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("codeAirport")
+                    b.Property<string>("codeAirportIcao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createAt")
@@ -353,7 +344,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<bool>("activeSubscription")
                         .HasColumnType("bit");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("codeChannel")
@@ -381,8 +372,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Permission.Permissions", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("codePermision")
                         .HasColumnType("nvarchar(max)");
@@ -397,85 +388,85 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = (byte)1,
+                            Id = (short)1,
                             codePermision = "ORG_CREATE",
                             description = "Crear organizaciones"
                         },
                         new
                         {
-                            Id = (byte)2,
+                            Id = (short)2,
                             codePermision = "ORG_EDIT",
                             description = "Editar organizaciones"
                         },
                         new
                         {
-                            Id = (byte)3,
+                            Id = (short)3,
                             codePermision = "ORG_DEACTIVATE",
                             description = "Desactivar organizaciones"
                         },
                         new
                         {
-                            Id = (byte)4,
+                            Id = (short)4,
                             codePermision = "USER_CREATE",
                             description = "Crear usuarios"
                         },
                         new
                         {
-                            Id = (byte)5,
+                            Id = (short)5,
                             codePermision = "USER_EDIT",
                             description = "Editar usuarios"
                         },
                         new
                         {
-                            Id = (byte)6,
+                            Id = (short)6,
                             codePermision = "USER_DEACTIVATE",
                             description = "Desactivar usuarios"
                         },
                         new
                         {
-                            Id = (byte)7,
+                            Id = (short)7,
                             codePermision = "AUDIT_VIEW",
                             description = "Visualizar registros de auditoría"
                         },
                         new
                         {
-                            Id = (byte)8,
+                            Id = (short)8,
                             codePermision = "AIRPORT_CONN_VIEW",
                             description = "Visualizar conexiones aeropuerto-aerolínea"
                         },
                         new
                         {
-                            Id = (byte)9,
+                            Id = (short)9,
                             codePermision = "AIRPORT_CONN_CREATE",
                             description = "Crear conexiones aeropuerto-aerolínea"
                         },
                         new
                         {
-                            Id = (byte)10,
+                            Id = (short)10,
                             codePermision = "AIRPORT_CONN_EDIT",
                             description = "Editar conexiones aeropuerto-aerolínea"
                         },
                         new
                         {
-                            Id = (byte)11,
+                            Id = (short)11,
                             codePermision = "AIRPORT_CONN_DEACTIVATE",
                             description = "Desactivar conexiones aeropuerto-aerolínea"
                         },
                         new
                         {
-                            Id = (byte)12,
+                            Id = (short)12,
                             codePermision = "OP_REGISTER",
                             description = "Registrar cambios operacionales"
                         },
                         new
                         {
-                            Id = (byte)13,
+                            Id = (short)13,
                             codePermision = "OP_VIEW",
                             description = "Visualizar cambios operacionales"
                         },
                         new
                         {
-                            Id = (byte)14,
+                            Id = (short)14,
                             codePermision = "FLIGHT_VIEW",
                             description = "Visualizar vuelos"
                         });
@@ -521,11 +512,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.RolesPermision.RolPermission", b =>
                 {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<short>("idRolPermission")
                         .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<short>("idPermission")
                         .HasColumnType("smallint");
@@ -533,140 +521,140 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<short>("idRol")
                         .HasColumnType("smallint");
 
-                    b.HasKey("Id");
+                    b.HasKey("idRolPermission");
 
                     b.ToTable("RolPermissions", "Identitys");
 
                     b.HasData(
                         new
                         {
-                            Id = (short)1,
+                            idRolPermission = (short)1,
                             idPermission = (short)1,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)2,
+                            idRolPermission = (short)2,
                             idPermission = (short)2,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)3,
+                            idRolPermission = (short)3,
                             idPermission = (short)3,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)4,
+                            idRolPermission = (short)4,
                             idPermission = (short)4,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)5,
+                            idRolPermission = (short)5,
                             idPermission = (short)5,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)6,
+                            idRolPermission = (short)6,
                             idPermission = (short)6,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)7,
+                            idRolPermission = (short)7,
                             idPermission = (short)7,
                             idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)8,
+                            idRolPermission = (short)8,
                             idPermission = (short)4,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)9,
+                            idRolPermission = (short)9,
                             idPermission = (short)5,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)10,
+                            idRolPermission = (short)10,
                             idPermission = (short)6,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)11,
+                            idRolPermission = (short)11,
                             idPermission = (short)7,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)12,
+                            idRolPermission = (short)12,
                             idPermission = (short)8,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)13,
+                            idRolPermission = (short)13,
                             idPermission = (short)9,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)14,
+                            idRolPermission = (short)14,
                             idPermission = (short)10,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)15,
+                            idRolPermission = (short)15,
                             idPermission = (short)11,
                             idRol = (short)2
                         },
                         new
                         {
-                            Id = (short)16,
+                            idRolPermission = (short)16,
                             idPermission = (short)4,
                             idRol = (short)3
                         },
                         new
                         {
-                            Id = (short)17,
+                            idRolPermission = (short)17,
                             idPermission = (short)5,
                             idRol = (short)3
                         },
                         new
                         {
-                            Id = (short)18,
+                            idRolPermission = (short)18,
                             idPermission = (short)6,
                             idRol = (short)3
                         },
                         new
                         {
-                            Id = (short)19,
+                            idRolPermission = (short)19,
                             idPermission = (short)7,
                             idRol = (short)3
                         },
                         new
                         {
-                            Id = (short)20,
+                            idRolPermission = (short)20,
                             idPermission = (short)12,
                             idRol = (short)4
                         },
                         new
                         {
-                            Id = (short)21,
+                            idRolPermission = (short)21,
                             idPermission = (short)13,
                             idRol = (short)4
                         },
                         new
                         {
-                            Id = (short)22,
+                            idRolPermission = (short)22,
                             idPermission = (short)14,
                             idRol = (short)4
                         });
@@ -681,7 +669,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<DateTime>("createAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("failedLoginAttempts")
+                    b.Property<int?>("failedLoginAttempts")
                         .HasColumnType("int");
 
                     b.Property<int>("idOrganization")
@@ -717,10 +705,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                 {
                     b.HasBaseType("AeroVeloz.Domain.Entities.Organization.Base.Organizations");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("codeIATA")
+                    b.Property<string>("codeIata")
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Airlines", "Flights");

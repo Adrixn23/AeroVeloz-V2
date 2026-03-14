@@ -26,7 +26,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 return false;
 
             var connections = await _context.ConectionsAirlineAirports.FirstOrDefaultAsync(con => 
-                  con.codeAirport == airportCode && con.codeAirlines == airlineCode);
+                  con.codeAirportIcao == airportCode && con.codeAirlinesIcao == airlineCode);
             if (connections == null) return false;
             return true;
         }

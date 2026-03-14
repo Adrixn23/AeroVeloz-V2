@@ -13,7 +13,7 @@ namespace AeroVeloz.Domain.Entities.Users.Permission
 
     [Table("Permissions", Schema ="Identitys")]
 
-    public partial class Permissions : BEntity<byte>
+    public partial class Permissions : BEntity<short>
     {
         public string? codePermision { get; init; }
 

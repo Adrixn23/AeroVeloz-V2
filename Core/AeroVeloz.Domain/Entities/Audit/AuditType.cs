@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Audit
@@ -11,10 +12,13 @@ namespace AeroVeloz.Domain.Entities.Audit
     /// 
 
 
-    [Table("AuditType", Schema ="Audits")]
+    [Table("AuditType", Schema = "Audits")]
 
-    public partial class AuditType : BEntity<short>
+    public partial class AuditType 
     {
+
+        [Key]
+        public short idAuditType { get; init; }
         public string? nameAudit { get; init; }
     }
 }

@@ -109,8 +109,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     IdAuditType = 1,
                     idUser = userId,
                     nameEntity = "Airport",
-                    occurentAt = DateTime.UtcNow,
-                    DataNew = JsonSerializer.Serialize(dto)
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto registrado exitosamente");
@@ -172,9 +171,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     IdAuditType = 2,
                     idUser = userId,
                     nameEntity = "Airport",
-                    occurentAt = DateTime.UtcNow,
-                    DataOld = JsonSerializer.Serialize(oldAirport),
-                    DataNew = JsonSerializer.Serialize(dto)
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto actualizado exitosamente");
@@ -221,8 +218,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     IdAuditType = 3,
                     idUser = userId,
                     nameEntity = "Airport",
-                    occurentAt = DateTime.UtcNow,
-                    DataOld = JsonSerializer.Serialize(new { Id = entityId, orgData?.NameOrganization })
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto desactivado");

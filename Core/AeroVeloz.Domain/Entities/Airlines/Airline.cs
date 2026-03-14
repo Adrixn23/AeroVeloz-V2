@@ -9,12 +9,11 @@ namespace AeroVeloz.Domain.Entities.Airlines;
 /// </summary>
 /// 
 
-
 [Table("Airlines", Schema = "Flights")]
 
 public partial class Airline : Organizations
 {
-    public string? codeAirlines { get; init; }
+    public string? codeAirlinesIcao { get; init; }
 
-    public string? codeIATA { get; init; }
+    public string? codeIata { get; init; }
 }

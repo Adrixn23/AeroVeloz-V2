@@ -12,7 +12,7 @@ namespace AeroVeloz.Domain.Entities.Notification
 
     [Table("ProviderResponse", Schema = "Notifications")]
 
-    public partial class ProviderResponse: BEntity<byte>
+    public partial class ProviderResponse: BEntity<short>
     {
         public string? name { get; init; }
     }

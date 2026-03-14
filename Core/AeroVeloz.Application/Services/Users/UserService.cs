@@ -85,8 +85,7 @@ namespace AeroVeloz.Application.Handlers.Users
                     IdAuditType = 1,
                     idUser = userId,
                     nameEntity = "User",
-                    occurentAt = DateTime.UtcNow,
-                    DataNew = JsonSerializer.Serialize(new { user.Id, user.nameUser, user.idOrganization, user.idRol })
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Usuario creado exitosamente");
@@ -141,8 +140,7 @@ namespace AeroVeloz.Application.Handlers.Users
                     IdAuditType = 2,
                     idUser = userId,
                     nameEntity = "User",
-                    occurentAt = DateTime.UtcNow,
-                    DataNew = JsonSerializer.Serialize(new { dto.IdUser, dto.NameUser, dto.IsActive, dto.IdRol })
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Usuario actualizado exitosamente");
@@ -191,8 +189,7 @@ namespace AeroVeloz.Application.Handlers.Users
                     IdAuditType = 3,
                     idUser = userId,
                     nameEntity = "User",
-                    occurentAt = DateTime.UtcNow,
-                    DataOld = JsonSerializer.Serialize(new { Id = entityId, targetUser?.userName, org?.NameOrganization })
+                    ocurrentAt = DateTime.UtcNow
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Usuario desactivado");

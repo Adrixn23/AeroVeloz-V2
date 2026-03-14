@@ -14,9 +14,9 @@ namespace AeroVeloz.Domain.Entities.Organization.Airport
     [Table("ConectionsAirlineAirport", Schema = "Airport")]
     public class ConectionsAirlineAirport : BEntity<Guid>
     {
-        public string? codeAirlines { get; init; }
+        public string? codeAirlinesIcao { get; init; }
 
-        public string? codeAirport { get; init;  }
+        public string? codeAirportIcao { get; init;  }
 
         public string? tokenApi { get; init; }
 

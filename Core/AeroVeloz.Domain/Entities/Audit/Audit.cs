@@ -9,17 +9,17 @@ namespace AeroVeloz.Domain.Entities.Audit;
 /// 
 
 
-[Table("Audit", Schema ="Audits")]
+[Table("Audit", Schema = "Audits")]
 
 public partial class Audit : BEntity<Guid>
 {
-    public short IdAuditType { get;  init; }
+    public short IdAuditType { get; init; }
 
-    public Guid idUser { get;  init; }
+    public Guid idUser { get; init; }
 
-    public string? nameEntity { get;  init; }
+    public string? nameEntity { get; init; }
 
-    public DateTime occurentAt { get;  init; }
+    public DateTime ocurrentAt { get; init; }
 
     public string? DataOld { get; init; }
 

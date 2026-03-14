@@ -22,9 +22,9 @@ public partial class OperationChange :  BEntity<Guid>
 
       public short flightNumber { get; init; }
 
-      public string? codeAirline { get; init;  }
+      public string? codeAirlinesIcao { get; init;  }
 
-      public string? codeAirport { get; init; }
+      public string? codeAirportIcao { get; init; }
 
       public string? previosValue { get; init; }
 

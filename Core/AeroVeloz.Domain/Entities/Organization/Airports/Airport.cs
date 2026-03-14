@@ -13,6 +13,7 @@ namespace AeroVeloz.Domain.Entities.Organization.Airports
 
     public partial class Airport : Organizations
     {
+
         public string? codeAirportIcao { get; init; }
 
         public string? codeAirportIata { get; init; }
@@ -22,7 +23,7 @@ namespace AeroVeloz.Domain.Entities.Organization.Airports
         public string? city { get; init; }
 
         public string? apiKeyMaster {  get; init; }
-
+ 
         public DateTimeOffset timeOffset { get; init; }
 
     }

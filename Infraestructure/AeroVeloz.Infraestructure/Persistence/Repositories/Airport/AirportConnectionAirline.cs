@@ -39,13 +39,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
             var conections = await(
                 from c in _context.ConectionsAirlineAirports.AsNoTracking()
                              join a in _context.Airlines.AsNoTracking()
-                                 on c.codeAirlines equals a.codeAirlines
+                                 on c.codeAirlinesIcao equals a.codeAirlinesIcao
                              join or in _context.Organizations.AsNoTracking()
                                   on a.Id equals or.Id
-                                  where c.codeAirport  == codeAirportIcao
+                                   where c.codeAirportIcao  == codeAirportIcao
                              select new AirlineConnectionByAirportModel(
-                                     c.codeAirport,
-                                     c.codeAirlines,
+                                      c.codeAirportIcao,
+                                      c.codeAirlinesIcao,
                                      or.nameOrganization,
                                      c.isActive,
                                      c.createAt
@@ -62,8 +62,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
         {
 
             var connections = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
-                .SetProperty(c =>  c.codeAirlines,  entity.codeAirlines)
-                .SetProperty(c => c.codeAirport, entity.codeAirport)
+                .SetProperty(c =>  c.codeAirlinesIcao,  entity.codeAirlinesIcao)
+                .SetProperty(c => c.codeAirportIcao, entity.codeAirportIcao)
                 .SetProperty(c => c.isActive, entity.isActive)
                 .SetProperty(c => c.tokenApi, entity.tokenApi)
             );

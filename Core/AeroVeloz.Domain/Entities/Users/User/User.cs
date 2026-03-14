@@ -25,7 +25,7 @@ public partial class User : BEntity<Guid>
 
     public DateTime? lastLoginAt { get;init ; }
 
-    public int failedLoginAttempts { get;init ; }
+    public int? failedLoginAttempts { get;init ; }
 
     public DateTime? lockedUntil { get;init ; }
 

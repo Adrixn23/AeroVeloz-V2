@@ -31,7 +31,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
             var query =
                 from a in _context.Audits.AsNoTracking()
                 join at in _context.AuditTypes.AsNoTracking()
-                    on a.IdAuditType equals at.Id
+                    on a.IdAuditType equals at.idAuditType
                 join u in _context.Users.AsNoTracking()
                     on a.idUser equals u.Id
                 join o in _context.Organizations.AsNoTracking()
@@ -40,12 +40,12 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                 select new { a, at, u, o };
 
             if (from.HasValue)
-                query = query.Where(x => x.a.occurentAt >= from.Value);
+                query = query.Where(x => x.a.ocurrentAt >= from.Value);
             if (to.HasValue)
-                query = query.Where(x => x.a.occurentAt <= to.Value);
+                query = query.Where(x => x.a.ocurrentAt <= to.Value);
 
             var audits = await query
-                .OrderByDescending(x => x.a.occurentAt)
+                .OrderByDescending(x => x.a.ocurrentAt)
                 .Select(x => new AuditDetailModel(
                     x.a.Id,
                     x.at.nameAudit,
@@ -54,7 +54,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                     x.o.Id,
                     x.o.nameOrganization,
                     x.a.nameEntity,
-                    x.a.occurentAt,
+                    x.a.ocurrentAt,
                     x.a.DataOld,
                     x.a.DataNew
                 ))
@@ -69,7 +69,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
             var query =
                 from a in _context.Audits.AsNoTracking()
                 join at in _context.AuditTypes.AsNoTracking()
-                    on a.IdAuditType equals at.Id
+                    on a.IdAuditType equals at.idAuditType
                 join u in _context.Users.AsNoTracking()
                     on a.idUser equals u.Id
                 join o in _context.Organizations.AsNoTracking()
@@ -78,12 +78,12 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                 select new { a, at, u, o };
 
             if (from.HasValue)
-                query = query.Where(x => x.a.occurentAt >= from.Value);
+                query = query.Where(x => x.a.ocurrentAt >= from.Value);
             if (to.HasValue)
-                query = query.Where(x => x.a.occurentAt <= to.Value);
+                query = query.Where(x => x.a.ocurrentAt <= to.Value);
 
             var audits = await query
-                .OrderByDescending(x => x.a.occurentAt)
+                .OrderByDescending(x => x.a.ocurrentAt)
                 .Select(x => new AuditDetailModel(
                     x.a.Id,
                     x.at.nameAudit,
@@ -92,7 +92,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                     x.o.Id,
                     x.o.nameOrganization,
                     x.a.nameEntity,
-                    x.a.occurentAt,
+                    x.a.ocurrentAt,
                     x.a.DataOld,
                     x.a.DataNew
                 ))
@@ -119,7 +119,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
             if (!userExists)
                 errors.Add(AuditErrors.UserNotFoundForAudit);
 
-            var typeExists = await _context.AuditTypes.AsNoTracking().AnyAsync(t => t.Id == auditTypeId);
+            var typeExists = await _context.AuditTypes.AsNoTracking().AnyAsync(t => t.idAuditType == auditTypeId);
             if (!typeExists)
                 errors.Add(AuditErrors.AuditTypeNotFound);
 

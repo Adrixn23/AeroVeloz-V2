@@ -48,7 +48,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
                 on orgId equals air.Id
                 join opt in _context.OperationalChangeTypes.AsNoTracking()
                 on op.idOperationalType equals opt.Id
-                where op.codeAirport == air.codeAirportIcao
+                where op.codeAirportIcao == air.codeAirportIcao
                 select new OperationalDetailModel(op.idUser, op.Id, or.nameOrganization, opt.name, op.changeAt, op.cause )
 
                 ).ToListAsync();
@@ -119,7 +119,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
             var fl = await _context.Flights.FirstOrDefaultAsync(f => f.Id == flightNumber);
             if (fl == null) return false;
             if (DateTimeOffset.UtcNow - fl.ScheduledDeparture > TimeSpan.FromDays(2)) return false;
-            var stateF = await _context.FlightStates.FirstOrDefaultAsync(fs => fs.Id == fl.flightStateId);
+            var stateF = await _context.FlightStates.FirstOrDefaultAsync(fs => fs.Id == fl.flightStatesId);
             if(stateF == null) return false;
             if(stateF.name == "CANCELLED" || stateF.name == "InFlight") return false;
             return true;
@@ -137,7 +137,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
                 .ExecuteUpdateAsync(setters => setters
                 .SetProperty(op => op.idOperationalType, entity.idOperationalType)
                 .SetProperty(op => op.flightNumber, entity.flightNumber)
-                .SetProperty(op => op.codeAirline, entity.codeAirline)
+                .SetProperty(op => op.codeAirlinesIcao, entity.codeAirlinesIcao)
+                .SetProperty(op => op.codeAirportIcao, entity.codeAirportIcao)
                 .SetProperty(op => op.isActive, entity.isActive)
                  .SetProperty(op => op.previosValue, entity.previosValue)
                  .SetProperty(op => op.newValue, entity.newValue)

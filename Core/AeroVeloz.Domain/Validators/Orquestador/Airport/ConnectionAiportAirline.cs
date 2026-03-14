@@ -33,17 +33,17 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
                 return new ValidationResult().Failur(errors);
             }
 
-            if (string.IsNullOrWhiteSpace(contections.codeAirlines))
+            if (string.IsNullOrWhiteSpace(contections.codeAirlinesIcao))
                 errors.Add(ConnectionAirportErrors.ConnectionMissingAirlineCode);
 
-            if (string.IsNullOrWhiteSpace(contections.codeAirport))
+            if (string.IsNullOrWhiteSpace(contections.codeAirportIcao))
                 errors.Add(ConnectionAirportErrors.ConnectionMissingAirportCode);
 
             if (errors.Any())
                 return new ValidationResult().Failur(errors);
 
             // Verificar que no exista una conexión duplicada entre el aeropuerto y la aerolínea
-            var exists = await _domainServiceAirport.AirportHasAirlineConnectionAsync(contections.codeAirport!, contections.codeAirlines!);
+            var exists = await _domainServiceAirport.AirportHasAirlineConnectionAsync(contections.codeAirportIcao!, contections.codeAirlinesIcao!);
             if (exists)
                 errors.Add(ConnectionAirportErrors.ConnectionAlreadyExists);
 

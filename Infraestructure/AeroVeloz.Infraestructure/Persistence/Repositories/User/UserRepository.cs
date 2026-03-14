@@ -45,7 +45,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
                     user!.Id,
                     user.nameUser,
                     (bool)user.isActive!,
-                    user.failedLoginAttempts,
+                    user.failedLoginAttempts ?? 0,
                     user.lockedUntil
                 );
 

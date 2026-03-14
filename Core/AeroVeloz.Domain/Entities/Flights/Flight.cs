@@ -17,9 +17,9 @@ namespace AeroVeloz.Domain.Entities.Flights;
 
 public partial class Flight: BEntity<short>
 {
-    public string? codeAirlines { get; init; }
+    public string? codeAirlinesIcao { get; init; }
 
-    public byte flightStateId { get; init; }
+    public byte flightStatesId { get; init; }
 
     public string? OriginAirport { get; init; }
 

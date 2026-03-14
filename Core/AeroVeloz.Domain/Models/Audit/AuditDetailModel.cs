@@ -1,6 +1,6 @@
 namespace AeroVeloz.Domain.Models.Audit
 {
-   
+
     public sealed record AuditDetailModel(
         Guid AuditId,
         string? AuditTypeName,
