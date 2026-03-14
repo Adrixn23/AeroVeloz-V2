@@ -237,5 +237,8 @@ namespace AeroVeloz.Application.Handlers.Users
                 return OperationResult<IReadOnlyCollection<UserDetailModel>>.Fail("USER_ERROR", "Error inesperado al obtener usuarios");
             }
         }
+
+
+        //agregar metodo para obtener usuario en especifico
     }
 }
