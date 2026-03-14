@@ -42,15 +42,15 @@ namespace AeroVeloz.Infraestructure.Persistence.Services
                     continue;
                 }
 
-                flights.Add(new FlightBatchItemDto
-                {
-                    CodeAirlines = cols[0].Trim(),
-                    OriginAirport = cols[1].Trim(),
-                    DestinationAirport = cols[2].Trim(),
-                    ScheduledDeparture = departure,
-                    BoardingGate = cols.Length > 4 ? cols[4].Trim() : null,
-                    BoardingGateArrived = cols.Length > 5 ? cols[5].Trim() : null
-                });
+                flights.Add(new FlightBatchItemDto(
+                    0, // id por el momento
+                    cols[0].Trim(),
+                    cols[1].Trim(),
+                    cols[2].Trim(),
+                    departure,
+                    cols.Length > 4 ? cols[4].Trim() : null,
+                    cols.Length > 5 ? cols[5].Trim() : null
+                ));
             }
 
             parseErrors = errors;
