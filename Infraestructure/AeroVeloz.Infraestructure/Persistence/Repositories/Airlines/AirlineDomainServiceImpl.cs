@@ -23,6 +23,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airlines
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("AIRLINE_CODE", $"Código de aerolínea no válido: {airlineCode}"));
             return new ValidationResult().Success();
+
         }
 
         public async Task<ValidationResult> HasConnectionWithAirportAsync(string codeAirlines, string airportCode)

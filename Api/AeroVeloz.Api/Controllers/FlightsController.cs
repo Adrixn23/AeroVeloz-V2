@@ -51,7 +51,7 @@ namespace AeroVeloz.Api.Controllers
         {
             var result = await _flightService.GetFlightDetailAsync(flightNumber, codeAirlines);
             if (result.Success) return Ok(result);
-            return NotFound(result); // lanzamos un 444 si no existe
+            return NotFound(result); 
         }
 
         // Actualizar estado del vuelo usando el fromquery y el from body

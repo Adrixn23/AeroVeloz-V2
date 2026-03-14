@@ -70,7 +70,7 @@ namespace AeroVeloz.Application.Services.Flights
                     var item = items[i];
                     var flight = new Domain.Entities.Flights.Flight
                     {
-                        codeAirlinesIcao = item.CodeAirlines,
+                        codeAirlinesIcao = item.CodeAirlinesIcao,
                         flightStatesId = (byte)FlightStateEnum.Scheduled,
                         OriginAirport = item.OriginAirport,
                         DestinationAirport = item.DestinationAirport,
@@ -83,30 +83,30 @@ namespace AeroVeloz.Application.Services.Flights
                     if (!rowValidation.IsValid)
                     {
                         foreach (var err in rowValidation.domainErrors)
-                            errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlines, err.code, err.description));
+                            errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlinesIcao, err.code, err.description));
                         continue;
                     }
 
-                    var exists = await _flightRepo.ExistsFlightAsync(flight.Id, item.CodeAirlines!);
+                    var exists = await _flightRepo.ExistsFlightAsync(flight.Id, item.CodeAirlinesIcao!);
                     if (exists)
                     {
-                        errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlines, "FLIGHT_DUPLICATE", "El vuelo ya existe en el sistema"));
+                        errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlinesIcao, "FLIGHT_DUPLICATE", "El vuelo ya existe en el sistema"));
                         continue;
                     }
 
-                    var originCheck = await _flightDomain.IsValidOriginAirportAsync(item.CodeAirlines!, item.OriginAirport!);
+                    var originCheck = await _flightDomain.IsValidOriginAirportAsync(item.CodeAirlinesIcao!, item.OriginAirport!);
                     if (!originCheck.IsValid)
                     {
                         foreach (var err in originCheck.domainErrors)
-                            errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlines, err.code, err.description));
+                            errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlinesIcao, err.code, err.description));
                         continue;
                     }
 
-                    var destCheck = await _flightDomain.IsValidDestinationAirportAsync(item.CodeAirlines!, item.DestinationAirport!);
+                    var destCheck = await _flightDomain.IsValidDestinationAirportAsync(item.CodeAirlinesIcao!, item.DestinationAirport!);
                     if (!destCheck.IsValid)
                     {
                         foreach (var err in destCheck.domainErrors)
-                            errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlines, err.code, err.description));
+                            errors.Add(new FlightBatchErrorDto(i + 1, item.CodeAirlinesIcao, err.code, err.description));
                         continue;
                     }
 
@@ -125,9 +125,9 @@ namespace AeroVeloz.Application.Services.Flights
                 var op = OperationResult<FlightBatchResultDto>.Ok(result, $"{validFlights.Count} vuelos persistidos, {errors.Count} rechazados");
 
                 if (validFlights.Count > 0)
-                    op.AddEvent(new FlightBatchProcessed(items[0].CodeAirlines!, validFlights.Count, DateTime.UtcNow));
+                    op.AddEvent(new FlightBatchProcessed(items[0].CodeAirlinesIcao!, validFlights.Count, DateTime.UtcNow));
                 if (errors.Count > 0)
-                    op.AddEvent(new FlightBatchRejected(items[0].CodeAirlines!, $"{errors.Count} vuelos rechazados", DateTime.UtcNow));
+                    op.AddEvent(new FlightBatchRejected(items[0].CodeAirlinesIcao!, $"{errors.Count} vuelos rechazados", DateTime.UtcNow));
 
                 foreach (var @event in op.DomainEvents)
                     await _mediator.Publish(@event);
