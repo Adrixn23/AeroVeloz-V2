@@ -1,12 +1,12 @@
 namespace AeroVeloz.Application.DTOs.Flights
 {
-    public sealed record FlightBatchItemDto
-    {
-        public string? CodeAirlines { get; init; }
-        public string? OriginAirport { get; init; }
-        public string? DestinationAirport { get; init; }
-        public DateTimeOffset ScheduledDeparture { get; init; }
-        public string? BoardingGate { get; init; }
-        public string? BoardingGateArrived { get; init; }
-    }
+    public sealed record FlightBatchItemDto(
+        short Id, // Número de vuelo
+        string? CodeAirlinesIcao,
+        string? OriginAirport,
+        string? DestinationAirport,
+        DateTimeOffset ScheduledDeparture,
+        string? BoardingGate,
+        string? BoardingGateArrived
+    ) : FlightBaseDto(Id, CodeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);
 }

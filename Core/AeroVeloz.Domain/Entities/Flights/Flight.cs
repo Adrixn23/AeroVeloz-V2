@@ -5,12 +5,10 @@ using AeroVeloz.Domain.Entities.Subscriptions;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace AeroVeloz.Domain.Entities.Flights;
 
-/// <summary>
 /// Entidad de dominio que representa un vuelo dentro del sistema AeroVeloz.
 /// Contiene la información esencial del vuelo: aerolínea, aeropuertos de origen y destino,
 /// horario de salida programado y puertas de embarque.
-/// </summary>
-/// 
+
 
 
 [Table("Flight", Schema ="Flights")]

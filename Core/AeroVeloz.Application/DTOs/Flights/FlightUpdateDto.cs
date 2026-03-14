@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AeroVeloz.Application.DTOs.Flights
+﻿namespace AeroVeloz.Application.DTOs.Flights
 {
-    internal class FlightUpdateDto
-    {
-    }
+    public sealed record FlightUpdateDto(
+        short Id,
+        string? CodeAirlinesIcao,
+        string? OriginAirport,
+        string? DestinationAirport,
+        DateTimeOffset ScheduledDeparture,
+        string? BordingGate,
+        string? BoardingGateArrived,
+        string? ChangeReason
+    ) : FlightBaseDto(Id, CodeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);
 }

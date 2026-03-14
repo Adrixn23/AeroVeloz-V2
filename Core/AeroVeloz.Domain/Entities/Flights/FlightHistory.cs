@@ -2,12 +2,11 @@
 
 namespace AeroVeloz.Domain.Entities.Flights;
 
-/// <summary>
+
 /// Entidad de dominio que registra el historial de cambios de estado de un vuelo.
 /// Cada registro captura la transición de un estado a otro, incluyendo la razón del cambio
 /// y la fecha en que ocurrió. Permite trazabilidad completa sobre la evolución de cada vuelo.
-/// </summary>
-/// 
+ 
 
 
 [Table("FlightHistory", Schema ="Flights")]

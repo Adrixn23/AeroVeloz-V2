@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AeroVeloz.Application.DTOs.Flights;
 
-namespace AeroVeloz.Application.DTOs.Flights
-{
-    internal class FlightSaveDto
-    {
-    }
-}
+public record FlightSaveDto(
+    short Id,
+    string? CodeAirlinesIcao,
+    string? OriginAirport,
+    string? DestinationAirport,
+    DateTimeOffset ScheduledDeparture,
+    byte FlightStatesId,
+    string? BordingGate,
+    string? BoardingGateArrived
+) : FlightBaseDto(Id, CodeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);

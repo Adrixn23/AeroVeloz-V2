@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AeroVeloz.Application.DTOs.Flights
+﻿namespace AeroVeloz.Application.DTOs.Flights
 {
-    internal class FlightQueryDto
-    {
-    }
+    public sealed record FlightQueryDto(
+        string? CodeAirlinesIcao = null,
+        string? OriginAirport = null,
+        string? DestinationAirport = null,
+        DateTimeOffset? DepartureDateFrom = null,
+        DateTimeOffset? DepartureDateTo = null,
+        byte? FlightStateId = null
+    );
 }
