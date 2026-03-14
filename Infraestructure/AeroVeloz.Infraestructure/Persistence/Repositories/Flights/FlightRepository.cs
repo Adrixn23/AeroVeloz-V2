@@ -1,5 +1,4 @@
-
-﻿using AeroVeloz.Application.DTOs.Flights;
+using AeroVeloz.Application.DTOs.Flights;
 using AeroVeloz.Application.Repositories.Flights;
 using AeroVeloz.Domain.Entities.Flights;
 using AeroVeloz.Infraestructure.Persistence.context;
@@ -38,12 +37,12 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         {
             return await (
                 from f in _context.Flights.AsNoTracking()
-                join s in _context.FlightStates.AsNoTracking() on f.flightStateId equals s.Id
-                where f.Id == flightNumber && f.codeAirlines == codeAirlines
+                join s in _context.FlightStates.AsNoTracking() on f.flightStatesId equals s.Id
+                where f.Id == flightNumber && f.codeAirlinesIcao == codeAirlines
                 select new FlightReadDto(
-                    f.Id, f.codeAirlines, f.OriginAirport, f.DestinationAirport,
+                    f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,
-                    f.flightStateId, s.name)
+                    f.flightStatesId, s.name)
             ).FirstOrDefaultAsync();
         }
 
@@ -51,14 +50,14 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         {
             return await (
                 from f in _context.Flights.AsNoTracking()
-                join s in _context.FlightStates.AsNoTracking() on f.flightStateId equals s.Id
-                where f.codeAirlines == codeAirlines
-                      && f.flightStateId != 6 && f.flightStateId != 7
+                join s in _context.FlightStates.AsNoTracking() on f.flightStatesId equals s.Id
+                where f.codeAirlinesIcao == codeAirlines
+                      && f.flightStatesId != 6 && f.flightStatesId != 7
                 orderby f.ScheduledDeparture
                 select new FlightReadDto(
-                    f.Id, f.codeAirlines, f.OriginAirport, f.DestinationAirport,
+                    f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,
-                    f.flightStateId, s.name)
+                    f.flightStatesId, s.name)
             ).ToListAsync();
         }
 
@@ -67,14 +66,14 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
             var cutoff = DateTimeOffset.UtcNow.AddHours(-2);
             return await (
                 from f in _context.Flights.AsNoTracking()
-                join s in _context.FlightStates.AsNoTracking() on f.flightStateId equals s.Id
+                join s in _context.FlightStates.AsNoTracking() on f.flightStatesId equals s.Id
                 where f.ScheduledDeparture >= cutoff
-                      && f.flightStateId != 6 && f.flightStateId != 7
+                      && f.flightStatesId != 6 && f.flightStatesId != 7
                 orderby f.ScheduledDeparture
                 select new FlightReadDto(
-                    f.Id, f.codeAirlines, f.OriginAirport, f.DestinationAirport,
+                    f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,
-                    f.flightStateId, s.name)
+                    f.flightStatesId, s.name)
             ).ToListAsync();
         }
 
@@ -83,28 +82,28 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
             var cutoff = DateTimeOffset.UtcNow.AddHours(-2);
             return await (
                 from f in _context.Flights.AsNoTracking()
-                join s in _context.FlightStates.AsNoTracking() on f.flightStateId equals s.Id
+                join s in _context.FlightStates.AsNoTracking() on f.flightStatesId equals s.Id
                 where (f.OriginAirport == airportCode || f.DestinationAirport == airportCode)
                       && f.ScheduledDeparture >= cutoff
-                      && f.flightStateId != 6 && f.flightStateId != 7
+                      && f.flightStatesId != 6 && f.flightStatesId != 7
                 orderby f.ScheduledDeparture
                 select new FlightReadDto(
-                    f.Id, f.codeAirlines, f.OriginAirport, f.DestinationAirport,
+                    f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,
-                    f.flightStateId, s.name)
+                    f.flightStatesId, s.name)
             ).ToListAsync();
         }
 
         public async Task<bool> ExistsFlightAsync(short flightNumber, string codeAirlines)
         {
             return await _context.Flights.AsNoTracking()
-                .AnyAsync(f => f.Id == flightNumber && f.codeAirlines == codeAirlines);
+                .AnyAsync(f => f.Id == flightNumber && f.codeAirlinesIcao == codeAirlines);
         }
 
         public async Task<Flight?> GetEntityByNumberAndAirlineAsync(short flightNumber, string codeAirlines)
         {
             return await _context.Flights
-                .FirstOrDefaultAsync(f => f.Id == flightNumber && f.codeAirlines == codeAirlines);
+                .FirstOrDefaultAsync(f => f.Id == flightNumber && f.codeAirlinesIcao == codeAirlines);
         }
 
         public async Task<bool> PersistBatchAsync(IEnumerable<Flight> flights)
@@ -116,15 +115,15 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         public async Task<bool> UpdateFlightStateAsync(short flightNumber, string codeAirlines, byte newStateId)
         {
             var rows = await _context.Flights
-                .Where(f => f.Id == flightNumber && f.codeAirlines == codeAirlines)
-                .ExecuteUpdateAsync(s => s.SetProperty(f => f.flightStateId, newStateId));
+                .Where(f => f.Id == flightNumber && f.codeAirlinesIcao == codeAirlines)
+                .ExecuteUpdateAsync(s => s.SetProperty(f => f.flightStatesId, newStateId));
             return rows > 0;
         }
 
         public async Task<bool> HasActiveConnectionAsync(string codeAirlines, string airportCode)
         {
             return await _context.ConectionsAirlineAirports.AsNoTracking()
-                .AnyAsync(c => c.codeAirlines == codeAirlines && c.codeAirport == airportCode && c.isActive);
+                .AnyAsync(c => c.codeAirlinesIcao == codeAirlines && c.codeAirportIcao == airportCode && c.isActive);
 
         }
     }

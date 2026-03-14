@@ -9,7 +9,7 @@ using AeroVeloz.Domain.Entities.Audit;
 using AeroVeloz.Domain.Entities.Notification;
 using AeroVeloz.Domain.Entities.Subscriptions;
 using AeroVeloz.Domain.Entities.Users.RolesPermision;
-using AeroVeloz.Domain.Entities.Organization.Airlines;
+using AeroVeloz.Domain.Entities.Airlines;
 
 namespace AeroVeloz.Infraestructure.Persistence.context
 {
@@ -19,7 +19,7 @@ namespace AeroVeloz.Infraestructure.Persistence.context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Permissions> Permissions { get; set; }
         public DbSet<RolPermission> RolPermissions { get; set; }
         public DbSet<Organizations> Organizations { get; set; }
         public DbSet<Airline> Airlines { get; set; }

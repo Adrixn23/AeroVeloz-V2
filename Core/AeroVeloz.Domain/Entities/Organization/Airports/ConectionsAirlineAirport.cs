@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Organization.Airport
 {
@@ -7,11 +8,15 @@ namespace AeroVeloz.Domain.Entities.Organization.Airport
     /// Permite gestionar qué aerolíneas operan en cada aeropuerto, incluyendo el token API
     /// de comunicación y el estado de la conexión.
     /// </summary>
+    /// 
+
+
+    [Table("ConectionsAirlineAirport", Schema = "Airport")]
     public class ConectionsAirlineAirport : BEntity<Guid>
     {
-        public string? codeAirlines { get; init; }
+        public string? codeAirlinesIcao { get; init; }
 
-        public string? codeAirport { get; init;  }
+        public string? codeAirportIcao { get; init;  }
 
         public string? tokenApi { get; init; }
 

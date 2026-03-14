@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Subscriptions
 {
@@ -7,6 +8,10 @@ namespace AeroVeloz.Domain.Entities.Subscriptions
     /// Define los medios por los cuales los suscriptores pueden recibir notificaciones
     /// (ej: "EMAIL", "SMS", "PUSH").
     /// </summary>
+    /// 
+
+
+    [Table("ChannelSubscriptionNotification", Schema = "Subscriptions")]
     public partial class ChannelSubscriptionNotification: BEntity<byte>
     {
         public string? name { get; init; }

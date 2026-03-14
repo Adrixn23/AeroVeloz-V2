@@ -19,7 +19,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         public async Task<ValidationResult> IsValidOriginAirportAsync(string codeAirlines, string airportCode)
         {
             var hasConnection = await _context.ConectionsAirlineAirports.AsNoTracking()
-                .AnyAsync(c => c.codeAirlines == codeAirlines && c.codeAirport == airportCode && c.isActive);
+                .AnyAsync(c => c.codeAirlinesIcao == codeAirlines && c.codeAirportIcao == airportCode && c.isActive);
             if (!hasConnection)
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("FLIGHT_ORIGIN", $"La aerolínea no tiene conexión activa con el aeropuerto de origen: {airportCode}"));
@@ -29,7 +29,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
         public async Task<ValidationResult> IsValidDestinationAirportAsync(string codeAirlines, string airportCode)
         {
             var hasConnection = await _context.ConectionsAirlineAirports.AsNoTracking()
-                .AnyAsync(c => c.codeAirlines == codeAirlines && c.codeAirport == airportCode && c.isActive);
+                .AnyAsync(c => c.codeAirlinesIcao == codeAirlines && c.codeAirportIcao == airportCode && c.isActive);
             if (!hasConnection)
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("FLIGHT_DEST", $"La aerolínea no tiene conexión activa con el aeropuerto de destino: {airportCode}"));

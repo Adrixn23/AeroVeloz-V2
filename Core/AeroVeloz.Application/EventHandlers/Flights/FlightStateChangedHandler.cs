@@ -67,7 +67,7 @@ namespace AeroVeloz.Application.EventHandlers.Flights
                     var notifEntity = new Notification
                     {
                         Id = notifId,
-                        subscriptionId = sub.Id,
+                        subscripcionId = sub.Id,
                         codeProvider = sub.codeChannel,
                         message = messageBody,
                         createAt = DateTime.UtcNow,

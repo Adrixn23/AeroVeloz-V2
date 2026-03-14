@@ -41,7 +41,7 @@ namespace AeroVeloz.Application.EventHandlers.Subscriptions
                 var entity = new Notification
                 {
                     Id = Guid.NewGuid(),
-                    subscriptionId = notification.SubscriptionId,
+                    subscripcionId = notification.SubscriptionId,
                     codeProvider = (byte)channelType,
                     message = message,
                     createAt = DateTime.UtcNow,

@@ -70,8 +70,8 @@ namespace AeroVeloz.Application.Services.Flights
                     var item = items[i];
                     var flight = new Domain.Entities.Flights.Flight
                     {
-                        codeAirlines = item.CodeAirlines,
-                        flightStateId = (byte)FlightStateEnum.Scheduled,
+                        codeAirlinesIcao = item.CodeAirlines,
+                        flightStatesId = (byte)FlightStateEnum.Scheduled,
                         OriginAirport = item.OriginAirport,
                         DestinationAirport = item.DestinationAirport,
                         ScheduledDeparture = item.ScheduledDeparture,
@@ -118,7 +118,7 @@ namespace AeroVeloz.Application.Services.Flights
                     await _flightRepo.PersistBatchAsync((IEnumerable<Domain.Entities.Flights.Flight>)validFlights);
 
                     foreach (var f in validFlights)
-                        await _subscriptionRepo.AutoSubscribeAirlineAsync(f.Id, f.codeAirlines!, orgId);
+                        await _subscriptionRepo.AutoSubscribeAirlineAsync(f.Id, f.codeAirlinesIcao!, orgId);
                 }
 
                 var result = new FlightBatchResultDto(items.Count, validFlights.Count, errors.Count, errors);
@@ -191,11 +191,11 @@ namespace AeroVeloz.Application.Services.Flights
                 if (flight == null)
                     return OperationResult<bool>.Fail("FLIGHT_NOT_FOUND", "Vuelo no encontrado");
 
-                var sameState = _flightValidator.ValidateStateTransition(flight.flightStateId, dto.NewFlightStateId);
+                            var sameState = _flightValidator.ValidateStateTransition(flight.flightStatesId, dto.NewFlightStateId);
                 if (!sameState.IsCompleted)
                     return OperationResult<bool>.FromValidation(await sameState);
 
-                var transition = await _flightDomain.IsValidStatusTransitionAsync(flight.flightStateId, (FlightStateEnum)dto.NewFlightStateId);
+                var transition = await _flightDomain.IsValidStatusTransitionAsync(flight.flightStatesId, (FlightStateEnum)dto.NewFlightStateId);
                 if (!transition.IsValid)
                     return OperationResult<bool>.FromValidation(transition);
 
@@ -208,9 +208,9 @@ namespace AeroVeloz.Application.Services.Flights
                     Id = Guid.NewGuid(),
                     IdAuditType = 1,
                     nameEntity = "Flight",
-                    occurentAt = DateTime.UtcNow,
+                    ocurrentAt = DateTime.UtcNow,
                     idUser = userId,
-                    DataOld = $"{{\"flightStateId\":{flight.flightStateId}}}",
+                    DataOld = $"{{\"flightStateId\":{flight.flightStatesId}}}",
                     DataNew = $"{{\"flightStateId\":{dto.NewFlightStateId},\"reason\":\"{dto.Reason}\"}}"
                 });
 
@@ -231,7 +231,7 @@ namespace AeroVeloz.Application.Services.Flights
                 {
                     op.AddEvent(new FlightDelayed(
                         dto.FlightNumber, dto.CodeAirlines!,
-                        (FlightStateEnum)flight.flightStateId, flight.ScheduledDeparture, DateTime.UtcNow));
+                        (FlightStateEnum)flight.flightStatesId, flight.ScheduledDeparture, DateTime.UtcNow));
                 }
 
                 foreach (var @event in op.DomainEvents)

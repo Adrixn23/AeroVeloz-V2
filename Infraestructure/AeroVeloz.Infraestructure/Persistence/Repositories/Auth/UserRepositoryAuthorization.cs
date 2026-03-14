@@ -84,7 +84,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
                 join r in _context.RolPermissions on u.idRol equals r.idRol
                 join p in _context.Permissions on r.idPermission equals p.Id
                 where u.Id == userId && u.idOrganization == orgId
-                select new PermissionModel(p.Id, p.codePermision)
+                select new PermissionModel((byte)p.Id, p.codePermision)
             ).ToListAsync();
         }
     }

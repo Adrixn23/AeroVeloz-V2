@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace AeroVeloz.Domain.Entities.Users.User;
 
 /// <summary>
@@ -6,6 +7,11 @@ namespace AeroVeloz.Domain.Entities.Users.User;
 /// Cada usuario pertenece a una organización y tiene asignado un rol que determina sus permisos.
 /// Incluye mecanismos de seguridad como bloqueo por intentos fallidos y registro de dirección IP.
 /// </summary>
+/// 
+
+
+[Table("Users", Schema ="Identitys")]
+
 public partial class User : BEntity<Guid>
 {
     public string? nameUser { get; init; }
@@ -19,7 +25,7 @@ public partial class User : BEntity<Guid>
 
     public DateTime? lastLoginAt { get;init ; }
 
-    public int failedLoginAttempts { get;init ; }
+    public int? failedLoginAttempts { get;init ; }
 
     public DateTime? lockedUntil { get;init ; }
 

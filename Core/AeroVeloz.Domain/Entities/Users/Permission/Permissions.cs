@@ -1,15 +1,19 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AeroVeloz.Domain.Entities.Users.Permission
 {
-
-
+    /// <summary>
     /// Entidad de dominio que representa un permiso granular del sistema.
-    /// Los permisos se asignan a los roles mediante la entidad
+    /// Los permisos se asignan a los roles mediante la entidad <see cref="RolesPermision.RolPermission"/>
     /// y determinan las acciones específicas que un usuario puede ejecutar.
-    
+    /// </summary>
+    /// 
 
-    public partial class Permission : BEntity<byte>
+
+    [Table("Permissions", Schema ="Identitys")]
+
+    public partial class Permissions : BEntity<short>
     {
         public string? codePermision { get; init; }
 

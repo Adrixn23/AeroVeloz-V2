@@ -37,14 +37,14 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
         public async Task<ValidationResult> ValidateFlightAcceptsSubscriptionsAsync(short flightNumber, string codeAirlines)
         {
             var flight = await _context.Flights.AsNoTracking()
-                .FirstOrDefaultAsync(f => f.Id == flightNumber && f.codeAirlines == codeAirlines);
+                .FirstOrDefaultAsync(f => f.Id == flightNumber && f.codeAirlinesIcao == codeAirlines);
 
             if (flight == null)
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("SUB_FLIGHT_MISSING", "Vuelo no encontrado"));
 
             byte[] closedStates = [6, 7]; // Completed, Cancelled
-            if (closedStates.Contains(flight.flightStateId))
+            if (closedStates.Contains(flight.flightStatesId))
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("SUB_FLIGHT_CLOSED", "El vuelo ya finalizó o fue cancelado"));
 

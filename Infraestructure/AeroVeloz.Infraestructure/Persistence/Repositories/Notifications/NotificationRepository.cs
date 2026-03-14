@@ -31,7 +31,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Notifications
         public async Task<IReadOnlyCollection<Notification>> GetBySubscriptionAsync(Guid subscriptionId)
         {
             return await _context.Notifications.AsNoTracking()
-                .Where(n => n.subscriptionId == subscriptionId)
+                .Where(n => n.subscripcionId == subscriptionId)
                 .OrderByDescending(n => n.createAt)
                 .ToListAsync();
         }

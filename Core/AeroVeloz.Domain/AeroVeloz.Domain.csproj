@@ -19,7 +19,6 @@
   <Compile Remove="Execeptions\**" />
     <EmbeddedResource Remove="Audit\**" />
     <EmbeddedResource Remove="Execeptions\**" />
-    <Folder Include="entities\" />
 
     <Compile Remove="Execeptions\**" />
     <EmbeddedResource Remove="Audit\**" />

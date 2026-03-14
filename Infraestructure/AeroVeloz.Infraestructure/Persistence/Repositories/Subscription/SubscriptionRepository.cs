@@ -33,7 +33,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
         {
             return await _context.Subscriptions.AsNoTracking()
                 .AnyAsync(s => s.flightNumber == flightNumber
-                    && s.codeAirlines == codeAirlines
+                    && s.codeAirlinesIcao == codeAirlines
                     && s.codeChannel == codeChannel
                     && s.contactValue == contactValue
                     && s.activeSubscription);
@@ -42,7 +42,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
         public async Task<IReadOnlyCollection<Domain.Entities.Subscriptions.Subscription>> GetActiveByFlightAsync(short flightNumber, string codeAirlines)
         {
             return await _context.Subscriptions.AsNoTracking()
-                .Where(s => s.flightNumber == flightNumber && s.codeAirlines == codeAirlines && s.activeSubscription)
+                .Where(s => s.flightNumber == flightNumber && s.codeAirlinesIcao == codeAirlines && s.activeSubscription)
                 .ToListAsync();
         }
 
@@ -51,9 +51,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
             return await (
                 from s in _context.Subscriptions.AsNoTracking()
                 join c in _context.ChannelSubscriptionNotifications.AsNoTracking() on s.codeChannel equals c.Id
-                where s.flightNumber == flightNumber && s.codeAirlines == codeAirlines && s.activeSubscription
+                where s.flightNumber == flightNumber && s.codeAirlinesIcao == codeAirlines && s.activeSubscription
                 select new SubscriptionReadDto(
-                    s.Id, s.flightNumber, s.codeAirlines, c.name,
+                    s.Id, s.flightNumber, s.codeAirlinesIcao, c.name,
                     s.contactValue, s.activeSubscription, s.createDate)
             ).ToListAsync();
         }
@@ -61,14 +61,14 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
         public async Task<int> GetInterestedCountAsync(short flightNumber, string codeAirlines)
         {
             return await _context.Subscriptions.AsNoTracking()
-                .Where(s => s.flightNumber == flightNumber && s.codeAirlines == codeAirlines && s.activeSubscription)
+                .Where(s => s.flightNumber == flightNumber && s.codeAirlinesIcao == codeAirlines && s.activeSubscription)
                 .CountAsync();
         }
 
         public async Task<bool> CloseAllForFlightAsync(short flightNumber, string codeAirlines)
         {
             var rows = await _context.Subscriptions
-                .Where(s => s.flightNumber == flightNumber && s.codeAirlines == codeAirlines && s.activeSubscription)
+                .Where(s => s.flightNumber == flightNumber && s.codeAirlinesIcao == codeAirlines && s.activeSubscription)
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(x => x.activeSubscription, false)
                     .SetProperty(x => x.endingDate, DateTime.UtcNow));
@@ -81,7 +81,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
             {
                 Id = Guid.NewGuid(),
                 flightNumber = flightNumber,
-                codeAirlines = codeAirlines,
+                codeAirlinesIcao = codeAirlines,
                 codeChannel = 3, // Push
                 contactValue = $"airline:{organizationId}",
                 numberInterested = 1,

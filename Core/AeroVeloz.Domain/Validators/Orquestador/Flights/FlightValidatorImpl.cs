@@ -38,7 +38,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Flights
             }
 
             
-           if (string.IsNullOrWhiteSpace(flight.codeAirlines))
+           if (string.IsNullOrWhiteSpace(flight.codeAirlinesIcao))
                 errors.Add(ErrorFlights.InvalidCodeAirlines);
 
         if (string.IsNullOrWhiteSpace(flight.OriginAirport))
@@ -67,7 +67,7 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Flights
         {
             var errors = new List<ErrosValidationResults>();
 
-            if (string.IsNullOrWhiteSpace(flight.codeAirlines))
+            if (string.IsNullOrWhiteSpace(flight.codeAirlinesIcao))
                 errors.Add(ErrorFlights.InvalidCodeAirlines);
 
             if (string.IsNullOrWhiteSpace(flight.OriginAirport))

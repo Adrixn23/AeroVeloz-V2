@@ -1,6 +1,6 @@
 using AeroVeloz.Domain.Common.codeError.codeErrorAirlines;
 using AeroVeloz.Domain.Common.Validation;
-using AeroVeloz.Domain.Entities.Organization.Airlines;
+using AeroVeloz.Domain.Entities.Airlines;
 using AeroVeloz.Domain.Validators.interfaces.Airlines;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Airlines
@@ -11,12 +11,12 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airlines
         {
             var errors = new List<ErrosValidationResults>();
 
-            if (string.IsNullOrWhiteSpace(airline.codeAirlines))
+            if (string.IsNullOrWhiteSpace(airline.codeAirlinesIcao))
                 errors.Add(ErrorAirlines.InvalidAirlineCode);
 
-            if (string.IsNullOrWhiteSpace(airline.codeIATA))
+            if (string.IsNullOrWhiteSpace(airline.codeIata))
                 errors.Add(ErrorAirlines.MissingIataCode);
-            else if (airline.codeIATA.Length < 3)
+            else if (airline.codeIata.Length < 3)
                 errors.Add(ErrorAirlines.InvalidIataFormat);
 
             if (errors.Count > 0)
@@ -29,10 +29,10 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airlines
         {
             var errors = new List<ErrosValidationResults>();
 
-            if (string.IsNullOrWhiteSpace(airline.codeAirlines))
+            if (string.IsNullOrWhiteSpace(airline.codeAirlinesIcao))
                 errors.Add(ErrorAirlines.InvalidAirlineCode);
 
-            if (string.IsNullOrWhiteSpace(airline.codeIATA))
+            if (string.IsNullOrWhiteSpace(airline.codeIata))
                 errors.Add(ErrorAirlines.MissingIataCode);
 
             if (errors.Count > 0)

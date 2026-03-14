@@ -18,7 +18,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airlines
         public async Task<ValidationResult> IsValidAirlineCodeAsync(string airlineCode)
         {
             var exists = await _context.Airlines.AsNoTracking()
-                .AnyAsync(a => a.codeAirlines == airlineCode);
+                .AnyAsync(a => a.codeAirlinesIcao == airlineCode);
             if (!exists)
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("AIRLINE_CODE", $"Código de aerolínea no válido: {airlineCode}"));
@@ -28,7 +28,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airlines
         public async Task<ValidationResult> HasConnectionWithAirportAsync(string codeAirlines, string airportCode)
         {
             var has = await _context.ConectionsAirlineAirports.AsNoTracking()
-                .AnyAsync(c => c.codeAirlines == codeAirlines && c.codeAirport == airportCode && c.isActive);
+                .AnyAsync(c => c.codeAirlinesIcao == codeAirlines && c.codeAirportIcao == airportCode && c.isActive);
             if (!has)
                 return new ValidationResult().Failur(
                     ErrosValidationResults.Create("AIRLINE_CONNECTION", $"No existe conexión activa con el aeropuerto: {airportCode}"));

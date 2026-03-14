@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Domain.Entities.BaseEntity;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace AeroVeloz.Domain.Entities.Notification;
 
 /// <summary>
@@ -6,11 +7,16 @@ namespace AeroVeloz.Domain.Entities.Notification;
 /// Cada notificación está vinculada a una suscripción, contiene el mensaje enviado,
 /// el proveedor utilizado para el envío y el estado actual de la notificación.
 /// </summary>
+/// 
+
+
+[Table("Notification", Schema = "Notifications")]
+
 public partial class Notification : BEntity<Guid>
 {
-    public Guid subscriptionId { get; init; }
+    public Guid subscripcionId { get; init; }
 
-    public byte codeProvider { get; init; }
+    public short codeProvider { get; init; }
 
     public string? message { get; init; }
 
