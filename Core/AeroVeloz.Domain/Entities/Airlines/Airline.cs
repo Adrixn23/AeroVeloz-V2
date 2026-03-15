@@ -12,7 +12,9 @@ namespace AeroVeloz.Domain.Entities.Airlines;
 
 public partial class Airline : Organizations
 {
+    [Column("codeAirlines")]
     public string? codeAirlinesIcao { get; init; }
 
+    [Column("codeIATA")]
     public string? codeIata { get; init; }
 }

@@ -1,3 +1,4 @@
+using AeroVeloz.Application.Repositories.Airlines;
 using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Flights;
@@ -30,6 +31,7 @@ namespace AeroVeloz.IOC.Dependencies
 
             // Module repositories
             services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<IAirlineRepository, AirlineRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IAuditWriteRepository, AuditWriteRepository>();
