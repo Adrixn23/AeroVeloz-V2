@@ -1,10 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using AeroVeloz.Application.Contracts.Airlines;
+using AeroVeloz.Application.Services.Airlines;
 using AeroVeloz.Infraestructure.Persistence.context;
 using AeroVeloz.IOC.Dependencies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddScoped<IAirlineService, AirlineService>();
 builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -32,5 +35,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.MapControllers();
 
 app.Run();

@@ -25,13 +25,13 @@ namespace AeroVeloz.Application.Services.Airlines
         public AirlineService(
             IAirlineRepository repo,
             IOrganizationMonitoringLogger monitoringLogger,
-            IAuditWriteRepository auditRepo,
+            //IAuditWriteRepository auditRepo,
             IUserRepositoryAuthorization auth,
             IMediator mediator)
         {
             _repo = repo;
             _monitoringLogger = monitoringLogger;
-            _auditRepo = auditRepo;
+            //_auditRepo = auditRepo;
             _auth = auth;
             _mediator = mediator;
         }
@@ -62,15 +62,15 @@ namespace AeroVeloz.Application.Services.Airlines
                 if (!persisted)
                     return OperationResult<bool>.Fail("AIRLINE_PERSIST", "Error al guardar la aerolínea");
 
-                await _auditRepo.RegisterAuditAsync(new Audit
-                {
-                    Id = Guid.NewGuid(),
-                    IdAuditType = 1, // Create
-                    nameEntity = "Airline",
-                    ocurrentAt = DateTime.UtcNow,
-                    idUser = userId,
-                    DataNew = JsonSerializer.Serialize(airline)
-                });
+                //await _auditRepo.RegisterAuditAsync(new Audit
+                //{
+                //    Id = Guid.NewGuid(),
+                //    IdAuditType = 1, // Create
+                //    nameEntity = "Airline",
+                //    ocurrentAt = DateTime.UtcNow,
+                //    idUser = userId,
+                //    DataNew = JsonSerializer.Serialize(airline)
+                //});
 
                 var op = OperationResult<bool>.Ok(true, "Aerolínea creada exitosamente");
                 
@@ -124,16 +124,16 @@ namespace AeroVeloz.Application.Services.Airlines
                 if (!updated)
                     return OperationResult<bool>.Fail("AIRLINE_UPDATE", "No se pudo actualizar la aerolínea");
 
-                await _auditRepo.RegisterAuditAsync(new Audit
-                {
-                    Id = Guid.NewGuid(),
-                    IdAuditType = 2, // Update
-                    nameEntity = "Airline",
-                    ocurrentAt = DateTime.UtcNow,
-                    idUser = userId,
-                    DataOld = oldData,
-                    DataNew = JsonSerializer.Serialize(updatedAirline)
-                });
+                //await _auditRepo.RegisterAuditAsync(new Audit
+                //{
+                //    Id = Guid.NewGuid(),
+                //    IdAuditType = 2, // Update
+                //    nameEntity = "Airline",
+                //    ocurrentAt = DateTime.UtcNow,
+                //    idUser = userId,
+                //    DataOld = oldData,
+                //    DataNew = JsonSerializer.Serialize(updatedAirline)
+                //});
 
                 return OperationResult<bool>.Ok(true, "Aerolínea actualizada correctamente");
             }
@@ -168,16 +168,16 @@ namespace AeroVeloz.Application.Services.Airlines
                 if (!deleted)
                     return OperationResult<bool>.Fail("AIRLINE_DELETE", "No se pudo realizar el borrado lógico");
 
-                await _auditRepo.RegisterAuditAsync(new Audit
-                {
-                    Id = Guid.NewGuid(),
-                    IdAuditType = 3, // Delete
-                    nameEntity = "Airline",
-                    ocurrentAt = DateTime.UtcNow,
-                    idUser = userId,
-                    DataOld = JsonSerializer.Serialize(airline),
-                    DataNew = "{\"isActived\": false}"
-                });
+                //await _auditRepo.RegisterAuditAsync(new Audit
+                //{
+                //    Id = Guid.NewGuid(),
+                //    IdAuditType = 3, // Delete
+                //    nameEntity = "Airline",
+                //    ocurrentAt = DateTime.UtcNow,
+                //    idUser = userId,
+                //    DataOld = JsonSerializer.Serialize(airline),
+                //    DataNew = "{\"isActived\": false}"
+                //});
 
                 return OperationResult<bool>.Ok(true, "Aerolínea desactivada correctamente");
             }
