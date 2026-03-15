@@ -39,21 +39,25 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Users
 
             // Verificar que la organización a la que se vincula el usuario exista y esté activa
             var org = await _domainServiceOrganization.GetByIdAsync(user.idOrganization);
+
             if(org == null)
             {
                 errors.Add(UserErrors.OrganizationNotFound);
                 return new ValidationResult().Failur(errors);
             }
+
             if (!org.IsActive)
                 errors.Add(UserErrors.UserAssociateWithOrganization);
 
             // Validar si el usuario ya se encuentra registrado en el sistema y en la organización
-            var exitsUser = await _domainServiceUser.ExistActiveUserAsync(user.Id);
+            //var exitsUser = await _domainServiceUser.ExistActiveUserAsync(user.Id);
+
             var existUserInOrg = await _domainServiceUser.UserNameExistOrganization(user.nameUser, org.Id);
 
-            if (!exitsUser)
-                errors.Add(UserErrors.UserIsExist);
-            if (!existUserInOrg)
+            //if (!exitsUser)
+            //    errors.Add(UserErrors.UserIsExist);
+
+            if (existUserInOrg)
                 errors.Add(UserErrors.UserExistInOrganization);
 
             var result = new ValidationResult();

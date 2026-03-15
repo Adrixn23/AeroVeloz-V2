@@ -72,14 +72,14 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             return new ValidationResult().Success();
         }
 
-        public async Task<bool> RegisterLoginAttemptAsync(Guid userId, int failedLoginAttempts, DateTime lockedUntil, byte[] ipAddress, int orgId)
+        public async Task<bool> RegisterLoginAttemptAsync(Guid userId, int failedLoginAttempts, DateTime lockedUntil, int orgId)
         {   
             var rowsAffected = await _context.Users
                 .Where(u => u.Id == userId && u.idOrganization == orgId)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(u => u.failedLoginAttempts, failedLoginAttempts)
                     .SetProperty(u => u.lockedUntil, lockedUntil)
-                    .SetProperty(u => u.ipAdress, ipAddress)
+                   
                 );
 
             return rowsAffected > 0;

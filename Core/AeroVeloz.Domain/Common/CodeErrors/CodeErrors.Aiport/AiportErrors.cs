@@ -24,8 +24,8 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport
         public static ErrosValidationResults AirportIcaoInvalid =>
             ErrosValidationResults.Create("AIRPORT_04", "El código ICAO del aeropuerto no tiene un formato válido (4 letras).");
 
-        public static ErrosValidationResults AirportNotFoundExternal =>
-            ErrosValidationResults.Create("AIRPORT_05", "El aeropuerto no fue encontrado en la fuente externa de aeropuertos reales.");
+        public static ErrosValidationResults  AirportExistInSystem =>
+            ErrosValidationResults.Create("AIRPORT_05", "El correo proporcionado para esta organización ya se encuentra registrado en el sistema.");
 
         public static ErrosValidationResults AirportAlreadyExists =>
             ErrosValidationResults.Create("AIRPORT_06", "El aeropuerto ya existe registrado en la organización.");

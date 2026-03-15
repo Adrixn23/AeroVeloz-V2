@@ -4,7 +4,6 @@ using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Models.Audit;
 using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;
-
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
 {
 
@@ -16,7 +15,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
         {
             _context = context;
         }
-
 
         public async Task<bool> CreateAsync(Domain.Entities.Audit.Audit audit)
         {
@@ -55,8 +53,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                     x.o.nameOrganization,
                     x.a.nameEntity,
                     x.a.ocurrentAt,
-                    x.a.DataOld,
-                    x.a.DataNew
+                    x.a.newValuesData
                 ))
                 .ToListAsync();
 
@@ -93,20 +90,19 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                     x.o.nameOrganization,
                     x.a.nameEntity,
                     x.a.ocurrentAt,
-                    x.a.DataOld,
-                    x.a.DataNew
+                    x.a.newValuesData
                 ))
                 .ToListAsync();
 
             return audits;
         }
 
-        public async Task<bool> ExistsAsync(Guid auditId)
-        {
-            return await _context.Audits
-                .AsNoTracking()
-                .AnyAsync(a => a.Id == auditId);
-        }
+        //public async Task<bool> ExistsAsync(Guid auditId)
+        //{
+        //    return await _context.Audits
+        //        .AsNoTracking()
+        //        .AnyAsync(a => a.Id == auditId);
+        //}
 
         public async Task<ValidationResult> ValidateAuditEntryAsync(Guid userId, short auditTypeId, string? entityName)
         {

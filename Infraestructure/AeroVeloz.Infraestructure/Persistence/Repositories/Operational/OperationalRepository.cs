@@ -1,5 +1,4 @@
-﻿using AeroVeloz.Application.DTOs.Organization.Base;
-using AeroVeloz.Application.Repositories.Operational;
+﻿using AeroVeloz.Application.Repositories.Operational;
 using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Models.Operational;
 using AeroVeloz.Domain.Services.Interfaces.Operational;
@@ -36,7 +35,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
             return op > 0;
         }
 
-      
         public async Task<IReadOnlyCollection<OperationalDetailModel>> GetAirportChangesAsync(int orgId)
         {
 
@@ -140,9 +138,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
                 .SetProperty(op => op.codeAirlinesIcao, entity.codeAirlinesIcao)
                 .SetProperty(op => op.codeAirportIcao, entity.codeAirportIcao)
                 .SetProperty(op => op.isActive, entity.isActive)
-                 .SetProperty(op => op.previosValue, entity.previosValue)
-                 .SetProperty(op => op.newValue, entity.newValue)
-                 .SetProperty(op => op.cause, entity.cause)
+                .SetProperty(op => op.previosValue, entity.previosValue)
+                .SetProperty(op => op.newValue, entity.newValue)
+                .SetProperty(op => op.cause, entity.cause)
                 );
 
             return operationUpdate > 0;

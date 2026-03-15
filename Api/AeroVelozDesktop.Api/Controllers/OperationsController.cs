@@ -58,6 +58,10 @@ namespace AeroVelozDesktop.Api.Controllers
         }
 
         ///agregar llamado de desactive para este service 
+        ///
+
+
+
        
     }
 }

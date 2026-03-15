@@ -10,7 +10,6 @@ namespace AeroVeloz.Domain.Models.Audit
         string? NameOrganization,
         string? NameEntity,
         DateTime OccurredAt,
-        string? DataOld,
         string? DataNew
     );
 }

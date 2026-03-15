@@ -17,8 +17,8 @@ namespace AeroVeloz.Application.Repositories.Auth
         Task<ValidationResult> IsUserLockedAsync(Guid userId, int orgId);
         Task<ValidationResult> BelongsToOrganizationAsync(Guid userId, int orgId);
         Task<ValidationResult> IsOrganizationAccessAllowedAsync(int orgId);
-        Task<bool> RegisterLoginAttemptAsync(Guid userId, int failedLoginAttempts, DateTime lockedUntil, byte[] ipAddress, int orgId);
-        
+        Task<bool> RegisterLoginAttemptAsync(Guid userId, int failedLoginAttempts, DateTime lockedUntil, int orgId);
+
 
     }
 }

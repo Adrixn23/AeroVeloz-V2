@@ -38,7 +38,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         public async Task<UserSystemModel> GetByUserName(string nameUser, int orgId) 
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.nameUser == nameUser && u.idOrganization == orgId );
-
+            Console.WriteLine(user!.nameUser);
             if (user != null)
             {
                return new UserSystemModel(
@@ -94,7 +94,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
         public async Task<bool> ExistActiveUserAsync(Guid userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            return user!.isActive;
+            if (user == null) return false;
+            return user.isActive;
         }
 
         public async Task<bool> UserNameExistOrganization(string? userName, int orgId)

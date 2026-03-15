@@ -21,6 +21,7 @@ namespace AeroVeloz.Application.Repositories.Auth
         Task<ValidationResult> CanModifyOrganizations(Guid userId, int orgId) ;
         Task<ValidationResult> CanViewAuditLogsAsync(Guid userId, int orgId);
         Task<bool> HasRoleAsync(Guid userId, int orgId, string rolName);
+        Task<ValidationResult> CanModifyOperationsAsync(Guid userId, int orgId);
 
     }
 

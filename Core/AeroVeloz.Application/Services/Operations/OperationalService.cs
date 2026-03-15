@@ -73,16 +73,21 @@ namespace AeroVeloz.Application.Handlers.Operations
 
                 var operationalTypeName = await _repo.GetOperationalTypeNameAsync(dto.IdOperationalType);
 
+
+                var values = JsonSerializer.Serialize(operation);
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
                     Id = Guid.NewGuid(),
                     IdAuditType = 1,
                     idUser = userId,
                     nameEntity = "OperationChange",
-                    ocurrentAt = DateTime.UtcNow
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = values
                 });
 
+
                 var result = OperationResult<bool>.Ok(true, "Cambio operacional registrado");
+
                 result.AddEvent(new OperationalChangeRegisteredDomainEvent(
                     operation.Id, userId, dto.FlightNumber, dto.CodeAirline,
                     dto.CodeAirport, operationalTypeName, dto.PreviousValue, dto.NewValue,
@@ -111,11 +116,14 @@ namespace AeroVeloz.Application.Handlers.Operations
             try
             {
                 var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+
                 if (!authResult.IsValid)
                     return OperationResult<OperationalModel>.FromValidation(authResult);
 
                 var operation = await _repo.GetByOperationAsync(operationId);
+
                 return OperationResult<OperationalModel>.Ok(operation);
+
             }
             catch (Exception ex)
             {
@@ -129,6 +137,25 @@ namespace AeroVeloz.Application.Handlers.Operations
                 return OperationResult<OperationalModel>.Fail("OP_ERROR", "Error inesperado al obtener la operación");
             }
         }
+
+
+        //public async Task<OperationResult<bool>> DesactiveOperational(OperationalChangeRemoveDto dto, Guid userId, int orgId)
+        //{
+        //    try
+        //    {
+        //        var authResult = await _auth.CanModifyOperationsAsync(userId, orgId);
+        //        if(!authResult.IsValid)
+        //            return OperationResult<bool>.FromValidation(authResult);
+
+
+
+        //    }catch(Exception ex)
+        //    {
+
+        //    }
+
+        //}
+
 
         public async Task<OperationResult<IReadOnlyCollection<OperationalModel>>> GetFlightChangesAsync(
             short flightNumber, Guid userId, int orgId)
@@ -179,5 +206,11 @@ namespace AeroVeloz.Application.Handlers.Operations
                 return OperationResult<IReadOnlyCollection<OperationalDetailModel>>.Fail("OP_ERROR", "Error inesperado al obtener cambios del aeropuerto");
             }
         }
+
+   
+
     }
+
+
+
 }

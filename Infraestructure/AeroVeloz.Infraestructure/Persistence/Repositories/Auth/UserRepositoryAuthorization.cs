@@ -1,4 +1,5 @@
 ﻿using AeroVeloz.Application.Repositories.Auth;
+using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Operations;
 using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User;
 using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.User.securtiy;
 using AeroVeloz.Domain.Common.Validation;
@@ -10,17 +11,13 @@ using AeroVeloz.Domain.Models.Permission;
 using AeroVeloz.Domain.Models.Rol;
 using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
 {
     public class UserRepositoryAuthorization : IUserRepositoryAuthorization
     {
 
-        /*
-          
-                                                                                                                    
-            Y LA AUTHENTICATION QUE SE REPITE PARA TENER UNA NO REPETICION DEL CODIGO;
-         */
 
         private readonly AeroVelozContext _context;
 
@@ -158,6 +155,27 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             return new ValidationResult().Success();
         }
 
+
+        public async Task<ValidationResult> CanModifyOperationsAsync(Guid userId, int orgId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(us => us.Id == userId && us.idOrganization == orgId );
+            var errors = new List<ErrosValidationResults>();
+            if (user == null) {
+                errors.Add(AuthenticationErrors.UserNotFound);
+                errors.Add(AuthorizationErrors.OrganizationAccessDenied);
+                return new ValidationResult().Failur(errors);
+            }
+            var rol = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.idRol);
+            if (rol!.nameRol != "AIRPORTADMIN")
+            {
+                errors.Add(OperationalChangeErrors.InvalidaOperationByOrganization);
+                return new ValidationResult().Failur(errors);
+            }
+
+            return new ValidationResult().Success();
+        }
+        
+
         //
         public async Task<RolModel> GetUserRolesAsync(Guid userId, int orgId)
         {
@@ -225,6 +243,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
 
             return Array.Empty<PermissionModel>();
         }
+
 
        
     }

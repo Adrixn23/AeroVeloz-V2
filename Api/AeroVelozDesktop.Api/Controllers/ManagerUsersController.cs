@@ -17,21 +17,17 @@ namespace AeroVelozDesktop.Api.Controllers
 
 
         // GET: api/<ManagerUsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetUsersByOrganizationAsync/{orgId}")]
+        public async Task<IActionResult>  GetAll(Guid userId, int orgId)
         {
-            return new string[] { "value1", "value2" };
+            var result = await _userService.GetUsersByOrganizationAsync(userId, orgId);
+            if (result.Success) return Ok(result);
+            return BadRequest(result);
         }
 
-        // GET api/<ManagerUsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+       
         // POST api/<ManagerUsersController>
-        [HttpPost("{}")]
+        [HttpPost("{ManagerUsersController}")]
         public async Task<IActionResult>  Post(UserSaveDto dto, Guid userId, int orgId)
         {
             var result = await _userService.CreateAsync(dto, userId, orgId);
@@ -41,15 +37,23 @@ namespace AeroVelozDesktop.Api.Controllers
 
 
         // PUT api/<ManagerUsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateAsync")]
+        public async Task<IActionResult>  Put(UserUpdateDto dto, Guid userId, int orgId)
         {
+            var result = await _userService.UpdateAsync(dto, userId, orgId);
+            if (result.Success) return Ok(result);
+            return BadRequest(result);
         }
 
-        // DELETE api/<ManagerUsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("Desactive")]
+
+        public async Task<IActionResult> Desactive(Guid entityId, Guid userId, int orgId)
         {
+            var result = await _userService.DeactivateAsync(entityId, userId, orgId);
+            if (result.Success) return Ok(result);
+            return BadRequest(result);
         }
+
+     
     }
 }

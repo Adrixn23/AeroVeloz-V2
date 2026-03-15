@@ -21,8 +21,6 @@ public partial class User : BEntity<Guid>
 
     public bool isActive { get;init ; }
 
-    public byte[]? ipAdress { get; init ;}
-
     public DateTime? lastLoginAt { get;init ; }
 
     public int? failedLoginAttempts { get;init ; }

@@ -46,13 +46,16 @@ namespace AeroVeloz.Application.Handlers.Auth
                 if (org == null)
                     return OperationResult<UserLoginResultDto>.Fail("LOGIN_ORG", "Organización no encontrada");
 
+
                 var orgAccess = await _authRepo.IsOrganizationAccessAllowedAsync(org.Id);
                 if (!orgAccess.IsValid)
                     return OperationResult<UserLoginResultDto>.FromValidation(orgAccess);
 
+
                 var userSystem = await _userRepo.GetByUserName(dto.nameUser!, org.Id);
                 if (userSystem == null)
                     return OperationResult<UserLoginResultDto>.Fail("LOGIN_USER", "Usuario no encontrado en esta organización");
+
 
                 if (userSystem.lockedUntil.HasValue && userSystem.lockedUntil.Value > DateTime.UtcNow)
                 {
@@ -69,14 +72,14 @@ namespace AeroVeloz.Application.Handlers.Auth
                 var credentials = await _authRepo.ValidateUserCredentialsAsync(dto.nameUser!, dto.password!, org.Id);
                 if (!credentials.IsValid)
                 {
-                    var newAttempts = userSystem.failedLoginAttempts + 1;
+                 var newAttempts = userSystem.failedLoginAttempts + 1;
                     DateTime? lockUntil = null;
 
                     if (newAttempts >= 3)
                         lockUntil = DateTime.UtcNow.AddMinutes(15);
 
                     await _authRepo.RegisterLoginAttemptAsync(
-                        userSystem.userId, newAttempts, lockUntil ?? DateTime.MinValue, dto.ipAddress ?? [], org.Id);
+                        userSystem.userId, newAttempts, lockUntil ?? DateTime.UtcNow, org.Id);
 
                     await _mediator.Publish(new UserLoginFailedDomainEvent(
                         userSystem.userId, dto.nameUser, org.Id, org.NameOrganization,
@@ -103,12 +106,14 @@ namespace AeroVeloz.Application.Handlers.Auth
                 }
 
                 var isActive = await _authRepo.IsUserActiveAsync(userSystem.userId, org.Id);
+
                 if (!isActive.IsValid)
                     return OperationResult<UserLoginResultDto>.FromValidation(isActive);
 
                 var role = await _authzRepo.GetUserRolesAsync(userSystem.userId, org.Id);
 
                 var allowedRoles = new[] { "AIRPORTADMIN", "SYSTEMADMIN", "OPERATIONAIRPORT" };
+
                 if (!allowedRoles.Any(r => string.Equals(role.nameRol, r, StringComparison.OrdinalIgnoreCase)))
                 {
                     await _monitoringLogger.LogSecurityAlertAsync(new MonitoringLogEntry
@@ -120,9 +125,10 @@ namespace AeroVeloz.Application.Handlers.Auth
                     });
                     return OperationResult<UserLoginResultDto>.Fail(AuthenticationErrors.DesktopAccessDenied);
                 }
+                /////
 
                 await _authRepo.RegisterLoginAttemptAsync(
-                    userSystem.userId, 0, DateTime.MinValue, dto.ipAddress ?? [], org.Id);
+                    userSystem.userId, 0, DateTime.UtcNow, org.Id);
 
                 var loginResult = new UserLoginResultDto(
                     userSystem.userId,

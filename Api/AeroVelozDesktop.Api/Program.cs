@@ -6,10 +6,10 @@ using AeroVeloz.IOC.Dependencies;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AeroVelozContext>(options => 
+
+builder.Services.AddDbContext<AeroVelozContext>(options =>
     options
         .UseSqlServer(connectionString)
         .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
@@ -19,17 +19,18 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddNotificationServices(builder.Configuration);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

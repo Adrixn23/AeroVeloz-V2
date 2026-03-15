@@ -50,6 +50,7 @@ namespace AeroVeloz.Application.Handlers.Users
             try
             {
                 var authResult = await _auth.CanModifyUsers(userId, orgId);
+
                 if (!authResult.IsValid)
                     return OperationResult<bool>.FromValidation(authResult);
 
@@ -68,16 +69,23 @@ namespace AeroVeloz.Application.Handlers.Users
                     failedLoginAttempts = 0
                 };
 
+
                 var validation = await _validator.ValidateForCreateUser(user);
+
                 if (!validation.IsValid)
                     return OperationResult<bool>.FromValidation(validation);
+
 
                 var created = await _repo.CreateEntity(user);
                 if (!created)
                     return OperationResult<bool>.Fail("USER_PERSIST", "No se pudo crear el usuario");
 
                 var org = await _orgService.GetByIdAsync(dto.IdOrganization);
+
                 var role = await _auth.GetUserRolesAsync(user.Id, dto.IdOrganization);
+
+
+                var newValues = JsonSerializer.Serialize(user);
 
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
@@ -85,10 +93,17 @@ namespace AeroVeloz.Application.Handlers.Users
                     IdAuditType = 1,
                     idUser = userId,
                     nameEntity = "User",
-                    ocurrentAt = DateTime.UtcNow
-                });
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = newValues,
+                  
+
+                }); // -testear estos elementos fallo en auditoria consultar el problema que presenta este punto
+
+                //
 
                 var result = OperationResult<bool>.Ok(true, "Usuario creado exitosamente");
+                //
+
                 result.AddEvent(new UserCreatedDomainEvent(
                     user.Id, user.nameUser, user.idOrganization,
                     org?.NameOrganization, org?.TypeOrganization,
@@ -99,6 +114,7 @@ namespace AeroVeloz.Application.Handlers.Users
 
                 return result;
             }
+
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -131,25 +147,33 @@ namespace AeroVeloz.Application.Handlers.Users
                 };
 
                 var updated = await _repo.UpdateEntity(user);
+
                 if (!updated)
                     return OperationResult<bool>.Fail("USER_UPDATE", "No se pudo actualizar el usuario");
 
+
+                var newValues = JsonSerializer.Serialize(user);
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
                     Id = Guid.NewGuid(),
                     IdAuditType = 2,
                     idUser = userId,
                     nameEntity = "User",
-                    ocurrentAt = DateTime.UtcNow
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = newValues,
+                    
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Usuario actualizado exitosamente");
+
+
                 result.AddEvent(new UserUpdatedDomainEvent(
                     dto.IdUser, dto.NameUser, dto.IdOrganization, dto.IsActive,
                     dto.Password != null, userId, DateTime.UtcNow));
 
                 foreach (var evt in result.DomainEvents)
                     await _mediator.Publish(evt);
+
 
                 return result;
             }
@@ -166,6 +190,7 @@ namespace AeroVeloz.Application.Handlers.Users
             }
         }
 
+        //agregar dto de user para el remove/desactivacion del sistema
         public async Task<OperationResult<bool>> DeactivateAsync(Guid entityId, Guid userId, int orgId)
         {
             try
@@ -175,13 +200,19 @@ namespace AeroVeloz.Application.Handlers.Users
                     return OperationResult<bool>.FromValidation(authResult);
 
                 var usersInOrg = await _repo.GetUserByOrganizationsId(orgId);
+
                 var targetUser = usersInOrg.FirstOrDefault(u => u.idUser == entityId);
+
                 var org = await _orgService.GetByIdAsync(orgId);
 
                 var user = new User { Id = entityId, isActive = false };
+
                 var deactivated = await _repo.DeleteEntity(user);
+
                 if (!deactivated)
                     return OperationResult<bool>.Fail("USER_DEACTIVATE", "No se pudo desactivar el usuario");
+
+                var newValues = JsonSerializer.Serialize(user);
 
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
@@ -189,8 +220,10 @@ namespace AeroVeloz.Application.Handlers.Users
                     IdAuditType = 3,
                     idUser = userId,
                     nameEntity = "User",
-                    ocurrentAt = DateTime.UtcNow
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = newValues,
                 });
+
 
                 var result = OperationResult<bool>.Ok(true, "Usuario desactivado");
                 result.AddEvent(new UserDeactivatedDomainEvent(

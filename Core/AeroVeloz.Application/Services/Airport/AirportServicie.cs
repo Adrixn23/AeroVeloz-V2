@@ -7,6 +7,8 @@ using AeroVeloz.Application.Repositories.Airport;
 using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Users;
+using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.Events.Aiport;
 using AeroVeloz.Domain.Models.Airports;
@@ -57,6 +59,14 @@ namespace AeroVeloz.Application.Handlers.Airport
                 if (!authResult.IsValid)
                     return OperationResult<bool>.FromValidation(authResult);
 
+                var orgExits = await _orgService.GetByEmailAsync(dto.emailOrganization!);
+
+                if(orgExits != null)
+                {
+                    var vl = new ValidationResult().Failur(AirportErrors.AirportExistInSystem);
+                    return OperationResult<bool>.FromValidation(vl);
+                }
+
                 var airport = new Domain.Entities.Organization.Airports.Airport
                 {
                     codeAirportIcao = dto.codeICAO,
@@ -65,7 +75,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     city = dto.city,
                     timeOffset = dto.timeOffset,
                     nameOrganization = dto.nameOrganization,
-                    typeOrganization = dto.typeOrganization ?? "AIRPORT",
+                    typeOrganization = "AIRPORT",
                     emailOrganization = dto.emailOrganization,
                     isActived = true,
                     createAt = DateTime.UtcNow
@@ -86,6 +96,7 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var org = await _orgService.GetByEmailAsync(dto.emailOrganization!);
 
+                Domain.Entities.Users.User.User user = null!;
                 if (org != null)
                 {
                     var defaultUser = new Domain.Entities.Users.User.User
@@ -99,29 +110,46 @@ namespace AeroVeloz.Application.Handlers.Airport
                         createAt = DateTime.UtcNow,
                         failedLoginAttempts = 0
                     };
-
+                    user = defaultUser;
                     await _userRepo.CreateEntity(defaultUser);
                 }
 
+                var values = JsonSerializer.Serialize(airport);
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
                     Id = Guid.NewGuid(),
                     IdAuditType = 1,
                     idUser = userId,
                     nameEntity = "Airport",
-                    ocurrentAt = DateTime.UtcNow
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = values
+                });
+
+                var valuesUserByAirport = JsonSerializer.Serialize(user);
+                await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                {
+                    Id = Guid.NewGuid(),
+                    IdAuditType = 1,
+                    idUser = userId,
+                    nameEntity = "Users",
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = valuesUserByAirport
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto registrado exitosamente");
-                result.AddEvent(new AirportRegisteredDomainEvent(
-                    dto.codeICAO, dto.codeIATA, dto.nameOrganization,
-                    dto.country, dto.city, dto.emailOrganization,
-                    defaultUserName, rawPassword, DateTime.UtcNow));
 
-                foreach (var evt in result.DomainEvents)
-                    await _mediator.Publish(evt);
+                //verificar elemento de mensajeria  -> configuracion de SMPT fue borrada  y necesita volverse a crear
+
+                //result.AddEvent(new AirportRegisteredDomainEvent(
+                //    dto.codeICAO, dto.codeIATA, dto.nameOrganization,
+                //    dto.country, dto.city, dto.emailOrganization,
+                //    defaultUserName, rawPassword, DateTime.UtcNow));
+
+                //foreach (var evt in result.DomainEvents)
+                //    await _mediator.Publish(evt);
 
                 return result;
+
             }
             catch (Exception ex)
             {
@@ -148,14 +176,14 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var airport = new Domain.Entities.Organization.Airports.Airport
                 {
-                    Id = orgId,
+                    Id = dto.idOrg,
                     codeAirportIcao = dto.codeICAO,
                     codeAirportIata = dto.codeIATA,
                     country = dto.country,
                     city = dto.city,
                     timeOffset = dto.timeOffset,
                     nameOrganization = dto.nameOrganization,
-                    typeOrganization = dto.typeOrganization ?? "AIRPORT",
+                    typeOrganization = "AIRPORT",
                     emailOrganization = dto.emailOrganization,
                     isActived = true,
                     createAt = DateTime.UtcNow
@@ -165,13 +193,16 @@ namespace AeroVeloz.Application.Handlers.Airport
                 if (!updated)
                     return OperationResult<bool>.Fail("AIRPORT_UPDATE", "No se pudo actualizar el aeropuerto");
 
+
+                var values = JsonSerializer.Serialize(airport);
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
                     Id = Guid.NewGuid(),
                     IdAuditType = 2,
                     idUser = userId,
                     nameEntity = "Airport",
-                    ocurrentAt = DateTime.UtcNow
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = values
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto actualizado exitosamente");
@@ -197,6 +228,7 @@ namespace AeroVeloz.Application.Handlers.Airport
             }
         }
 
+
         public async Task<OperationResult<bool>> DeactivateAsync(int entityId, Guid userId, int orgId)
         {
             try
@@ -209,21 +241,26 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var airport = new Domain.Entities.Organization.Airports.Airport { Id = entityId, isActived = false };
                 var deactivated = await _repo.DeleteEntity(airport);
+
                 if (!deactivated)
                     return OperationResult<bool>.Fail("AIRPORT_DEACTIVATE", "No se pudo desactivar el aeropuerto");
 
+                var values = JsonSerializer.Serialize(airport);
                 await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
                 {
                     Id = Guid.NewGuid(),
                     IdAuditType = 3,
                     idUser = userId,
                     nameEntity = "Airport",
-                    ocurrentAt = DateTime.UtcNow
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = values
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto desactivado");
+
+
                 result.AddEvent(new AirportSuspendedDomainEvent(
-                    null, null, orgData?.NameOrganization, userId, DateTime.UtcNow));
+                     orgData?.NameOrganization, userId, DateTime.UtcNow));
 
                 foreach (var evt in result.DomainEvents)
                     await _mediator.Publish(evt);

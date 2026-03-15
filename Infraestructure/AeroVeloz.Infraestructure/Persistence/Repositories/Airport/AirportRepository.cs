@@ -48,8 +48,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 .SetProperty(or => or.isActived, false)
                 );
    
-            var reult = await _context.SaveChangesAsync();
-            return reult > 0;
+            return airportOrg > 0;
         }
 
 
@@ -71,6 +70,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
         }
 
         //metodo para generar api key de comunicacion del aeropuerto de manera segura
+
         public async Task<bool> GenerateApiKey(string? codeAirport)
         {
             var randomKey = RandomNumberGenerator.GetBytes(32);
@@ -142,10 +142,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 .SetProperty(e => e.emailOrganization, entity.emailOrganization)
                 .SetProperty(e => e.nameOrganization, entity.nameOrganization)
                 );
+
             var airport = await _context.Airports.Where(air =>
-               air.codeAirportIcao == entity.codeAirportIcao
+            air.Id == entity.Id
             ).ExecuteUpdateAsync(
                 setters => setters
+                .SetProperty(a => a.codeAirportIcao, entity.codeAirportIcao )
+                .SetProperty(a => a.codeAirportIata, entity.codeAirportIata )
                 .SetProperty(a => a.city, entity.city)
                 .SetProperty(a => a.apiKeyMaster, entity.apiKeyMaster)
                 .SetProperty(a => a.country, entity.country)

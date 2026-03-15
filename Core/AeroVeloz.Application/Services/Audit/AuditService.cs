@@ -21,6 +21,7 @@ namespace AeroVeloz.Application.Handlers.Audit
             _monitoringLogger = monitoringLogger;
         }
 
+
         public async Task<OperationResult<IReadOnlyCollection<AuditDetailModel>>> GetByOrganizationAsync(
             int orgId, DateTime? from, DateTime? to, Guid userId)
         {
@@ -70,5 +71,6 @@ namespace AeroVeloz.Application.Handlers.Audit
                 return OperationResult<IReadOnlyCollection<AuditDetailModel>>.Fail("AUDIT_ERROR", "Error inesperado al obtener auditoría del usuario");
             }
         }
+
     }
 }

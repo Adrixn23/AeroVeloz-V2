@@ -40,9 +40,12 @@ namespace AeroVeloz.Infraestructure.Integrations.Email
                 {
                     From = new MailAddress(_options.FromAddress, _options.FromName),
                     Subject = payload.Title,
+      
                     Body = BuildEmailBody(payload),
                     IsBodyHtml = true
                 };
+
+              
 
                 message.To.Add(payload.EmailAddress);
 
