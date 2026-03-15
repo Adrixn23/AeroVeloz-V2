@@ -49,13 +49,20 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
         public async Task<IReadOnlyCollection<SubscriptionReadDto>> GetSubscriptionsByFlightAsync(short flightNumber, string codeAirlines)
         {
             return await (
-                from s in _context.Subscriptions.AsNoTracking()
-                join c in _context.ChannelSubscriptionNotifications.AsNoTracking() on s.codeChannel equals c.Id
-                where s.flightNumber == flightNumber && s.codeAirlinesIcao == codeAirlines && s.activeSubscription
-                select new SubscriptionReadDto(
-                    s.Id, s.flightNumber, s.codeAirlinesIcao, c.name,
-                    s.contactValue, s.activeSubscription, s.createDate)
-            ).ToListAsync();
+        from s in _context.Subscriptions.AsNoTracking()
+        join c in _context.ChannelSubscriptionNotifications.AsNoTracking() on s.codeChannel equals c.Id
+        where s.flightNumber == flightNumber && s.codeAirlinesIcao == codeAirlines && s.activeSubscription
+        select new SubscriptionReadDto(
+            s.Id,                    // Guid Id
+            s.flightNumber,          // short FlightNumber
+            s.codeAirlinesIcao!,     // string CodeAirlinesIcao
+            s.codeChannel,           // byte CodeChannel 
+            s.contactValue!,         // string ContactValue
+            s.numberInterested,      // int NumberInterested 
+            s.createDate,            // DateTime CreateDate
+            s.activeSubscription     // bool ActiveSubscription
+        )
+    ).ToListAsync();
         }
 
         public async Task<int> GetInterestedCountAsync(short flightNumber, string codeAirlines)

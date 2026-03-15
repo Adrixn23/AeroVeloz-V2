@@ -1,12 +1,13 @@
 namespace AeroVeloz.Application.DTOs.Subscriptions
 {
     public sealed record SubscriptionReadDto(
-        Guid SubscriptionId,
+        Guid Id,
         short FlightNumber,
-        string? CodeAirlines,
-        string? ChannelName,
-        string? ContactValue,
-        bool IsActive,
-        DateTime CreatedAt
+        string CodeAirlinesIcao,
+        byte CodeChannel,
+        string ContactValue,
+        int NumberInterested,
+        DateTime CreateDate,
+        bool ActiveSubscription
     );
 }

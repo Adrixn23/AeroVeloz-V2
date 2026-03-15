@@ -2,7 +2,7 @@ namespace AeroVeloz.Application.DTOs.Flights
 {
     public sealed record FlightReadDto(
         short FlightNumber,
-        string? CodeAirlines,
+        string? CodeAirlinesIcao,
         string? OriginAirport,
         string? DestinationAirport,
         DateTimeOffset ScheduledDeparture,

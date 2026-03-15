@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AeroVeloz.Application.DTOs.ConnectionsAirports
+﻿namespace AeroVeloz.Application.DTOs.ConnectionsAirports
 {
-    internal class ConnectionAirportResponseDto
-    {
-    }
+    public sealed record ConnectionAirportResponseDto(
+        Guid Id,
+        string CodeAirlinesIcao,
+        string CodeAirportIcao,
+        string TokenApi,
+        bool IsActive,
+        DateTime CreateAt
+    );
 }

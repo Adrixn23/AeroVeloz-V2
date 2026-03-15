@@ -2,11 +2,11 @@
 
 public record FlightSaveDto(
     short Id,
-    string? CodeAirlinesIcao,
+    string? codeAirlinesIcao,
     string? OriginAirport,
     string? DestinationAirport,
     DateTimeOffset ScheduledDeparture,
-    byte FlightStatesId,
-    string? BordingGate,
+    byte FlightStateId,
+    string? BoardingGate,
     string? BoardingGateArrived
-) : FlightBaseDto(Id, CodeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);
+) : FlightBaseDto(Id, codeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);

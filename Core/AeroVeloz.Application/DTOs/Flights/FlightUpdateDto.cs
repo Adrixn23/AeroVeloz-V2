@@ -2,12 +2,12 @@
 {
     public sealed record FlightUpdateDto(
         short Id,
-        string? CodeAirlinesIcao,
+        string? codeAirlinesIcao,
         string? OriginAirport,
         string? DestinationAirport,
         DateTimeOffset ScheduledDeparture,
-        string? BordingGate,
+        string? BoardingGate,
         string? BoardingGateArrived,
         string? ChangeReason
-    ) : FlightBaseDto(Id, CodeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);
+    ) : FlightBaseDto(Id, codeAirlinesIcao, OriginAirport, DestinationAirport, ScheduledDeparture);
 }

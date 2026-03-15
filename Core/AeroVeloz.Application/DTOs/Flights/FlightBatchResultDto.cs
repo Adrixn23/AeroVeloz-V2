@@ -9,7 +9,7 @@ namespace AeroVeloz.Application.DTOs.Flights
 
     public sealed record FlightBatchErrorDto(
         int RowIndex,
-        string? CodeAirlines,
+        string? codeAirlinesIcao,
         string? ErrorCode,
         string? ErrorDescription
     );

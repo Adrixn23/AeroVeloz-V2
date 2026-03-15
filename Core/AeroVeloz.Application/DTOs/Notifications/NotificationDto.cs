@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AeroVeloz.Application.DTOs.Notifications
+﻿namespace AeroVeloz.Application.DTOs.Notifications
 {
-    internal class NotificationDto
-    {
-    }
+    public sealed record NotificationReadDto(
+        Guid Id,
+        string Title,        // titulo principal, ejm vuelo retrasado
+        string Message,      // descripcion de la noti
+        DateTime CreatedAt,  // Para mostrar hace cuanto llegoo
+        bool IsRead,         // Para saber si esta leido o no
+        short? FlightNumber  // Opcional: para que al darle clic, lo lleve a la pantalla del vuelo
+    );
 }

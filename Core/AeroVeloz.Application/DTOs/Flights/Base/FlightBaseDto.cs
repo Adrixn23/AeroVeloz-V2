@@ -2,7 +2,7 @@
 {
     public abstract record FlightBaseDto(
         short Id,
-        string? CodeAirlinesIcao,
+        string? codeAirlinesIcao,
         string? OriginAirport,
         string? DestinationAirport,
         DateTimeOffset ScheduledDeparture
