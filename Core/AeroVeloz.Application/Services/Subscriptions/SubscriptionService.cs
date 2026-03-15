@@ -62,7 +62,7 @@ namespace AeroVeloz.Application.Services.Subscriptions
                 {
                     Id = Guid.NewGuid(),
                     flightNumber = dto.FlightNumber,
-                    codeAirlinesIcao = dto.CodeAirlines, // <-- FIXED: use correct property name
+                    codeAirlinesIcao = dto.CodeAirlines, 
                     codeChannel = dto.CodeChannel,
                     contactValue = dto.ContactValue,
                     numberInterested = 1,
