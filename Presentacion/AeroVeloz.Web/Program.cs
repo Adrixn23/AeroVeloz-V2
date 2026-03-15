@@ -10,14 +10,12 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AeroVelozContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AeroVelozDb")));
 
-builder.Services.Configure<OneSignalOptions>(builder.Configuration.GetSection("OneSignal"));
-builder.Services.AddHttpClient<OneSignalPushChannel>();
-builder.Services.AddHttpClient<OneSignalInAppChannel>();
-
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddDomainServices();
-builder.Services.AddNotificationServices();
+builder.Services.AddNotificationServices(builder.Configuration);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AeroVeloz.Application.Services.Flights.FlightService>());
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

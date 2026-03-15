@@ -16,8 +16,8 @@ namespace AeroVeloz.IOC.Dependencies
             services.AddScoped<IFlightServicie, FlightService>();
             services.AddScoped<ISubscriptionServicie, SubscriptionService>();
 
-            services.AddMediatR(cfg =>
-                cfg.RegisterServicesFromAssembly(typeof(FlightService).Assembly));
+            //services.AddMediatR(cfg =>
+            //    cfg.RegisterServicesFromAssembly(typeof(FlightService).Assembly));
 
             return services;
         }

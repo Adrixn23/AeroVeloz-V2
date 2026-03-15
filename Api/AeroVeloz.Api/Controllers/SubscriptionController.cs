@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.Contracts.Subscriptions;
+using AeroVeloz.Application.Contracts.Subscriptions;
 using AeroVeloz.Application.DTOs.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
 using System;
