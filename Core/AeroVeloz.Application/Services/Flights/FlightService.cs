@@ -203,6 +203,19 @@ namespace AeroVeloz.Application.Services.Flights
                 if (!updated)
                     return OperationResult<bool>.Fail("FLIGHT_UPDATE", "No se pudo actualizar el estado del vuelo");
 
+                // Registrar Historial de Vuelo
+                var history = new Domain.Entities.Flights.FlightHistory
+                {
+                    flightNumber = dto.FlightNumber,
+                    codeAirlines = dto.codeAirlinesIcao!,
+                    changeAt = DateTime.UtcNow,
+                    reason = dto.Reason ?? "Cambio de estado",
+                    flightStatesIdAfter = dto.FlightStateId,
+                    flightStatesIdBefore = flight.flightStatesId
+                };
+
+                await _flightRepo.AddHistoryAsync(history);
+                
                 await _auditRepo.RegisterAuditAsync(new Audit
                 {
                     Id = Guid.NewGuid(),
@@ -210,8 +223,7 @@ namespace AeroVeloz.Application.Services.Flights
                     nameEntity = "Flight",
                     ocurrentAt = DateTime.UtcNow,
                     idUser = userId,
-                    DataOld = $"{{\"flightStateId\":{flight.flightStatesId}}}",
-                    DataNew = $"{{\"flightStateId\":{dto.FlightStateId},\"reason\":\"{dto.Reason}\"}}"
+                    newValuesData = $"{{\"flightStateIdBefore\":{flight.flightStatesId},\"flightStateIdAfter\":{dto.FlightStateId},\"reason\":\"{dto.Reason}\"}}"
                 });
 
                 if (dto.FlightStateId == (byte)FlightStateEnum.Completed ||

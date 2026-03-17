@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AeroVeloz.Infraestructure.Persistence.Migrations
+namespace AeroVeloz.Infraestructure.Migrations
 {
     [DbContext(typeof(AeroVelozContext))]
-    [Migration("20260310202247_SyncFlightHistoryTypes")]
-    partial class SyncFlightHistoryTypes
+    [Migration("20260317052147_FixFlightHistoryKey")]
+    partial class FixFlightHistoryKey
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,12 +31,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DataNew")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DataOld")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<short>("IdAuditType")
                         .HasColumnType("smallint");
 
@@ -46,54 +40,51 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<string>("nameEntity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("occurentAt")
+                    b.Property<string>("newValuesData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ocurrentAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Audits");
+                    b.ToTable("Audit", "Audits");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Audit.AuditType", b =>
                 {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<short>("idAuditType")
                         .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("nameAudit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("idAuditType");
 
-                    b.ToTable("AuditTypes");
+                    b.ToTable("AuditType", "Audits");
 
                     b.HasData(
                         new
                         {
-                            Id = (short)1,
-                            nameAudit = "FlightStateChange"
+                            idAuditType = (short)1,
+                            nameAudit = "ENTITY_CREATE"
                         },
                         new
                         {
-                            Id = (short)2,
-                            nameAudit = "FlightBatchUpload"
+                            idAuditType = (short)2,
+                            nameAudit = "ENTITY_UPDATE"
                         },
                         new
                         {
-                            Id = (short)3,
-                            nameAudit = "SubscriptionChange"
+                            idAuditType = (short)3,
+                            nameAudit = "ENTITY_DEACTIVATE"
                         });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.Flight", b =>
                 {
                     b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("BoardingGateArrived")
                         .HasColumnType("nvarchar(max)");
@@ -110,15 +101,15 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<DateTimeOffset>("ScheduledDeparture")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("flightStateId")
+                    b.Property<byte>("flightStatesId")
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flight", "Flights");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.FlightHistory", b =>
@@ -126,26 +117,24 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<short>("flightNumber")
                         .HasColumnType("smallint");
 
-                    b.Property<short>("codeAirlines")
-                        .HasColumnType("smallint");
+                    b.Property<string>("codeAirlines")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("changeAt")
                         .HasColumnType("datetime2");
 
                     b.Property<byte>("flightStatesIdAfter")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("flightStatesIdAfter");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("flightStatesIdBefore")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("flightStatesIdBefore");
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("reason")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("flightNumber", "codeAirlines", "changeAt");
 
-                    b.ToTable("FlightHistory");
+                    b.ToTable("FlightHistory", "Flights");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Flights.FlightState", b =>
@@ -161,7 +150,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FlightStates");
+                    b.ToTable("FlightStates", "Flights");
 
                     b.HasData(
                         new
@@ -220,8 +209,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte>("codeProvider")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("codeProvider")
+                        .HasColumnType("smallint");
 
                     b.Property<DateTime>("createAt")
                         .HasColumnType("datetime2");
@@ -232,42 +221,96 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<string>("statusNotification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("subscriptionId")
+                    b.Property<Guid>("subscripcionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notification", "Notifications");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Notification.ProviderResponse", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProviderResponses");
+                    b.ToTable("ProviderResponse", "Notifications");
 
                     b.HasData(
                         new
                         {
-                            Id = (byte)1,
+                            Id = (short)1,
                             name = "SMS"
                         },
                         new
                         {
-                            Id = (byte)2,
+                            Id = (short)2,
                             name = "Email"
                         },
                         new
                         {
-                            Id = (byte)3,
+                            Id = (short)3,
                             name = "Push Notification"
                         });
+                });
+
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Operations.OperationChange", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("cause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("changeAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("codeAirlinesIcao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("codeAirportIcao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short>("flightNumber")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("idOperationalType")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("idUser")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("newValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("previosValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationChange", "Operations");
+                });
+
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Operations.OperationalChangeType", b =>
+                {
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationalChangeType", "Operations");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airport.ConectionsAirlineAirport", b =>
@@ -276,10 +319,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("codeAirport")
+                    b.Property<string>("codeAirportIcao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createAt")
@@ -293,7 +336,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConectionsAirlineAirports");
+                    b.ToTable("ConectionsAirlineAirport", "Airport");
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Base.Organizations", b =>
@@ -303,11 +346,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
 
                     b.Property<DateTime>("createAt")
                         .HasColumnType("datetime2");
@@ -326,11 +364,20 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organizations", "Identitys");
 
-                    b.HasDiscriminator().HasValue("Organizations");
+                    b.UseTptMappingStrategy();
 
-                    b.UseTphMappingStrategy();
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            createAt = new DateTime(2026, 3, 17, 1, 21, 46, 567, DateTimeKind.Local).AddTicks(9465),
+                            emailOrganization = "Admin@Aeroveloz.com",
+                            isActived = true,
+                            nameOrganization = "aerovelozGlobal",
+                            typeOrganization = "admin"
+                        });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Subscriptions.ChannelSubscriptionNotification", b =>
@@ -343,7 +390,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChannelSubscriptionNotifications");
+                    b.ToTable("ChannelSubscriptionNotification", "Subscriptions");
 
                     b.HasData(
                         new
@@ -372,7 +419,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<bool>("activeSubscription")
                         .HasColumnType("bit");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("codeChannel")
@@ -395,13 +442,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscription", "Subscriptions");
                 });
 
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Permission.Permission", b =>
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Permission.Permissions", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("codePermision")
                         .HasColumnType("nvarchar(max)");
@@ -411,77 +458,134 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", "Identitys");
 
                     b.HasData(
                         new
                         {
-                            Id = (byte)1,
-                            codePermision = "FLIGHT_UPLOAD_BATCH",
-                            description = "Upload flight batch via CSV"
+                            Id = (short)1,
+                            codePermision = "ORG_CREATE",
+                            description = "Crear organizaciones"
                         },
                         new
                         {
-                            Id = (byte)2,
-                            codePermision = "FLIGHT_UPDATE_STATE",
-                            description = "Update flight state"
+                            Id = (short)2,
+                            codePermision = "ORG_EDIT",
+                            description = "Editar organizaciones"
                         },
                         new
                         {
-                            Id = (byte)3,
-                            codePermision = "FLIGHT_VIEW_OWN",
-                            description = "View own airline flights"
+                            Id = (short)3,
+                            codePermision = "ORG_DEACTIVATE",
+                            description = "Desactivar organizaciones"
                         },
                         new
                         {
-                            Id = (byte)4,
-                            codePermision = "FLIGHT_VIEW_SUBSCRIPTIONS",
-                            description = "View flight subscription count"
+                            Id = (short)4,
+                            codePermision = "USER_CREATE",
+                            description = "Crear usuarios"
                         },
                         new
                         {
-                            Id = (byte)5,
-                            codePermision = "CONNECTION_REQUEST",
-                            description = "Request airport connection"
+                            Id = (short)5,
+                            codePermision = "USER_EDIT",
+                            description = "Editar usuarios"
                         },
                         new
                         {
-                            Id = (byte)6,
-                            codePermision = "CONNECTION_VIEW",
-                            description = "View airline connections"
+                            Id = (short)6,
+                            codePermision = "USER_DEACTIVATE",
+                            description = "Desactivar usuarios"
+                        },
+                        new
+                        {
+                            Id = (short)7,
+                            codePermision = "AUDIT_VIEW",
+                            description = "Visualizar registros de auditoría"
+                        },
+                        new
+                        {
+                            Id = (short)8,
+                            codePermision = "AIRPORT_CONN_VIEW",
+                            description = "Visualizar conexiones aeropuerto-aerolínea"
+                        },
+                        new
+                        {
+                            Id = (short)9,
+                            codePermision = "AIRPORT_CONN_CREATE",
+                            description = "Crear conexiones aeropuerto-aerolínea"
+                        },
+                        new
+                        {
+                            Id = (short)10,
+                            codePermision = "AIRPORT_CONN_EDIT",
+                            description = "Editar conexiones aeropuerto-aerolínea"
+                        },
+                        new
+                        {
+                            Id = (short)11,
+                            codePermision = "AIRPORT_CONN_DEACTIVATE",
+                            description = "Desactivar conexiones aeropuerto-aerolínea"
+                        },
+                        new
+                        {
+                            Id = (short)12,
+                            codePermision = "OP_REGISTER",
+                            description = "Registrar cambios operacionales"
+                        },
+                        new
+                        {
+                            Id = (short)13,
+                            codePermision = "OP_VIEW",
+                            description = "Visualizar cambios operacionales"
+                        },
+                        new
+                        {
+                            Id = (short)14,
+                            codePermision = "FLIGHT_VIEW",
+                            description = "Visualizar vuelos"
                         });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.Roles.Roles", b =>
                 {
                     b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("nameRol")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Rol", "Identitys");
 
                     b.HasData(
                         new
                         {
+                            Id = (short)1,
+                            nameRol = "SYSTEMADMIN"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            nameRol = "AIRPORTADMIN"
+                        },
+                        new
+                        {
                             Id = (short)3,
                             nameRol = "AIRLINEADMIN"
+                        },
+                        new
+                        {
+                            Id = (short)4,
+                            nameRol = "OPERATIONAIRPORT"
                         });
                 });
 
             modelBuilder.Entity("AeroVeloz.Domain.Entities.Users.RolesPermision.RolPermission", b =>
                 {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<short>("idRolPermission")
                         .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<short>("idPermission")
                         .HasColumnType("smallint");
@@ -489,46 +593,142 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<short>("idRol")
                         .HasColumnType("smallint");
 
-                    b.HasKey("Id");
+                    b.HasKey("idRolPermission");
 
-                    b.ToTable("RolPermissions");
+                    b.ToTable("RolPermissions", "Identitys");
 
                     b.HasData(
                         new
                         {
-                            Id = (short)1,
+                            idRolPermission = (short)1,
                             idPermission = (short)1,
-                            idRol = (short)3
+                            idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)2,
+                            idRolPermission = (short)2,
                             idPermission = (short)2,
-                            idRol = (short)3
+                            idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)3,
+                            idRolPermission = (short)3,
                             idPermission = (short)3,
-                            idRol = (short)3
+                            idRol = (short)1
                         },
                         new
                         {
-                            Id = (short)4,
+                            idRolPermission = (short)4,
+                            idPermission = (short)4,
+                            idRol = (short)1
+                        },
+                        new
+                        {
+                            idRolPermission = (short)5,
+                            idPermission = (short)5,
+                            idRol = (short)1
+                        },
+                        new
+                        {
+                            idRolPermission = (short)6,
+                            idPermission = (short)6,
+                            idRol = (short)1
+                        },
+                        new
+                        {
+                            idRolPermission = (short)7,
+                            idPermission = (short)7,
+                            idRol = (short)1
+                        },
+                        new
+                        {
+                            idRolPermission = (short)8,
+                            idPermission = (short)4,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)9,
+                            idPermission = (short)5,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)10,
+                            idPermission = (short)6,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)11,
+                            idPermission = (short)7,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)12,
+                            idPermission = (short)8,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)13,
+                            idPermission = (short)9,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)14,
+                            idPermission = (short)10,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)15,
+                            idPermission = (short)11,
+                            idRol = (short)2
+                        },
+                        new
+                        {
+                            idRolPermission = (short)16,
                             idPermission = (short)4,
                             idRol = (short)3
                         },
                         new
                         {
-                            Id = (short)5,
+                            idRolPermission = (short)17,
                             idPermission = (short)5,
                             idRol = (short)3
                         },
                         new
                         {
-                            Id = (short)6,
+                            idRolPermission = (short)18,
                             idPermission = (short)6,
                             idRol = (short)3
+                        },
+                        new
+                        {
+                            idRolPermission = (short)19,
+                            idPermission = (short)7,
+                            idRol = (short)3
+                        },
+                        new
+                        {
+                            idRolPermission = (short)20,
+                            idPermission = (short)12,
+                            idRol = (short)4
+                        },
+                        new
+                        {
+                            idRolPermission = (short)21,
+                            idPermission = (short)13,
+                            idRol = (short)4
+                        },
+                        new
+                        {
+                            idRolPermission = (short)22,
+                            idPermission = (short)14,
+                            idRol = (short)4
                         });
                 });
 
@@ -541,7 +741,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
                     b.Property<DateTime>("createAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("failedLoginAttempts")
+                    b.Property<int?>("failedLoginAttempts")
                         .HasColumnType("int");
 
                     b.Property<int>("idOrganization")
@@ -570,20 +770,65 @@ namespace AeroVeloz.Infraestructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", "Identitys");
                 });
 
-            modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airlines.Airline", b =>
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Airlines.Airline", b =>
                 {
                     b.HasBaseType("AeroVeloz.Domain.Entities.Organization.Base.Organizations");
 
-                    b.Property<string>("codeAirlines")
+                    b.Property<string>("codeAirlinesIcao")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("codeAirlinesIcao");
+
+                    b.Property<string>("codeIata")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("codeIata");
+
+                    b.ToTable("Airlines", "Flights");
+                });
+
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airports.Airport", b =>
+                {
+                    b.HasBaseType("AeroVeloz.Domain.Entities.Organization.Base.Organizations");
+
+                    b.Property<string>("apiKeyMaster")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("codeIATA")
+                    b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("Airline");
+                    b.Property<string>("codeAirportIata")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("codeAirportIcao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("timeOffset")
+                        .HasColumnType("datetimeoffset");
+
+                    b.ToTable("Airports", "Airport");
+                });
+
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Airlines.Airline", b =>
+                {
+                    b.HasOne("AeroVeloz.Domain.Entities.Organization.Base.Organizations", null)
+                        .WithOne()
+                        .HasForeignKey("AeroVeloz.Domain.Entities.Airlines.Airline", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AeroVeloz.Domain.Entities.Organization.Airports.Airport", b =>
+                {
+                    b.HasOne("AeroVeloz.Domain.Entities.Organization.Base.Organizations", null)
+                        .WithOne()
+                        .HasForeignKey("AeroVeloz.Domain.Entities.Organization.Airports.Airport", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

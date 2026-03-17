@@ -57,8 +57,8 @@ namespace AeroVeloz.Application.EventHandlers.Flights
 
                     var channelType = sub.codeChannel switch
                     {
-                        1 => ChannelType.Sms,
-                        2 => ChannelType.Email,
+                        1 => ChannelType.Email,
+                        2 => ChannelType.Sms,
                         3 => ChannelType.Push,
                         _ => ChannelType.Push
                     };

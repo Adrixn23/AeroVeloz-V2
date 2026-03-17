@@ -21,8 +21,6 @@ public partial class Audit : BEntity<Guid>
 
     public DateTime ocurrentAt { get; init; }
 
-    public string? DataOld { get; init; }
-
-    public string? DataNew { get; init; }
+    public string? newValuesData { get; init; }
 
 }

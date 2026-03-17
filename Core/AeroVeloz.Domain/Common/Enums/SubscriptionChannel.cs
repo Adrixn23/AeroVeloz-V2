@@ -1,13 +1,10 @@
-
-
-
 namespace AeroVeloz.Domain.Common.Enums
 {
-    public  enum SubscriptionChannel
+    public enum SubscriptionChannel : byte
     {
-        Email,
-        Sms,
-        Push,
-        None
+        Email = 1,
+        Sms = 2,
+        Push = 3,
+        None = 4
     }
 }

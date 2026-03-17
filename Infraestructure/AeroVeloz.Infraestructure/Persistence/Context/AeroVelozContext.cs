@@ -10,6 +10,8 @@ using AeroVeloz.Domain.Entities.Notification;
 using AeroVeloz.Domain.Entities.Subscriptions;
 using AeroVeloz.Domain.Entities.Users.RolesPermision;
 using AeroVeloz.Domain.Entities.Airlines;
+using AeroVeloz.Domain.Entities.Operations;
+using AeroVeloz.Infraestructure.Persistence.Configurations;
 
 namespace AeroVeloz.Infraestructure.Persistence.context
 {
@@ -33,15 +35,16 @@ namespace AeroVeloz.Infraestructure.Persistence.context
         public DbSet<ProviderResponse> ProviderResponses { get; set; }
         public DbSet<Audit> Audits { get; set; }
         public DbSet<AuditType> AuditTypes { get; set; }
+        public DbSet<OperationalChangeType> OperationalChangeTypes { get; set; }
+        public DbSet<OperationChange> OperationChanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<FlightHistory>()
-                .HasKey(fh => new { fh.flightNumber, fh.codeAirlines, fh.changeAt });
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AeroVelozContext).Assembly);
+
+            DatabaseSchemaSyncConfiguration.Configure(modelBuilder);
         }
     }
 }

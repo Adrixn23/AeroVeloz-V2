@@ -126,5 +126,11 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
                 .AnyAsync(c => c.codeAirlinesIcao == codeAirlines && c.codeAirportIcao == airportCode && c.isActive);
 
         }
-    }
-}
+
+        public async Task<bool> AddHistoryAsync(FlightHistory history)
+        {
+            _context.FlightHistory.Add(history);
+            return await _context.SaveChangesAsync() > 0;
+        }
+        }
+        }

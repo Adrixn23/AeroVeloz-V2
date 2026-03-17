@@ -12,6 +12,8 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+
+
 builder.Services.AddDbContext<AeroVelozContext>(options =>
     options
         .UseSqlServer(connectionString)

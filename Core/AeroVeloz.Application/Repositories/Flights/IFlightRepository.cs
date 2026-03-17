@@ -18,6 +18,7 @@ namespace AeroVeloz.Application.Repositories.Flights
         Task<bool> PersistBatchAsync(IEnumerable<Flight> flights);
         Task<bool> UpdateFlightStateAsync(short flightNumber, string codeAirlines, byte newStateId);
         Task<bool> HasActiveConnectionAsync(string codeAirlines, string airportCode);
+        Task<bool> AddHistoryAsync(FlightHistory history);
     }
 }
 

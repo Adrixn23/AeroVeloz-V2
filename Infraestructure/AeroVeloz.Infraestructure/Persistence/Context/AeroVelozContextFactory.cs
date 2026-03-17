@@ -13,7 +13,8 @@ public class AeroVelozContextFactory : IDesignTimeDbContextFactory<AeroVelozCont
         var optionsBuilder = new DbContextOptionsBuilder<AeroVelozContext>();
 
         // Default connection string if not provided in environment or appsettings
-        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aerovelozdb;Trusted_Connection=True;MultipleActiveResultSets=true");
+        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aerovelozdb;Trusted_Connection=True;MultipleActiveResultSets=true")
+            .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
 
         return new AeroVelozContext(optionsBuilder.Options);
     }

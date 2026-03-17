@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<AeroVelozContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AeroVelozDb")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AeroVelozDb"))
+           .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
