@@ -12,3 +12,5 @@ public partial class Airline : Organizations
     [Column("codeIata")]
     public string? codeIata { get; init; }
 }
+
+
