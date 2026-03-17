@@ -12,5 +12,6 @@ namespace AeroVeloz.Application.Repositories.Auth
         Task<bool> IsAirlineAdminAsync(Guid userId, int orgId);
         Task<ValidationResult> CanModifyFlightAsync(Guid userId, short flightNumber, int orgId);
         Task<bool> HasRoleAsync(Guid userId, int orgId, string rolName);
+        Task<ValidationResult> CanViewAuditLogsAsync(Guid userId, int orgId);
     }
 }

@@ -86,6 +86,31 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
                 where u.Id == userId && u.idOrganization == orgId
                 select new PermissionModel((byte)p.Id, p.codePermision)
             ).ToListAsync();
+
+
+        }
+
+        public async Task<ValidationResult> CanViewAuditLogsAsync(Guid userId, int orgId)
+        {
+            //validar que el usuario que esta intenando vizualizar la auditoria de su organizacion exista y contenga los elementos de admin 
+
+            var user = await _context.Users.FirstOrDefaultAsync(us => us.Id == userId && us.idOrganization == orgId);
+            var errors = new List<ErrosValidationResults>();
+            if (user == null)
+            {
+                errors.Add(AuthenticationErrors.UserNotFound);
+                errors.Add(AuthorizationErrors.OrganizationAccessDenied);
+                return new ValidationResult().Failur(errors);
+            }
+            var rol = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.idRol);
+
+            if (!rol!.nameRol!.Contains("ADMIN"))
+            {
+                errors.Add(AuthorizationErrors.AdminAccessRequired);
+                errors.Add(AuthorizationErrors.InsufficientPermissions);
+                return new ValidationResult().Failur(errors);
+            }
+            return new ValidationResult().Success();
         }
     }
 }
