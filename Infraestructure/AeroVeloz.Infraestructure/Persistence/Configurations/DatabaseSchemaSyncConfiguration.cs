@@ -44,7 +44,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Configurations
             modelBuilder.Entity<FlightState>().Property(x => x.Id).ValueGeneratedNever(); // Sin Identity según SQL
 
             modelBuilder.Entity<Flight>().ToTable("Flight", "Flights");
-            modelBuilder.Entity<Flight>().Property(x => x.Id).ValueGeneratedNever();
 
             modelBuilder.Entity<FlightHistory>().ToTable("FlightHistory", "Flights")
                 .HasKey(fh => new { fh.flightNumber, fh.codeAirlines, fh.changeAt });

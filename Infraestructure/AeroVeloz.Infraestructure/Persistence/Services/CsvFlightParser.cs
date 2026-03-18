@@ -43,7 +43,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Services
                 }
 
                 flights.Add(new FlightBatchItemDto(
-                    0, // id por el momento
                     cols[0].Trim(),
                     cols[1].Trim(),
                     cols[2].Trim(),

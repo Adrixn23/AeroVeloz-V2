@@ -63,7 +63,8 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
 
         public async Task<bool> IsAirlineAdminAsync(Guid userId, int orgId)
         {
-            return await HasRoleAsync(userId, orgId, "AIRLINEADMIN");
+            // Un SYSTEMADMIN también tiene poderes de AIRLINEADMIN
+            return await HasRoleAsync(userId, orgId, "AIRLINEADMIN") || await HasRoleAsync(userId, orgId, "SYSTEMADMIN");
         }
 
         public async Task<bool> HasRoleAsync(Guid userId, int orgId, string rolName)
@@ -98,6 +99,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             var errors = new List<ErrosValidationResults>();
             if (user == null)
             {
+
                 errors.Add(AuthenticationErrors.UserNotFound);
                 errors.Add(AuthorizationErrors.OrganizationAccessDenied);
                 return new ValidationResult().Failur(errors);

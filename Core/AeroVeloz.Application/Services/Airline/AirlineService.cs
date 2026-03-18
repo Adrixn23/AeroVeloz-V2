@@ -54,6 +54,7 @@ namespace AeroVeloz.Application.Services.Airlines
                     codeIata = dto.CodeIata,
                     nameOrganization = dto.NameOrganization,
                     typeOrganization = "AIRLINE",
+                    emailOrganization = $"{dto.CodeAirlinesIcao.ToLower()}@aeroveloz.com", // Solución para el constraint UNIQUE
                     isActived = true,
                     createAt = DateTime.UtcNow
                 };
@@ -91,7 +92,7 @@ namespace AeroVeloz.Application.Services.Airlines
                     OrganizationId = orgId,
                     OccurredAt = DateTime.UtcNow
                 }, ex);
-                return OperationResult<bool>.Fail("AIRLINE_ERROR", "Error interno al procesar la creación");
+                return OperationResult<bool>.Fail("AIRLINE_ERROR", $"Error interno: {ex.Message} | {ex.InnerException?.Message}");
             }
         }
 
@@ -192,7 +193,7 @@ namespace AeroVeloz.Application.Services.Airlines
                     OrganizationId = orgId,
                     OccurredAt = DateTime.UtcNow
                 }, ex);
-                return OperationResult<bool>.Fail("AIRLINE_ERROR", "Error interno al eliminar");
+                return OperationResult<bool>.Fail("AIRLINE_ERROR", $"Error interno: {ex.Message} | {ex.InnerException?.Message}");
             }
         }
 

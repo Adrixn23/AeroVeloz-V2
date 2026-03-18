@@ -87,29 +87,6 @@ namespace AeroVeloz.Application.Services.Flights
                         continue;
                     }
 
-                    var exists = await _flightRepo.ExistsFlightAsync(flight.Id, item.codeAirlinesIcao!);
-                    if (exists)
-                    {
-                        errors.Add(new FlightBatchErrorDto(i + 1, item.codeAirlinesIcao, "FLIGHT_DUPLICATE", "El vuelo ya existe en el sistema"));
-                        continue;
-                    }
-
-                    var originCheck = await _flightDomain.IsValidOriginAirportAsync(item.codeAirlinesIcao!, item.OriginAirport!);
-                    if (!originCheck.IsValid)
-                    {
-                        foreach (var err in originCheck.domainErrors)
-                            errors.Add(new FlightBatchErrorDto(i + 1, item.codeAirlinesIcao, err.code, err.description));
-                        continue;
-                    }
-
-                    var destCheck = await _flightDomain.IsValidDestinationAirportAsync(item.codeAirlinesIcao!, item.DestinationAirport!);
-                    if (!destCheck.IsValid)
-                    {
-                        foreach (var err in destCheck.domainErrors)
-                            errors.Add(new FlightBatchErrorDto(i + 1, item.codeAirlinesIcao, err.code, err.description));
-                        continue;
-                    }
-
                     validFlights.Add(flight);
                 }
 
@@ -145,7 +122,7 @@ namespace AeroVeloz.Application.Services.Flights
                     OrganizationId = orgId,
                     OccurredAt = DateTime.UtcNow
                 }, ex);
-                return OperationResult<FlightBatchResultDto>.Fail("BATCH_ERROR", "Error interno al procesar el lote de vuelos");
+                return OperationResult<FlightBatchResultDto>.Fail("BATCH_ERROR", $"Error interno: {ex.Message} | {ex.InnerException?.Message}");
             }
         }
 
