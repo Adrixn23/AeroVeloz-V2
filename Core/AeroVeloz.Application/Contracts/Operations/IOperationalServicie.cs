@@ -10,6 +10,6 @@ namespace AeroVeloz.Application.Contracts.Operations
         Task<OperationResult<OperationalModel>> GetByIdAsync(Guid operationId, Guid userId, int orgId);
         Task<OperationResult<IReadOnlyCollection<OperationalModel>>> GetFlightChangesAsync(short flightNumber, Guid userId, int orgId);
         Task<OperationResult<IReadOnlyCollection<OperationalDetailModel>>> GetAirportChangesAsync(Guid userId, int orgId);
-
+        Task<OperationResult<bool>> DesactiveOperational(OperationalChangeRemoveDto dto, Guid userId, int orgId);
     }
 }

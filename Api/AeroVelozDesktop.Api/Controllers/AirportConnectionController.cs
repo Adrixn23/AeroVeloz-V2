@@ -46,9 +46,9 @@ namespace AeroVelozDesktop.Api.Controllers
      
         // DELETE api/<AirportConnectionController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult>  Desactive(Guid connectionId, Guid userId, int orgId)
+        public async Task<IActionResult>  Desactive(Guid connectionId, string airportIcao, Guid userId, int orgId)
         {
-            var result = await _airportConnectionServicie.DeactivateConnectionAsync(connectionId,  userId,  orgId);
+            var result = await _airportConnectionServicie.DeactivateConnectionAsync(connectionId, airportIcao,  userId,  orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }

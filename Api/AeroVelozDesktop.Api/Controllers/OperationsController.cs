@@ -1,9 +1,6 @@
 ﻿using AeroVeloz.Application.Contracts.Operations;
 using AeroVeloz.Application.DTOs.Operations;
-using AeroVeloz.Domain.Entities.Users.User;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 
 namespace AeroVelozDesktop.Api.Controllers
 {
@@ -37,8 +34,6 @@ namespace AeroVelozDesktop.Api.Controllers
             return BadRequest(result);
         }
 
-
-
         // GET api/<OperationsController>/5
         [HttpGet("GetById/{operationId}")]
         public async Task<IActionResult> GetById(Guid operationId, Guid userId, int orgId)
@@ -57,11 +52,13 @@ namespace AeroVelozDesktop.Api.Controllers
             return BadRequest(result);
         }
 
-        ///agregar llamado de desactive para este service 
-        ///
-
-
-
-       
+        [HttpDelete("{Desactive}")]
+        public async Task<IActionResult> Desactive(OperationalChangeRemoveDto dto, Guid userId, int orgId)
+        {
+            var result = await _operationalServicie.DesactiveOperational(dto, userId, orgId);
+            if (result.Success) Ok(result);
+            return BadRequest(result);
+        }
+     
     }
 }

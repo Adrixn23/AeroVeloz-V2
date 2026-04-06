@@ -17,18 +17,18 @@ namespace AeroVelozDesktop.Api.Controllers
 
         // GET: api/<AuditController>
         [HttpGet("GetOrgAudit/{orgId}")]
-        public async Task<IActionResult> GetOrgAudit(int orgId, DateTime? from, DateTime? to, Guid userId)
+        public async Task<IActionResult> GetOrgAudit(int orgId, Guid userId)
         {
-            var result = await _auditService.GetByOrganizationAsync(orgId, from, to, userId);
+            var result = await _auditService.GetByOrganizationAsync(orgId,  userId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
 
         // GET api/<AuditController>/5
         [HttpGet("GetUse/{targetUserId}")]
-        public async Task<IActionResult>  GetUserAudit(Guid targetUserId, DateTime? from, DateTime? to, Guid userId, int orgId)
+        public async Task<IActionResult>  GetUserAudit(Guid targetUserId, Guid userId, int orgId)
         {
-           var result = await _auditService.GetByUserAsync(targetUserId, from, to, userId, orgId);
+           var result = await _auditService.GetByUserAsync(targetUserId,  userId, orgId);
            if (result.Success) return Ok(result);
            return BadRequest(result);
         }

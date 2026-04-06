@@ -228,7 +228,6 @@ namespace AeroVeloz.Application.Handlers.Airport
             }
         }
 
-
         public async Task<OperationResult<bool>> DeactivateAsync(int entityId, Guid userId, int orgId)
         {
             try

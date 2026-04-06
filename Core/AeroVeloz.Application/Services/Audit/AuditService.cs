@@ -23,7 +23,7 @@ namespace AeroVeloz.Application.Handlers.Audit
 
 
         public async Task<OperationResult<IReadOnlyCollection<AuditDetailModel>>> GetByOrganizationAsync(
-            int orgId, DateTime? from, DateTime? to, Guid userId)
+            int orgId, Guid userId)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace AeroVeloz.Application.Handlers.Audit
                 if (!authResult.IsValid)
                     return OperationResult<IReadOnlyCollection<AuditDetailModel>>.FromValidation(authResult);
 
-                var audits = await _repo.GetByOrganizationAsync(orgId, from, to);
+                var audits = await _repo.GetByOrganizationAsync(orgId);
                 return OperationResult<IReadOnlyCollection<AuditDetailModel>>.Ok(audits);
             }
             catch (Exception ex)
@@ -48,7 +48,7 @@ namespace AeroVeloz.Application.Handlers.Audit
         }
 
         public async Task<OperationResult<IReadOnlyCollection<AuditDetailModel>>> GetByUserAsync(
-            Guid targetUserId, DateTime? from, DateTime? to, Guid userId, int orgId)
+            Guid targetUserId, Guid userId, int orgId)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace AeroVeloz.Application.Handlers.Audit
                 if (!authResult.IsValid)
                     return OperationResult<IReadOnlyCollection<AuditDetailModel>>.FromValidation(authResult);
 
-                var audits = await _repo.GetByUserAsync(targetUserId, from, to);
+                var audits = await _repo.GetByUserAsync(targetUserId);
                 return OperationResult<IReadOnlyCollection<AuditDetailModel>>.Ok(audits);
             }
             catch (Exception ex)

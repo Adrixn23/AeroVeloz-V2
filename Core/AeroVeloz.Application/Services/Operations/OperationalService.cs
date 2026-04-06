@@ -1,17 +1,20 @@
-using System.Text.Json;
 using AeroVeloz.Application.Contracts.Operations;
 using AeroVeloz.Application.DTOs.Operations;
-using AeroVeloz.Application.Repositories.Auth;
+using AeroVeloz.Application.Handlers.Result;
 using AeroVeloz.Application.Repositories.Audit;
+using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Operational;
+using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Operations;
+using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Operations;
+using AeroVeloz.Domain.Entities.Users.User;
 using AeroVeloz.Domain.Events.Operations;
 using AeroVeloz.Domain.Models.Operational;
 using AeroVeloz.Domain.Validators.interfaces.Operations;
 using AeroVeloz.Transversal.Contracts.Monitoring;
 using AeroVeloz.Transversal.Monitoring;
 using MediatR;
-using AeroVeloz.Application.Handlers.Result;
+using System.Text.Json;
 
 namespace AeroVeloz.Application.Handlers.Operations
 {
@@ -139,22 +142,59 @@ namespace AeroVeloz.Application.Handlers.Operations
         }
 
 
-        //public async Task<OperationResult<bool>> DesactiveOperational(OperationalChangeRemoveDto dto, Guid userId, int orgId)
-        //{
-        //    try
-        //    {
-        //        var authResult = await _auth.CanModifyOperationsAsync(userId, orgId);
-        //        if(!authResult.IsValid)
-        //            return OperationResult<bool>.FromValidation(authResult);
+        public async Task<OperationResult<bool>> DesactiveOperational(OperationalChangeRemoveDto dto, Guid userId, int orgId)
+        {
+            try
+            {
+                var authResult = await _auth.CanModifyOperationsAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
 
+                var operation = _repo.GetByOperationAsync(dto.IdOperational);
 
+                if(operation == null)
+                {
+                    var vl = new ValidationResult().Failur(OperationalChangeErrors.OperationsNotExist);
+                    return OperationResult<bool>.FromValidation(vl);
+                }
 
-        //    }catch(Exception ex)
-        //    {
+                var op = new OperationChange { Id = dto.IdOperational, isActive = false };
+                var deactivated = await _repo.DeleteEntity(op);
 
-        //    }
+                if (!deactivated)
+                    return OperationResult<bool>.Fail("OPERATION_DESACTIVE", "No se pudo desactivar la operacion");
 
-        //}
+                var newValues = JsonSerializer.Serialize(op);
+
+                await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                {
+                    Id = Guid.NewGuid(),
+                    IdAuditType = 3,
+                    idUser = userId,
+                    nameEntity = "Operations",
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = newValues,
+                });
+
+                var result = OperationResult<bool>.Ok(true, "Operation desactivada");
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.DeactivateAsync",
+                    Message = $"Error inesperado al desactivar la operacion: {dto.IdOperational}"
+                }, ex);
+
+                return OperationResult<bool>.Fail("OPERATION_ERROR", "Error inesperado al desactivar la operacion");
+
+            }
+
+        }
 
 
         public async Task<OperationResult<IReadOnlyCollection<OperationalModel>>> GetFlightChangesAsync(

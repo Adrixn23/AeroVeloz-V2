@@ -21,5 +21,8 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Operations
             ErrosValidationResults.Create("OP_07", "El vuelo sobre el cual a intentado operar no se encuentra en una fecha valida a  la del flujo operario");
         public static ErrosValidationResults OperationExistType =>
            ErrosValidationResults.Create("OP_08", "El tipo de  operación que ha intentado crear ya se encuentra para el vuelo y aerolinea en la que ha intentado operar");
+
+        public static ErrosValidationResults OperationsNotExist =>
+            ErrosValidationResults.Create("OP_09", "La operacion que ha intentado desactivar no existe");
     }
 }

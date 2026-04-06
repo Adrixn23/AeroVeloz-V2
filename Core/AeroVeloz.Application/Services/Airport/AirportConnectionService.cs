@@ -10,6 +10,7 @@ using AeroVeloz.Domain.Validators.interfaces.Airport;
 using AeroVeloz.Transversal.Contracts.Monitoring;
 using AeroVeloz.Transversal.Monitoring;
 using MediatR;
+using System.Text.Json;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
@@ -43,6 +44,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 if (!authResult.IsValid)
                     return OperationResult<bool>.FromValidation(authResult);
 
+               
                 var connection = new ConectionsAirlineAirport
                 {
                     Id = Guid.NewGuid(),
@@ -51,6 +53,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     isActive = true,
                     createAt = DateTime.UtcNow
                 };
+            
 
                 var validation = await _validator.ValidationForCreateConnectionAirlineByAirport(connection);
                 if (!validation.IsValid)
@@ -59,6 +62,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 var created = await _repo.CreateEntity(connection);
                 if (!created)
                     return OperationResult<bool>.Fail("CONN_PERSIST", "No se pudo crear la conexión");
+
 
                 var result = OperationResult<bool>.Ok(true, "Conexión creada exitosamente");
                 result.AddEvent(new AirportConnectionCreatedDomainEvent(
@@ -82,7 +86,7 @@ namespace AeroVeloz.Application.Handlers.Airport
             }
         }
 
-        public async Task<OperationResult<bool>> DeactivateConnectionAsync(Guid connectionId, Guid userId, int orgId)
+        public async Task<OperationResult<bool>> DeactivateConnectionAsync(Guid connectionId, string airportIcao,  Guid userId, int orgId)
         {
             try
             {
@@ -90,16 +94,18 @@ namespace AeroVeloz.Application.Handlers.Airport
                 if (!authResult.IsValid)
                     return OperationResult<bool>.FromValidation(authResult);
 
-                var connections = await _repo.GetAirportConnectionById(null);
-                var connData = connections.FirstOrDefault(c => c.airportCode != null);
 
-                var allConnections = await _repo.GetAirportConnectionById(connData?.airportCode);
+                var allConnections = await _repo.GetAirportConnectionById(airportIcao);
                 var targetConn = allConnections.FirstOrDefault();
+
 
                 var connection = new ConectionsAirlineAirport { Id = connectionId, isActive = false };
                 var deactivated = await _repo.DeleteEntity(connection);
+
                 if (!deactivated)
                     return OperationResult<bool>.Fail("CONN_DEACTIVATE", "No se pudo desactivar la conexión");
+
+
 
                 var result = OperationResult<bool>.Ok(true, "Conexión desactivada");
                 result.AddEvent(new AirportConnectionDeactivatedDomainEvent(

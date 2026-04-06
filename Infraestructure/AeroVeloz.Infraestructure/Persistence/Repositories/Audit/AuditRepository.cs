@@ -24,9 +24,9 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
         }
 
         public async Task<IReadOnlyCollection<AuditDetailModel>> GetByOrganizationAsync(
-            int orgId, DateTime? from = null, DateTime? to = null)
+            int orgId)
         {
-            var query =
+            var query = await (
                 from a in _context.Audits.AsNoTracking()
                 join at in _context.AuditTypes.AsNoTracking()
                     on a.IdAuditType equals at.idAuditType
@@ -35,35 +35,28 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                 join o in _context.Organizations.AsNoTracking()
                     on u.idOrganization equals o.Id
                 where u.idOrganization == orgId
-                select new { a, at, u, o };
+                select
+                new AuditDetailModel(
+                    a.Id,
+                    at.nameAudit,
+                    a.idUser,
+                    u.nameUser,
+                    o.Id,
+                    o.nameOrganization,
+                    a.nameEntity,
+                    a.ocurrentAt,
+                    a.newValuesData
+                )).ToListAsync();
 
-            if (from.HasValue)
-                query = query.Where(x => x.a.ocurrentAt >= from.Value);
-            if (to.HasValue)
-                query = query.Where(x => x.a.ocurrentAt <= to.Value);
 
-            var audits = await query
-                .OrderByDescending(x => x.a.ocurrentAt)
-                .Select(x => new AuditDetailModel(
-                    x.a.Id,
-                    x.at.nameAudit,
-                    x.a.idUser,
-                    x.u.nameUser,
-                    x.o.Id,
-                    x.o.nameOrganization,
-                    x.a.nameEntity,
-                    x.a.ocurrentAt,
-                    x.a.newValuesData
-                ))
-                .ToListAsync();
-
-            return audits;
+            return query;
+         
         }
 
         public async Task<IReadOnlyCollection<AuditDetailModel>> GetByUserAsync(
-            Guid userId, DateTime? from = null, DateTime? to = null)
+            Guid userId)
         {
-            var query =
+            var query = await(
                 from a in _context.Audits.AsNoTracking()
                 join at in _context.AuditTypes.AsNoTracking()
                     on a.IdAuditType equals at.idAuditType
@@ -72,29 +65,23 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Audit
                 join o in _context.Organizations.AsNoTracking()
                     on u.idOrganization equals o.Id
                 where a.idUser == userId
-                select new { a, at, u, o };
-
-            if (from.HasValue)
-                query = query.Where(x => x.a.ocurrentAt >= from.Value);
-            if (to.HasValue)
-                query = query.Where(x => x.a.ocurrentAt <= to.Value);
-
-            var audits = await query
-                .OrderByDescending(x => x.a.ocurrentAt)
-                .Select(x => new AuditDetailModel(
-                    x.a.Id,
-                    x.at.nameAudit,
-                    x.a.idUser,
-                    x.u.nameUser,
-                    x.o.Id,
-                    x.o.nameOrganization,
-                    x.a.nameEntity,
-                    x.a.ocurrentAt,
-                    x.a.newValuesData
+                select new AuditDetailModel(
+                    a.Id,
+                    at.nameAudit,
+                    a.idUser,
+                    u.nameUser,
+                    o.Id,
+                    o.nameOrganization,
+                    a.nameEntity,
+                    a.ocurrentAt,
+                    a.newValuesData
                 ))
                 .ToListAsync();
+                    
+                
+             
 
-            return audits;
+            return query;
         }
 
         //public async Task<bool> ExistsAsync(Guid auditId)

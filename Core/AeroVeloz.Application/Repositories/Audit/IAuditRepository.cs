@@ -9,9 +9,9 @@ namespace AeroVeloz.Application.Repositories.Audit
 
         Task<bool> CreateAsync(Domain.Entities.Audit.Audit audit);
 
-        Task<IReadOnlyCollection<AuditDetailModel>> GetByOrganizationAsync(int orgId, DateTime? from = null, DateTime? to = null);
+        Task<IReadOnlyCollection<AuditDetailModel>> GetByOrganizationAsync(int orgId);
 
-        Task<IReadOnlyCollection<AuditDetailModel>> GetByUserAsync(Guid userId, DateTime? from = null, DateTime? to = null);
+        Task<IReadOnlyCollection<AuditDetailModel>> GetByUserAsync(Guid userId);
 
         //Task<bool> ExistsAsync(Guid auditId); ->metodo comentado ya que no se encuentra en uso de momento por el cambio de enfoque que se realizo, favor descomentar para futuros puntos de mejora    
 
