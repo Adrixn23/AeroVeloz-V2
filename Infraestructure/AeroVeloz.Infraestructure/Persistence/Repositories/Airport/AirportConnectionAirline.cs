@@ -79,7 +79,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error consultando conexiones por código de aeropuerto {Code}", codeAirportIcao);
-                return Array.Empty<AirlineConnectionByAirportModel>();
+                throw new DatabaseOperationException($"Error consultando conexiones por código de aeropuerto {codeAirportIcao}", ex);
             }
         }
 

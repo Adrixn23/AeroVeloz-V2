@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
-    public class AirportServicie : IAirportServicie
+    public class AirportService : IAirportService
     {
         private readonly IAirportRepository _repo;
         private readonly IAirportValidator _validator;
@@ -33,7 +33,7 @@ namespace AeroVeloz.Application.Handlers.Airport
         private readonly IOrganizationMonitoringLogger _monitoringLogger;
         private readonly IMediator _mediator;
 
-        public AirportServicie(
+        public AirportService(
             IAirportRepository repo,
             IAirportValidator validator,
             IUserRepositoryAuthorization auth,
@@ -157,7 +157,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.CreateAsync",
+                    Source = "AirportService.CreateAsync",
                     Message = "Error de base de datos al registrar aeropuerto"
                 }, ex);
                 return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
@@ -168,7 +168,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.CreateAsync",
+                    Source = "AirportService.CreateAsync",
                     Message = "Error inesperado al registrar aeropuerto"
                 }, ex);
                 return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al registrar el aeropuerto");
@@ -232,7 +232,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.UpdateAsync",
+                    Source = "AirportService.UpdateAsync",
                     Message = "Error de base de datos al actualizar aeropuerto"
                 }, ex);
                 return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
@@ -243,7 +243,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.UpdateAsync",
+                    Source = "AirportService.UpdateAsync",
                     Message = "Error inesperado al actualizar aeropuerto"
                 }, ex);
                 return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al actualizar el aeropuerto");
@@ -294,7 +294,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.DeactivateAsync",
+                    Source = "AirportService.DeactivateAsync",
                     Message = "Error de base de datos al desactivar aeropuerto"
                 }, ex);
                 return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
@@ -305,7 +305,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.DeactivateAsync",
+                    Source = "AirportService.DeactivateAsync",
                     Message = "Error inesperado al desactivar aeropuerto"
                 }, ex);
                 return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al desactivar el aeropuerto");
@@ -329,7 +329,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.GetAllAsync",
+                    Source = "AirportService.GetAllAsync",
                     Message = "Error inesperado al obtener aeropuertos"
                 }, ex);
                 return OperationResult<IReadOnlyCollection<AirportModel>>.Fail("AIRPORT_ERROR", "Error inesperado al obtener aeropuertos");
@@ -353,7 +353,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.GetByCodeAsync",
+                    Source = "AirportService.GetByCodeAsync",
                     Message = $"Error inesperado al obtener aeropuerto por código: {codeAirport}"
                 }, ex);
                 return OperationResult<AirportModel>.Fail("AIRPORT_ERROR", "Error inesperado al obtener el aeropuerto");
@@ -389,7 +389,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                 {
                     OrganizationId = orgId,
                     UserId = userId,
-                    Source = "AirportServicie.GenerateApiKeyAsync",
+                    Source = "AirportService.GenerateApiKeyAsync",
                     Message = $"Error inesperado al generar API Key: {codeAirport}"
                 }, ex);
                 return OperationResult<bool>.Fail("AIRPORT_ERROR", "Error inesperado al generar la API Key");

@@ -5,7 +5,7 @@ using AeroVeloz.Domain.Models.Airports;
 
 namespace AeroVeloz.Application.Contracts.Airport
 {
-    public interface IAirportServicie : IBaseServicie<AirportSaveDto, AirportUpdateDto, int>
+    public interface IAirportService : IBaseService<AirportSaveDto, AirportUpdateDto, int>
     {
         Task<OperationResult<IReadOnlyCollection<AirportModel>>> GetAllAsync(Guid userId, int orgId);
         Task<OperationResult<AirportModel>> GetByCodeAsync(string codeAirport, Guid userId, int orgId);

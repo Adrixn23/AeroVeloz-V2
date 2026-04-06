@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class AuditEventServicie :
+    public class AuditEventService :
         INotificationHandler<AuditRecordCreatedDomainEvent>,
         INotificationHandler<AuditDeletionAttemptedDomainEvent>,
         INotificationHandler<AuditModificationAttemptedDomainEvent>,
@@ -13,7 +13,7 @@ namespace AeroVeloz.Application.EventHandlers
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public AuditEventServicie(INotificationDispatcher dispatcher)
+        public AuditEventService(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

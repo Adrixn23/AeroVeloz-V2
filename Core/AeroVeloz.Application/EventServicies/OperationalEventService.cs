@@ -5,13 +5,13 @@ using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class OperationalEventServicie :
+    public class OperationalEventService :
         INotificationHandler<OperationalChangeRegisteredDomainEvent>,
         INotificationHandler<ChangeDoorEvent>
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public OperationalEventServicie(INotificationDispatcher dispatcher)
+        public OperationalEventService(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

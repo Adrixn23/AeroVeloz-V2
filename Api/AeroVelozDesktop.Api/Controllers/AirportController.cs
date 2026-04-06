@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.Contracts.Airport;
+using AeroVeloz.Application.Contracts.Airport;
 using AeroVeloz.Application.DTOs.Organization.Airports;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +9,17 @@ namespace AeroVelozDesktop.Api.Controllers
     public class AirportController : ControllerBase
     {
 
-        public readonly IAirportServicie _airportServicie;
-        public AirportController(IAirportServicie airportServicie   ) { 
+        public readonly IAirportService _airportService;
+        public AirportController(IAirportService airportService   ) { 
             
-            _airportServicie = airportServicie;
+            _airportService = airportService;
         }
 
         [HttpGet("{GetAllAsync}")]
 
         public async Task<IActionResult> GetAll(Guid userId, int orgId) {
                 
-          var result = await _airportServicie.GetAllAsync(userId, orgId);
+          var result = await _airportService.GetAllAsync(userId, orgId);
           if(result.Success) return Ok(result);
           return BadRequest(result);
         }
@@ -30,7 +30,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpGet("GetByCodeAsync/{codeAirport}")]
         public async Task<IActionResult>  Get(string codeAirport, Guid userId, int orgId)
         {
-            var result =  await _airportServicie.GetByCodeAsync(codeAirport, userId, orgId);
+            var result =  await _airportService.GetByCodeAsync(codeAirport, userId, orgId);
             if(result.Success)
                 return Ok(result);
 
@@ -42,7 +42,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpPost("{CreateAsync}")]
         public async Task<IActionResult>  Post(AirportSaveDto airportSaveDto, Guid userId, int orgId)
         {
-            var result = await _airportServicie.CreateAsync(airportSaveDto, userId, orgId);
+            var result = await _airportService.CreateAsync(airportSaveDto, userId, orgId);
             if(result.Success) return Ok(result);
             return BadRequest(result);
         }
@@ -51,7 +51,7 @@ namespace AeroVelozDesktop.Api.Controllers
 
         public async Task<IActionResult> Post(string codeAirport, Guid userId, int orgId)
         {
-            var result = await _airportServicie.GenerateApiKeyAsync(codeAirport, userId, orgId);
+            var result = await _airportService.GenerateApiKeyAsync(codeAirport, userId, orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
@@ -62,7 +62,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpPut("{UpdateAsync}")]
         public async Task<IActionResult> Put(AirportUpdateDto airportUpdate, Guid userId, int orgId)
         {
-            var result = await _airportServicie.UpdateAsync(airportUpdate, userId, orgId);
+            var result = await _airportService.UpdateAsync(airportUpdate, userId, orgId);
             if(result.Success) return Ok( result);
             return BadRequest(result);
         }
@@ -71,7 +71,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpDelete("{DeactivateAsync}")]
         public async Task<IActionResult> Desactive(int entityId, Guid userId, int orgId)
         {
-            var result = await _airportServicie.DeactivateAsync(entityId, userId, orgId);
+            var result = await _airportService.DeactivateAsync(entityId, userId, orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
 

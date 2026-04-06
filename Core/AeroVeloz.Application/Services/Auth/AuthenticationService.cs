@@ -13,7 +13,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.Handlers.Auth
 {
-    public class AuthenticationService : IAuthenticationServicie
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IUserRepositoryAuthenticacion _authRepo;
         private readonly IUserRepository _userRepo;
@@ -140,6 +140,15 @@ namespace AeroVeloz.Application.Handlers.Auth
                 );
 
                 return OperationResult<UserLoginResultDto>.Ok(loginResult, "Inicio de sesión exitoso");
+            }
+            catch (AeroVeloz.Domain.Common.Exceptions.DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    Source = "AuthenticationService.LoginAsync",
+                    Message = "Error de base de datos durante el inicio de sesión"
+                }, ex);
+                return OperationResult<UserLoginResultDto>.Fail(AeroVeloz.Domain.Common.CodeErrors.SystemErrors.DatabaseFailure);
             }
             catch (Exception ex)
             {

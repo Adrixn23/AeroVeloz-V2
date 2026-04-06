@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.Contracts.Users;
+using AeroVeloz.Application.Contracts.Users;
 using AeroVeloz.Application.DTOs.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +10,9 @@ namespace AeroVelozDesktop.Api.Controllers
     public class ManagerUsersController : ControllerBase
     {
 
-        public readonly IUserServicie _userService;
-        public ManagerUsersController(IUserServicie userServicie) { 
-                _userService = userServicie;
+        public readonly IUserService _userService;
+        public ManagerUsersController(IUserService userService) { 
+                _userService = userService;
         }
 
 

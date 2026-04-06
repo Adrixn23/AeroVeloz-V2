@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AeroVeloz.Application.Handlers.Users
 {
-    public class UserService : IUserServicie
+    public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
         private readonly IUserValidator _validator;

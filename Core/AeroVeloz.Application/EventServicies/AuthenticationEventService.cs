@@ -5,13 +5,13 @@ using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class AuthenticationEventServicie :
+    public class AuthenticationEventService :
         INotificationHandler<UserLoginFailedDomainEvent>,
         INotificationHandler<UserAccountLockedDomainEvent>
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public AuthenticationEventServicie(INotificationDispatcher dispatcher)
+        public AuthenticationEventService(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using AeroVeloz.Application.Contracts.Audit;
 
 namespace AeroVelozDesktop.Api.Controllers
@@ -8,9 +8,9 @@ namespace AeroVelozDesktop.Api.Controllers
     public class AuditController : ControllerBase
     {
 
-        public readonly IAuditServicie _auditService;
+        public readonly IAuditService _auditService;
 
-        public AuditController(IAuditServicie auditService) { 
+        public AuditController(IAuditService auditService) { 
             _auditService = auditService;
         }
 

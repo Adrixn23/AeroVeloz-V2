@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class AirportEventServicie :
+    public class AirportEventService :
         INotificationHandler<AirportRegisteredDomainEvent>,
         INotificationHandler<AirportUpdatedDomainEvent>,
         INotificationHandler<AirportSuspendedDomainEvent>,
@@ -15,7 +15,7 @@ namespace AeroVeloz.Application.EventHandlers
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public AirportEventServicie(INotificationDispatcher dispatcher)
+        public AirportEventService(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

@@ -5,6 +5,8 @@ using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Operational;
 using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Operations;
+using AeroVeloz.Domain.Common.CodeErrors;
+using AeroVeloz.Domain.Common.Exceptions;
 using AeroVeloz.Domain.Common.Validation;
 using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Entities.Users.User;
@@ -18,7 +20,7 @@ using System.Text.Json;
 
 namespace AeroVeloz.Application.Handlers.Operations
 {
-    public class OperationalService : IOperationalServicie
+    public class OperationalService : IOperationalService
     {
         private readonly IOperationalRepository _repo;
         private readonly IOperationalChangeValidator _validator;
@@ -101,6 +103,17 @@ namespace AeroVeloz.Application.Handlers.Operations
 
                 return result;
             }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.RegisterAsync",
+                    Message = "Error de base de datos al registrar cambio operacional"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
+            }
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -127,6 +140,17 @@ namespace AeroVeloz.Application.Handlers.Operations
 
                 return OperationResult<OperationalModel>.Ok(operation);
 
+            }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.GetByIdAsync",
+                    Message = $"Error de base de datos al obtener operación: {operationId}"
+                }, ex);
+                return OperationResult<OperationalModel>.Fail(SystemErrors.DatabaseFailure);
             }
             catch (Exception ex)
             {
@@ -180,6 +204,18 @@ namespace AeroVeloz.Application.Handlers.Operations
                 return result;
 
             }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.DesactiveOperational",
+                    Message = $"Error de base de datos al desactivar la operacion: {dto.IdOperational}"
+                }, ex);
+
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
+            }
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -209,6 +245,17 @@ namespace AeroVeloz.Application.Handlers.Operations
                 var changes = await _repo.GetFlightChangesAsync(flightNumber);
                 return OperationResult<IReadOnlyCollection<OperationalModel>>.Ok(changes);
             }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.GetFlightChangesAsync",
+                    Message = $"Error de base de datos al obtener cambios del vuelo: {flightNumber}"
+                }, ex);
+                return OperationResult<IReadOnlyCollection<OperationalModel>>.Fail(SystemErrors.DatabaseFailure);
+            }
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -233,6 +280,17 @@ namespace AeroVeloz.Application.Handlers.Operations
 
                 var changes = await _repo.GetAirportChangesAsync(orgId);
                 return OperationResult<IReadOnlyCollection<OperationalDetailModel>>.Ok(changes);
+            }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.GetAirportChangesAsync",
+                    Message = "Error de base de datos al obtener cambios del aeropuerto"
+                }, ex);
+                return OperationResult<IReadOnlyCollection<OperationalDetailModel>>.Fail(SystemErrors.DatabaseFailure);
             }
             catch (Exception ex)
             {

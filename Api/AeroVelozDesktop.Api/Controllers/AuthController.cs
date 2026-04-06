@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.DTOs.Users;
+using AeroVeloz.Application.DTOs.Users;
 using Microsoft.AspNetCore.Mvc;
 using AeroVeloz.Application.Contracts.Auth;
 
@@ -10,18 +10,18 @@ namespace AeroVelozDesktop.Api.Controllers
     public class AuthController : ControllerBase
     {
 
-        public readonly IAuthenticationServicie _authenticationServicie;
+        public readonly IAuthenticationService _authenticationService;
 
-        public AuthController(IAuthenticationServicie authenticationServicie) {
+        public AuthController(IAuthenticationService authenticationService) {
 
-            _authenticationServicie = authenticationServicie;
+            _authenticationService = authenticationService;
         }
 
         // POST api/<AuthController>
         [HttpPost("{LoginAction}")]
         public async Task<IActionResult>  LoginAction(UserLoginDto userLoginDto)
         {
-            var result = await _authenticationServicie.LoginAsync(userLoginDto);
+            var result = await _authenticationService.LoginAsync(userLoginDto);
             if(result.Success) return Ok(result);
             return BadRequest(result);
         }

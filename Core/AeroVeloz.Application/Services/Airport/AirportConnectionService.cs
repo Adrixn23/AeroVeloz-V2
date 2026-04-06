@@ -14,7 +14,7 @@ using System.Text.Json;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
-    public class AirportConnectionService : IAirportConnectionServicie
+    public class AirportConnectionService : IAirportConnectionService
     {
         private readonly IAirportConnectionAirline _repo;
         private readonly IConnectionAiportAirline _validator;

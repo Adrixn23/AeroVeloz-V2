@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.EventHandlers
 {
-    public class UserEventServicie :
+    public class UserEventService :
         INotificationHandler<UserCreatedDomainEvent>,
         INotificationHandler<UserUpdatedDomainEvent>,
         INotificationHandler<UserDeactivatedDomainEvent>,
@@ -14,7 +14,7 @@ namespace AeroVeloz.Application.EventHandlers
     {
         private readonly INotificationDispatcher _dispatcher;
 
-        public UserEventServicie(INotificationDispatcher dispatcher)
+        public UserEventService(INotificationDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }

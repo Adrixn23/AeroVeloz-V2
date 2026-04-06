@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.Contracts.Operations;
+using AeroVeloz.Application.Contracts.Operations;
 using AeroVeloz.Application.DTOs.Operations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +9,10 @@ namespace AeroVelozDesktop.Api.Controllers
     public class OperationsController : ControllerBase
     {
 
-        public readonly IOperationalServicie _operationalServicie;
+        public readonly IOperationalService _operationalService;
 
-        public OperationsController(IOperationalServicie operationalServicie) { 
-            _operationalServicie = operationalServicie;
+        public OperationsController(IOperationalService operationalService) { 
+            _operationalService = operationalService;
         }
 
 
@@ -20,7 +20,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpGet("GetFlightChangesAsync/{flightNumber}")]
         public async Task<IActionResult> GetByFlights(short flightNumber, Guid userId, int orgId)
         {
-           var result = await _operationalServicie.GetFlightChangesAsync(flightNumber, userId, orgId);
+           var result = await _operationalService.GetFlightChangesAsync(flightNumber, userId, orgId);
             if(result.Success) Ok(result);
             return BadRequest(result);
         }
@@ -29,7 +29,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpGet("GetAirportChangesAsync/{orgId}")]
         public async Task<IActionResult> GetByAirport(Guid userId, int orgId)
         {
-            var result = await _operationalServicie.GetAirportChangesAsync(userId, orgId);
+            var result = await _operationalService.GetAirportChangesAsync(userId, orgId);
             if (result.Success) Ok(result);
             return BadRequest(result);
         }
@@ -38,7 +38,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpGet("GetById/{operationId}")]
         public async Task<IActionResult> GetById(Guid operationId, Guid userId, int orgId)
         {
-            var result = await _operationalServicie.GetByIdAsync(operationId, userId, orgId);
+            var result = await _operationalService.GetByIdAsync(operationId, userId, orgId);
             if (result.Success) Ok(result);
             return BadRequest(result);
         }
@@ -47,7 +47,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpPost("{RegisterAsync}")]
         public async Task<IActionResult> Post(OperationalChangeSaveDto dto, Guid userId, int orgId)
         {
-            var result = await  _operationalServicie.RegisterAsync(dto, userId, orgId);
+            var result = await  _operationalService.RegisterAsync(dto, userId, orgId);
             if (result.Success) Ok(result);
             return BadRequest(result);
         }
@@ -55,7 +55,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpDelete("{Desactive}")]
         public async Task<IActionResult> Desactive(OperationalChangeRemoveDto dto, Guid userId, int orgId)
         {
-            var result = await _operationalServicie.DesactiveOperational(dto, userId, orgId);
+            var result = await _operationalService.DesactiveOperational(dto, userId, orgId);
             if (result.Success) Ok(result);
             return BadRequest(result);
         }

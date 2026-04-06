@@ -1,4 +1,4 @@
-﻿using AeroVeloz.Application.Contracts.Airport;
+using AeroVeloz.Application.Contracts.Airport;
 using AeroVeloz.Application.DTOs.Organization.Airports;
 using AeroVeloz.Domain.Entities.Users.User;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +15,9 @@ namespace AeroVelozDesktop.Api.Controllers
     {
 
 
-        public readonly IAirportConnectionServicie _airportConnectionServicie;
-        public AirportConnectionController(IAirportConnectionServicie airportConnectionServicie) { 
-            _airportConnectionServicie = airportConnectionServicie;
+        public readonly IAirportConnectionService _airportConnectionService;
+        public AirportConnectionController(IAirportConnectionService airportConnectionService) { 
+            _airportConnectionService = airportConnectionService;
         }
 
 
@@ -26,7 +26,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpGet]
         public async Task<IActionResult>  GetAll(string codeAirportIcao, Guid userId, int orgId)
         {
-            var result = await _airportConnectionServicie.GetConnectionsAsync(codeAirportIcao, userId, orgId);
+            var result = await _airportConnectionService.GetConnectionsAsync(codeAirportIcao, userId, orgId);
             if(result.Success) return Ok(result);
             return BadRequest(result);
         }
@@ -37,7 +37,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpPost("{CreateConnectionAsync}")]
         public async Task<IActionResult>  Post(ConnectionAirlineByAirportSaveDto dto, Guid userId, int orgId)
         {
-            var result = await _airportConnectionServicie.CreateConnectionAsync(dto, userId, orgId);
+            var result = await _airportConnectionService.CreateConnectionAsync(dto, userId, orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
@@ -48,7 +48,7 @@ namespace AeroVelozDesktop.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult>  Desactive(Guid connectionId, string airportIcao, Guid userId, int orgId)
         {
-            var result = await _airportConnectionServicie.DeactivateConnectionAsync(connectionId, airportIcao,  userId,  orgId);
+            var result = await _airportConnectionService.DeactivateConnectionAsync(connectionId, airportIcao,  userId,  orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
