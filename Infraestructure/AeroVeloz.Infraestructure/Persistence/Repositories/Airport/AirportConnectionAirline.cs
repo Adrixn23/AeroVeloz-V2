@@ -1,8 +1,10 @@
 ﻿using AeroVeloz.Application.Repositories.Airport;
 using AeroVeloz.Domain.Entities.Organization.Airport;
+using AeroVeloz.Domain.Common.Exceptions;
 using AeroVeloz.Domain.Models.Airports;
 using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
 {
@@ -10,65 +12,95 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
     {
 
         private readonly AeroVelozContext _context;
-        public AirportConnectionAirline(AeroVelozContext context) {
+        private readonly ILogger<AirportConnectionAirline> _logger;
+
+        public AirportConnectionAirline(AeroVelozContext context, ILogger<AirportConnectionAirline> logger) {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<bool> CreateEntity(ConectionsAirlineAirport entity)
         {
+            try
+            {
+                var connection =  await _context.ConectionsAirlineAirports.AddAsync(entity);
+                var result = await _context.SaveChangesAsync();
 
-            var connection =  await _context.ConectionsAirlineAirports.AddAsync(entity);
-            var result = await _context.SaveChangesAsync();
-
-            return result > 0;
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear la conexión aerolínea-aeropuerto");
+                throw new DatabaseOperationException("Error persistiendo la conexión aerolínea-aeropuerto en base de datos", ex);
+            }
         }
 
         public async Task<bool> DeleteEntity(ConectionsAirlineAirport entity)
         {
+            try
+            {
+                var connection = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
+                   .SetProperty(c => c.isActive, false));
 
-            var connection = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
-               .SetProperty(c => c.isActive, false));
-              
-                return connection > 0;
-          
+                    return connection > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al desactivar (eliminar) la conexión {Id}", entity.Id);
+                throw new DatabaseOperationException($"Error desactivando la conexión con Id: {entity.Id}", ex);
+            }
         }
 
         public async Task<IReadOnlyCollection<AirlineConnectionByAirportModel>> GetAirportConnectionById(string? codeAirportIcao)
         {
+            try
+            {
+                var conections = await(
+                    from c in _context.ConectionsAirlineAirports.AsNoTracking()
+                                 join a in _context.Airlines.AsNoTracking()
+                                     on c.codeAirlinesIcao equals a.codeAirlinesIcao
+                                 join or in _context.Organizations.AsNoTracking()
+                                      on a.Id equals or.Id
+                                       where c.codeAirportIcao  == codeAirportIcao
+                                 select new AirlineConnectionByAirportModel(
+                                          c.codeAirportIcao,
+                                          c.codeAirlinesIcao,
+                                         or.nameOrganization,
+                                         c.isActive,
+                                         c.createAt
 
-            var conections = await(
-                from c in _context.ConectionsAirlineAirports.AsNoTracking()
-                             join a in _context.Airlines.AsNoTracking()
-                                 on c.codeAirlinesIcao equals a.codeAirlinesIcao
-                             join or in _context.Organizations.AsNoTracking()
-                                  on a.Id equals or.Id
-                                   where c.codeAirportIcao  == codeAirportIcao
-                             select new AirlineConnectionByAirportModel(
-                                      c.codeAirportIcao,
-                                      c.codeAirlinesIcao,
-                                     or.nameOrganization,
-                                     c.isActive,
-                                     c.createAt
+                                     )).ToListAsync();
 
-                                 )).ToListAsync();
+                if(conections.Any())
+                    return  conections;
 
-            if(conections.Any())
-                return  conections;
-
-            return Array.Empty<AirlineConnectionByAirportModel>();
+                return Array.Empty<AirlineConnectionByAirportModel>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error consultando conexiones por código de aeropuerto {Code}", codeAirportIcao);
+                return Array.Empty<AirlineConnectionByAirportModel>();
+            }
         }
 
         public async Task<bool> UpdateEntity(ConectionsAirlineAirport entity)
         {
+            try
+            {
+                var connections = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
+                    .SetProperty(c =>  c.codeAirlinesIcao,  entity.codeAirlinesIcao)
+                    .SetProperty(c => c.codeAirportIcao, entity.codeAirportIcao)
+                    .SetProperty(c => c.isActive, entity.isActive)
+                    .SetProperty(c => c.tokenApi, entity.tokenApi)
+                );
 
-            var connections = await _context.ConectionsAirlineAirports.Where(con => con.Id == entity.Id).ExecuteUpdateAsync(setters => setters
-                .SetProperty(c =>  c.codeAirlinesIcao,  entity.codeAirlinesIcao)
-                .SetProperty(c => c.codeAirportIcao, entity.codeAirportIcao)
-                .SetProperty(c => c.isActive, entity.isActive)
-                .SetProperty(c => c.tokenApi, entity.tokenApi)
-            );
-         
-            return connections > 0;
+                return connections > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar la conexión aerolínea-aeropuerto {Id}", entity.Id);
+                throw new DatabaseOperationException($"Error actualizando la conexión aerolínea-aeropuerto con Id: {entity.Id}", ex);
+            }
         }
     }
 }

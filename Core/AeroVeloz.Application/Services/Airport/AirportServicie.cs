@@ -9,6 +9,8 @@ using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Users;
 using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
 using AeroVeloz.Domain.Common.Validation;
+using AeroVeloz.Domain.Common.CodeErrors;
+using AeroVeloz.Domain.Common.Exceptions;
 using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.Events.Aiport;
 using AeroVeloz.Domain.Models.Airports;
@@ -138,18 +140,27 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var result = OperationResult<bool>.Ok(true, "Aeropuerto registrado exitosamente");
 
-                //verificar elemento de mensajeria  -> configuracion de SMPT fue borrada  y necesita volverse a crear
+                result.AddEvent(new AirportRegisteredDomainEvent(
+                    dto.codeICAO, dto.codeIATA, dto.nameOrganization,
+                    dto.country, dto.city, dto.emailOrganization,
+                    defaultUserName, rawPassword, DateTime.UtcNow));
 
-                //result.AddEvent(new AirportRegisteredDomainEvent(
-                //    dto.codeICAO, dto.codeIATA, dto.nameOrganization,
-                //    dto.country, dto.city, dto.emailOrganization,
-                //    defaultUserName, rawPassword, DateTime.UtcNow));
-
-                //foreach (var evt in result.DomainEvents)
-                //    await _mediator.Publish(evt);
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
 
                 return result;
 
+            }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.CreateAsync",
+                    Message = "Error de base de datos al registrar aeropuerto"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
             }
             catch (Exception ex)
             {
@@ -215,6 +226,17 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 return result;
             }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.UpdateAsync",
+                    Message = "Error de base de datos al actualizar aeropuerto"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
+            }
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -265,6 +287,17 @@ namespace AeroVeloz.Application.Handlers.Airport
                     await _mediator.Publish(evt);
 
                 return result;
+            }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportServicie.DeactivateAsync",
+                    Message = "Error de base de datos al desactivar aeropuerto"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
             }
             catch (Exception ex)
             {

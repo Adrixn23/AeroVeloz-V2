@@ -1,9 +1,12 @@
 ﻿using AeroVeloz.Application.Repositories.Airport;
+using AeroVeloz.Domain.Common.Exceptions;
 using AeroVeloz.Domain.Entities.Organization.Airports;
 using AeroVeloz.Domain.Models.Airports;
 using AeroVeloz.Domain.Services.Interfaces.Airport;
 using AeroVeloz.Infraestructure.Persistence.context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Data.Common;
 using System.Security.Cryptography;
 
 namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
@@ -12,10 +15,12 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
     {
 
         private readonly AeroVelozContext _context;
+        private readonly ILogger<AirportRepository> _logger;
 
-        public AirportRepository(AeroVelozContext context)
+        public AirportRepository(AeroVelozContext context, ILogger<AirportRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         //metodo para validar si el aeropuerto tiene connectines pendientes de aceptar para x aerolinea o ya aceptadas
@@ -34,21 +39,54 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
         // crear entidad de vuelo y organizacion corrrespondiente guardando los datos en la base de datos de manera simultanea
         public async Task<bool> CreateEntity(Domain.Entities.Organization.Airports.Airport entity)
         {       
-            _context.Airports.Add(entity);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
-         
+            var strategy = _context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    _context.Airports.Add(entity);
+                    var result = await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                    return result > 0;
+                }
+                catch (DbUpdateException ex)
+                {
+                    _logger.LogError(ex, "Error al crear la entidad de aeropuerto. Problemas de actualización en la base de datos.");
+                    throw new DatabaseOperationException("No se pudo persistir el aeropuerto debido a un error de base de datos.", ex);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error inesperado al crear la entidad de aeropuerto.");
+                    throw new DatabaseOperationException("Error inesperado en la base de datos al crear el aeropuerto.", ex);
+                }
+            });
         }
 
         //desactivar la organizacion correspondiente 
         public async Task<bool> DeleteEntity(Domain.Entities.Organization.Airports.Airport entity)
         {
-            var airportOrg = await _context.Organizations.Where(org =>  org.Id  == entity.Id)
-                .ExecuteUpdateAsync(setters => setters
-                .SetProperty(or => or.isActived, false)
-                );
-   
-            return airportOrg > 0;
+            var strategy = _context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    var airportOrg = await _context.Organizations.Where(org =>  org.Id  == entity.Id)
+                        .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(or => or.isActived, false)
+                        );
+
+                    await transaction.CommitAsync();
+                    return airportOrg > 0;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error al desactivar la entidad de aeropuerto {Id}.", entity.Id);
+                    throw new DatabaseOperationException("No se pudo desactivar el aeropuerto.", ex);
+                }
+            });
         }
 
 
@@ -135,28 +173,41 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
 
         public async Task<bool> UpdateEntity(Domain.Entities.Organization.Airports.Airport entity)
         {
-            var org = await _context.Organizations.Where(or => or.Id == entity.Id).
-                ExecuteUpdateAsync(setters => setters 
-                .SetProperty(e => e.isActived, entity.isActived)
-                .SetProperty(e => e.typeOrganization, entity.typeOrganization)
-                .SetProperty(e => e.emailOrganization, entity.emailOrganization)
-                .SetProperty(e => e.nameOrganization, entity.nameOrganization)
-                );
+            var strategy = _context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    var org = await _context.Organizations.Where(or => or.Id == entity.Id).
+                        ExecuteUpdateAsync(setters => setters 
+                        .SetProperty(e => e.isActived, entity.isActived)
+                        .SetProperty(e => e.typeOrganization, entity.typeOrganization)
+                        .SetProperty(e => e.emailOrganization, entity.emailOrganization)
+                        .SetProperty(e => e.nameOrganization, entity.nameOrganization)
+                        );
 
-            var airport = await _context.Airports.Where(air =>
-            air.Id == entity.Id
-            ).ExecuteUpdateAsync(
-                setters => setters
-                .SetProperty(a => a.codeAirportIcao, entity.codeAirportIcao )
-                .SetProperty(a => a.codeAirportIata, entity.codeAirportIata )
-                .SetProperty(a => a.city, entity.city)
-                .SetProperty(a => a.apiKeyMaster, entity.apiKeyMaster)
-                .SetProperty(a => a.country, entity.country)
-                .SetProperty(a => a.timeOffset, entity.timeOffset)
-                );
+                    var airport = await _context.Airports.Where(air =>
+                    air.Id == entity.Id
+                    ).ExecuteUpdateAsync(
+                        setters => setters
+                        .SetProperty(a => a.codeAirportIcao, entity.codeAirportIcao )
+                        .SetProperty(a => a.codeAirportIata, entity.codeAirportIata )
+                        .SetProperty(a => a.city, entity.city)
+                        .SetProperty(a => a.apiKeyMaster, entity.apiKeyMaster)
+                        .SetProperty(a => a.country, entity.country)
+                        .SetProperty(a => a.timeOffset, entity.timeOffset)
+                        );
 
-            return org > 0 && airport > 0;
-
+                    await transaction.CommitAsync();
+                    return org > 0 && airport > 0;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error actualizando la entidad de aeropuerto con ID: {Id}", entity.Id);
+                    throw new DatabaseOperationException("Ocurrió un error en la base de datos al actualizar el aeropuerto.", ex);
+                }
+            });
         }
     }
 }

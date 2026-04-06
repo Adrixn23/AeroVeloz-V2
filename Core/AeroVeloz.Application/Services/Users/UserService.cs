@@ -5,6 +5,8 @@ using AeroVeloz.Application.Handlers.Result;
 using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Users;
+using AeroVeloz.Domain.Common.CodeErrors;
+using AeroVeloz.Domain.Common.Exceptions;
 using AeroVeloz.Domain.DomainServices.Interfaces.Organization;
 using AeroVeloz.Domain.Entities.Users.User;
 using AeroVeloz.Domain.Events.User;
@@ -115,6 +117,17 @@ namespace AeroVeloz.Application.Handlers.Users
                 return result;
             }
 
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "UserService.CreateAsync",
+                    Message = "Error de base de datos al crear usuario"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
+            }
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -177,6 +190,17 @@ namespace AeroVeloz.Application.Handlers.Users
 
                 return result;
             }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "UserService.UpdateAsync",
+                    Message = "Error de base de datos al actualizar usuario"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
+            }
             catch (Exception ex)
             {
                 await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
@@ -233,6 +257,17 @@ namespace AeroVeloz.Application.Handlers.Users
                     await _mediator.Publish(evt);
 
                 return result;
+            }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "UserService.DeactivateAsync",
+                    Message = $"Error de base de datos al desactivar usuario: {entityId}"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
             }
             catch (Exception ex)
             {
