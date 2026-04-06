@@ -5,6 +5,7 @@ namespace AeroVelozDesktop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class AuditController : ControllerBase
     {
 

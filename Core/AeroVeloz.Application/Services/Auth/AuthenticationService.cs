@@ -21,6 +21,7 @@ namespace AeroVeloz.Application.Handlers.Auth
         private readonly IDomainServiceOrganization _orgService;
         private readonly IOrganizationMonitoringLogger _monitoringLogger;
         private readonly IMediator _mediator;
+        private readonly IJwtProvider _jwtProvider;
 
         public AuthenticationService(
             IUserRepositoryAuthenticacion authRepo,
@@ -28,7 +29,8 @@ namespace AeroVeloz.Application.Handlers.Auth
             IUserRepositoryAuthorization authzRepo,
             IDomainServiceOrganization orgService,
             IOrganizationMonitoringLogger monitoringLogger,
-            IMediator mediator)
+            IMediator mediator,
+            IJwtProvider jwtProvider)
         {
             _authRepo = authRepo;
             _userRepo = userRepo;
@@ -36,6 +38,7 @@ namespace AeroVeloz.Application.Handlers.Auth
             _orgService = orgService;
             _monitoringLogger = monitoringLogger;
             _mediator = mediator;
+            _jwtProvider = jwtProvider;
         }
 
         public async Task<OperationResult<UserLoginResultDto>> LoginAsync(UserLoginDto dto)
@@ -138,6 +141,9 @@ namespace AeroVeloz.Application.Handlers.Auth
                     org.TypeOrganization,
                     role.nameRol
                 );
+
+                var token = _jwtProvider.GenerateToken(loginResult);
+                loginResult = loginResult with { Token = token };
 
                 return OperationResult<UserLoginResultDto>.Ok(loginResult, "Inicio de sesión exitoso");
             }

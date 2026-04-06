@@ -18,8 +18,9 @@ namespace AeroVelozDesktop.Api.Controllers
         }
 
         // POST api/<AuthController>
-        [HttpPost("{LoginAction}")]
-        public async Task<IActionResult>  LoginAction(UserLoginDto userLoginDto)
+        [HttpPost("login")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        public async Task<IActionResult> LoginAction([FromBody] UserLoginDto userLoginDto)
         {
             var result = await _authenticationService.LoginAsync(userLoginDto);
             if(result.Success) return Ok(result);

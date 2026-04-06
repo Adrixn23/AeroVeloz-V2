@@ -7,6 +7,7 @@ namespace AeroVelozDesktop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class ManagerUsersController : ControllerBase
     {
 
@@ -17,18 +18,18 @@ namespace AeroVelozDesktop.Api.Controllers
 
 
         // GET: api/<ManagerUsersController>
-        [HttpGet("GetUsersByOrganizationAsync/{orgId}")]
-        public async Task<IActionResult>  GetAll(Guid userId, int orgId)
+        [HttpGet("organization/{orgId}")]
+        public async Task<IActionResult>  GetAll([FromQuery] Guid userId, [FromRoute] int orgId)
         {
             var result = await _userService.GetUsersByOrganizationAsync(userId, orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
 
-       
+
         // POST api/<ManagerUsersController>
-        [HttpPost("{ManagerUsersController}")]
-        public async Task<IActionResult>  Post(UserSaveDto dto, Guid userId, int orgId)
+        [HttpPost]
+        public async Task<IActionResult>  Post([FromBody] UserSaveDto dto, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _userService.CreateAsync(dto, userId, orgId);
             if (result.Success) return Ok(result);
@@ -37,17 +38,17 @@ namespace AeroVelozDesktop.Api.Controllers
 
 
         // PUT api/<ManagerUsersController>/5
-        [HttpPut("UpdateAsync")]
-        public async Task<IActionResult>  Put(UserUpdateDto dto, Guid userId, int orgId)
+        [HttpPut]
+        public async Task<IActionResult>  Put([FromBody] UserUpdateDto dto, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _userService.UpdateAsync(dto, userId, orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);
         }
 
-        [HttpDelete("Desactive")]
+        [HttpDelete("{entityId}")]
 
-        public async Task<IActionResult> Desactive(Guid entityId, Guid userId, int orgId)
+        public async Task<IActionResult> Desactive([FromRoute] Guid entityId, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _userService.DeactivateAsync(entityId, userId, orgId);
             if (result.Success) return Ok(result);

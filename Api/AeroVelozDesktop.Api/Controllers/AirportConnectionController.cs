@@ -11,6 +11,7 @@ namespace AeroVelozDesktop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class AirportConnectionController : ControllerBase
     {
 
@@ -24,18 +25,18 @@ namespace AeroVelozDesktop.Api.Controllers
 
         // GET: api/<AirportConnectionController>
         [HttpGet]
-        public async Task<IActionResult>  GetAll(string codeAirportIcao, Guid userId, int orgId)
+        public async Task<IActionResult>  GetAll([FromQuery] string codeAirportIcao, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportConnectionService.GetConnectionsAsync(codeAirportIcao, userId, orgId);
             if(result.Success) return Ok(result);
             return BadRequest(result);
         }
 
-     
+
 
         // POST api/<AirportConnectionController>
-        [HttpPost("{CreateConnectionAsync}")]
-        public async Task<IActionResult>  Post(ConnectionAirlineByAirportSaveDto dto, Guid userId, int orgId)
+        [HttpPost]
+        public async Task<IActionResult>  Post([FromBody] ConnectionAirlineByAirportSaveDto dto, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportConnectionService.CreateConnectionAsync(dto, userId, orgId);
             if (result.Success) return Ok(result);
@@ -43,10 +44,10 @@ namespace AeroVelozDesktop.Api.Controllers
         }
 
 
-     
+
         // DELETE api/<AirportConnectionController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult>  Desactive(Guid connectionId, string airportIcao, Guid userId, int orgId)
+        [HttpDelete("{connectionId}")]
+        public async Task<IActionResult>  Desactive([FromRoute] Guid connectionId, [FromQuery] string airportIcao, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportConnectionService.DeactivateConnectionAsync(connectionId, airportIcao,  userId,  orgId);
             if (result.Success) return Ok(result);

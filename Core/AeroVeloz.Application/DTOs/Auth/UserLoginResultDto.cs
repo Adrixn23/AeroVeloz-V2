@@ -6,6 +6,7 @@ namespace AeroVeloz.Application.DTOs.Auth
         int OrganizationId,
         string? OrganizationName,
         string? OrganizationType,
-        string? RoleName
+        string? RoleName,
+        string? Token = null
     );
 }

@@ -15,6 +15,8 @@ using AeroVeloz.Infraestructure.Persistence.Repositories.Operational;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Organization;
 using AeroVeloz.Infraestructure.Persistence.Repositories.User;
 using AeroVeloz.Transversal.Contracts.Monitoring;
+using AeroVeloz.Application.Contracts.Auth;
+using AeroVeloz.Infraestructure.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AeroVeloz.IOC.Dependencies
@@ -23,6 +25,7 @@ namespace AeroVeloz.IOC.Dependencies
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
+            services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IAirportRepository, AirportRepository>();
             services.AddScoped<IAirportConnectionAirline, AirportConnectionAirline>();
             services.AddScoped<IUserRepository, UserRepository>();

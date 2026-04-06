@@ -6,6 +6,7 @@ namespace AeroVelozDesktop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class AirportController : ControllerBase
     {
 
@@ -15,10 +16,9 @@ namespace AeroVelozDesktop.Api.Controllers
             _airportService = airportService;
         }
 
-        [HttpGet("{GetAllAsync}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] Guid userId, [FromQuery] int orgId) {
 
-        public async Task<IActionResult> GetAll(Guid userId, int orgId) {
-                
           var result = await _airportService.GetAllAsync(userId, orgId);
           if(result.Success) return Ok(result);
           return BadRequest(result);
@@ -27,8 +27,8 @@ namespace AeroVelozDesktop.Api.Controllers
 
         // GET api/<AirportController>/5
 
-        [HttpGet("GetByCodeAsync/{codeAirport}")]
-        public async Task<IActionResult>  Get(string codeAirport, Guid userId, int orgId)
+        [HttpGet("{codeAirport}")]
+        public async Task<IActionResult>  Get([FromRoute] string codeAirport, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result =  await _airportService.GetByCodeAsync(codeAirport, userId, orgId);
             if(result.Success)
@@ -39,17 +39,16 @@ namespace AeroVelozDesktop.Api.Controllers
         }
 
         // POST api/<AirportController>
-        [HttpPost("{CreateAsync}")]
-        public async Task<IActionResult>  Post(AirportSaveDto airportSaveDto, Guid userId, int orgId)
+        [HttpPost]
+        public async Task<IActionResult>  Post([FromBody] AirportSaveDto airportSaveDto, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportService.CreateAsync(airportSaveDto, userId, orgId);
             if(result.Success) return Ok(result);
             return BadRequest(result);
         }
 
-        [HttpPost("GenerateApiKeyAsync/{codeAirport}")]
-
-        public async Task<IActionResult> Post(string codeAirport, Guid userId, int orgId)
+        [HttpPost("{codeAirport}/generate-api-key")]
+        public async Task<IActionResult> Post([FromRoute] string codeAirport, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportService.GenerateApiKeyAsync(codeAirport, userId, orgId);
             if (result.Success) return Ok(result);
@@ -57,10 +56,9 @@ namespace AeroVelozDesktop.Api.Controllers
         }
 
 
-
         // PUT api/<AirportController>/5
-        [HttpPut("{UpdateAsync}")]
-        public async Task<IActionResult> Put(AirportUpdateDto airportUpdate, Guid userId, int orgId)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] AirportUpdateDto airportUpdate, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportService.UpdateAsync(airportUpdate, userId, orgId);
             if(result.Success) return Ok( result);
@@ -68,8 +66,8 @@ namespace AeroVelozDesktop.Api.Controllers
         }
 
         // DELETE api/<AirportController>/5
-        [HttpDelete("{DeactivateAsync}")]
-        public async Task<IActionResult> Desactive(int entityId, Guid userId, int orgId)
+        [HttpDelete("{entityId}")]
+        public async Task<IActionResult> Desactive([FromRoute] int entityId, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _airportService.DeactivateAsync(entityId, userId, orgId);
             if (result.Success) return Ok(result);
