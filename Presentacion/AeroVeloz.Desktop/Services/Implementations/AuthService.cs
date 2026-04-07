@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs;
 using AeroVeloz.Desktop.Services.Interfaces;
@@ -31,11 +32,27 @@ public class AuthService : IAuthService
             }
 
             var errorContent = await response.Content.ReadAsStringAsync();
-            return new LoginResponseDto 
-            { 
-                Success = false, 
-                ErrorMessage = string.IsNullOrWhiteSpace(errorContent) ? "Credenciales incorrectas o usuario no encontrado." : errorContent 
-            };
+            try
+            {
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var apiError = JsonSerializer.Deserialize<ApiErrorResponseDto>(errorContent, options);
+
+                return new LoginResponseDto 
+                { 
+                    Success = false, 
+                    ErrorMessage = !string.IsNullOrWhiteSpace(apiError?.Message) 
+                        ? apiError.Message 
+                        : "Ocurrió un error al procesar las credenciales." 
+                };
+            }
+            catch (JsonException)
+            {
+                return new LoginResponseDto 
+                { 
+                    Success = false, 
+                    ErrorMessage = "Credenciales incorrectas o usuario no encontrado." 
+                };
+            }
         }
         catch (HttpRequestException ex)
         {

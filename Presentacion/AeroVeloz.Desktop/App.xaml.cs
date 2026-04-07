@@ -27,7 +27,7 @@ namespace AeroVeloz.Desktop
                     })
                     .ConfigureServices((context, services) =>
                     {
-                        var baseUrl = context.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7087";
+                        var baseUrl = context.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7126";
                         services.AddHttpClient("AeroVelozApi", client =>
                         {
                             client.BaseAddress = new Uri(baseUrl);

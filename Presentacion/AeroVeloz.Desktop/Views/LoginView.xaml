@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels"
         mc:Ignorable="d"
-        Title="AeroVeloz - Ingresar" Height="450" Width="400"
+        Title="AeroVeloz - Ingresar" Height="500" Width="400"
         WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -24,35 +24,41 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-     
+
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,20,0,30">
             <materialDesign:PackIcon Kind="Airplane" Width="48" Height="48" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
             <TextBlock Text="AeroVeloz" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,8,0,0"/>
             <TextBlock Text="Acceso al sistema" FontSize="14" Foreground="Gray" HorizontalAlignment="Center"/>
         </StackPanel>
 
-      
+
         <TextBlock x:Name="ErrorTextBlock" Text="{Binding ErrorMessage}" Foreground="#D32F2F" 
                    Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,16"
                    FontWeight="SemiBold" HorizontalAlignment="Center"
                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" />
-        
-      
-        <TextBox Grid.Row="2" materialDesign:HintAssist.Hint="Correo Electrónico (Ej. admin@aeroveloz.com)" 
+
+
+        <TextBox Grid.Row="2" materialDesign:HintAssist.Hint="Correo Organizacional (Ej. mioriginal@aeroveloz.com)" 
                  Text="{Binding EmailOrganization, UpdateSourceTrigger=PropertyChanged}" 
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                 Margin="0,0,0,24"/>
+                 Margin="0,0,0,16"/>
 
-        
-        <TextBox Grid.Row="3" materialDesign:HintAssist.Hint="Contraseña" 
+        <TextBox Grid.Row="3" materialDesign:HintAssist.Hint="Nombre de Usuario" 
+                 Text="{Binding NameUser, UpdateSourceTrigger=PropertyChanged}" 
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                 Margin="0,0,0,16"/>
+
+
+        <TextBox Grid.Row="4" materialDesign:HintAssist.Hint="Contraseña" 
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  Margin="0,0,0,32"
                  FontFamily="Consolas" />
-                 
+
 
         <Grid Grid.Row="5" Margin="0,16,0,0">
             
