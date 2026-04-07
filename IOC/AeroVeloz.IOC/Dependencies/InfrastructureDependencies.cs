@@ -4,6 +4,7 @@ using AeroVeloz.Application.Repositories.Auth;
 using AeroVeloz.Application.Repositories.Flights;
 using AeroVeloz.Application.Repositories.Notifications;
 using AeroVeloz.Application.Repositories.Subscriptions;
+using AeroVeloz.Application.Repositories;
 using AeroVeloz.Domain.DomainService.Interfaces.Airlines;
 using AeroVeloz.Domain.DomainService.Interfaces.Flights;
 using AeroVeloz.Domain.DomainService.Interfaces.Organization;
@@ -16,6 +17,7 @@ using AeroVeloz.Infraestructure.Persistence.Repositories.Flights;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Notifications;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Organization;
 using AeroVeloz.Infraestructure.Persistence.Repositories.Subscription;
+using AeroVeloz.Infraestructure.Persistence.Transactions;
 using AeroVeloz.Transversal.Contracts.Monitoring;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +37,8 @@ namespace AeroVeloz.IOC.Dependencies
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IAuditWriteRepository, AuditWriteRepository>();
+            services.AddScoped<IAuditRepository, AuditRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Domain services implemented in Infrastructure
             services.AddScoped<IDomainServiceOrganization, OrganizationRepository>();

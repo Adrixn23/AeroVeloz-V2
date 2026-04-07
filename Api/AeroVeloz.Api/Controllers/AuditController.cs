@@ -1,40 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using AeroVeloz.Application.Contracts.Audit;
+using AeroVeloz.Domain.Models.Audit;
 
-namespace AeroVelozDesktop.Api.Controllers
+namespace AeroVeloz.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuditController : ControllerBase
+    [Route("api/audits")]
+    [Authorize]
+    public class AuditController : ApiBaseController
     {
-
-        public readonly IAuditServicie _auditService;
+        private readonly IAuditServicie _auditService;
 
         public AuditController(IAuditServicie auditService)
         {
             _auditService = auditService;
         }
 
-
-        // GET: api/<AuditController>
-        [HttpGet("GetOrgAudit/{orgId}")]
-        public async Task<IActionResult> GetOrgAudit(int orgId, DateTime? from, DateTime? to, Guid userId)
+        [HttpGet("organization/{orgId:int}")]
+        public async Task<ActionResult<IReadOnlyCollection<AuditDetailModel>>> GetOrgAudit(int orgId, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromHeader] Guid userId)
         {
             var result = await _auditService.GetByOrganizationAsync(orgId, from, to, userId);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessResult(result);
         }
 
-        // GET api/<AuditController>/5
-        [HttpGet("GetUse/{targetUserId}")]
-        public async Task<IActionResult> GetUserAudit(Guid targetUserId, DateTime? from, DateTime? to, Guid userId, int orgId)
+        [HttpGet("user/{targetUserId:guid}")]
+        public async Task<ActionResult<IReadOnlyCollection<AuditDetailModel>>> GetUserAudit(Guid targetUserId, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromHeader] Guid userId, [FromHeader] int orgId)
         {
             var result = await _auditService.GetByUserAsync(targetUserId, from, to, userId, orgId);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessResult(result);
         }
-
-
-
     }
 }

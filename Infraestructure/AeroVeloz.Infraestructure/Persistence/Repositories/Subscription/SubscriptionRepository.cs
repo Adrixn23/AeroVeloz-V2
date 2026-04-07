@@ -79,7 +79,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(x => x.activeSubscription, false)
                     .SetProperty(x => x.endingDate, DateTime.UtcNow));
-            return rows >= 0;
+            return rows > 0;
         }
 
         public async Task<bool> AutoSubscribeAirlineAsync(short flightNumber, string codeAirlines, int organizationId)

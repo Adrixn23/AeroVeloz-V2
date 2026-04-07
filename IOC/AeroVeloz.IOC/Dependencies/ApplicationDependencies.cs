@@ -1,8 +1,10 @@
 using AeroVeloz.Application.Contracts.Airlines;
+using AeroVeloz.Application.Contracts.Audit;
 using AeroVeloz.Application.Contracts.Auth;
 using AeroVeloz.Application.Contracts.Flights;
 using AeroVeloz.Application.Contracts.Subscriptions;
 using AeroVeloz.Application.Services.Airlines;
+using AeroVeloz.Application.Handlers.Audit;
 using AeroVeloz.Application.Services.Auth;
 using AeroVeloz.Application.Services.Flights;
 using AeroVeloz.Application.Services.Subscriptions;
@@ -18,6 +20,7 @@ namespace AeroVeloz.IOC.Dependencies
             services.AddScoped<IFlightServicie, FlightService>();
             services.AddScoped<IAirlineService, AirlineService>();
             services.AddScoped<ISubscriptionServicie, SubscriptionService>();
+            services.AddScoped<IAuditServicie, AuditService>();
 
             //services.AddMediatR(cfg =>
             //    cfg.RegisterServicesFromAssembly(typeof(FlightService).Assembly));

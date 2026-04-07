@@ -3,6 +3,7 @@ using AeroVeloz.Application.DTOs.Airlines;
 using AeroVeloz.Application.Repositories.Airlines;
 using AeroVeloz.Application.Repositories.Audit;
 using AeroVeloz.Application.Repositories.Auth;
+using AeroVeloz.Application.Repositories;
 using AeroVeloz.Application.Services.Result;
 using AeroVeloz.Domain.Entities.Airlines;
 using AeroVeloz.Domain.Entities.Audit;
@@ -21,19 +22,22 @@ namespace AeroVeloz.Application.Services.Airlines
         private readonly IAuditWriteRepository _auditRepo;
         private readonly IUserRepositoryAuthorization _auth;
         private readonly IMediator _mediator;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AirlineService(
             IAirlineRepository repo,
             IOrganizationMonitoringLogger monitoringLogger,
             IAuditWriteRepository auditRepo,
             IUserRepositoryAuthorization auth,
-            IMediator mediator)
+            IMediator mediator,
+            IUnitOfWork unitOfWork)
         {
             _repo = repo;
             _monitoringLogger = monitoringLogger;
             _auditRepo = auditRepo;
             _auth = auth;
             _mediator = mediator;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<OperationResult<bool>> CreateAirlineAsync(AirlineSaveDto dto, Guid userId, int orgId)
@@ -59,27 +63,40 @@ namespace AeroVeloz.Application.Services.Airlines
                     createAt = DateTime.UtcNow
                 };
 
-                var persisted = await _repo.CreateEntity(airline);
-                if (!persisted)
-                    return OperationResult<bool>.Fail("AIRLINE_PERSIST", "Error al guardar la aerolínea");
-
-                await _auditRepo.RegisterAuditAsync(new Audit
+                return await _unitOfWork.ExecuteInTransactionAsync(async () =>
                 {
-                    Id = Guid.NewGuid(),
-                    IdAuditType = 1, // Create
-                   nameEntity = "Airline",
-                    ocurrentAt = DateTime.UtcNow,
-                   idUser = userId,
-                    newValuesData = JsonSerializer.Serialize(airline)
+                    var persisted = await _repo.CreateEntity(airline);
+                    if (!persisted)
+                        throw new InvalidOperationException("AIRLINE_PERSIST");
+
+                    var auditSaved = await _auditRepo.RegisterAuditAsync(new Audit
+                    {
+                        Id = Guid.NewGuid(),
+                        IdAuditType = 1,
+                        nameEntity = "Airline",
+                        ocurrentAt = DateTime.UtcNow,
+                        idUser = userId,
+                        newValuesData = JsonSerializer.Serialize(airline)
+                    });
+
+                    if (!auditSaved)
+                        throw new InvalidOperationException("AIRLINE_AUDIT");
+
+                    var op = OperationResult<bool>.Ok(true, "Aerolínea creada exitosamente");
+
+                    foreach (var @event in op.DomainEvents)
+                        await _mediator.Publish(@event);
+
+                    return op;
                 });
-
-                var op = OperationResult<bool>.Ok(true, "Aerolínea creada exitosamente");
-                
-                // Publicar eventos si existieran
-                foreach (var @event in op.DomainEvents)
-                    await _mediator.Publish(@event);
-
-                return op;
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "AIRLINE_PERSIST")
+            {
+                return OperationResult<bool>.Fail("AIRLINE_PERSIST", "Error al guardar la aerolínea");
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "AIRLINE_AUDIT")
+            {
+                return OperationResult<bool>.Fail("AIRLINE_AUDIT", "La aerolínea no pudo ser auditada y la operación fue revertida");
             }
             catch (Exception ex)
             {
@@ -92,7 +109,7 @@ namespace AeroVeloz.Application.Services.Airlines
                     OrganizationId = orgId,
                     OccurredAt = DateTime.UtcNow
                 }, ex);
-                return OperationResult<bool>.Fail("AIRLINE_ERROR", $"Error interno: {ex.Message} | {ex.InnerException?.Message}");
+                return OperationResult<bool>.Fail("AIRLINE_ERROR", "Error interno al crear la aerolínea");
             }
         }
 
@@ -121,22 +138,35 @@ namespace AeroVeloz.Application.Services.Airlines
                     createAt = airline.createAt
                 };
 
-                var updated = await _repo.UpdateEntity(updatedAirline);
-                if (!updated)
-                    return OperationResult<bool>.Fail("AIRLINE_UPDATE", "No se pudo actualizar la aerolínea");
-
-                await _auditRepo.RegisterAuditAsync(new Audit
+                return await _unitOfWork.ExecuteInTransactionAsync(async () =>
                 {
-                   Id = Guid.NewGuid(),
-                    IdAuditType = 2, // Update
-                    nameEntity = "Airline",
-                   ocurrentAt = DateTime.UtcNow,
-                   idUser = userId,
-                  
-                    newValuesData = JsonSerializer.Serialize(updatedAirline)
-                });
+                    var updated = await _repo.UpdateEntity(updatedAirline);
+                    if (!updated)
+                        throw new InvalidOperationException("AIRLINE_UPDATE");
 
-                return OperationResult<bool>.Ok(true, "Aerolínea actualizada correctamente");
+                    var auditSaved = await _auditRepo.RegisterAuditAsync(new Audit
+                    {
+                        Id = Guid.NewGuid(),
+                        IdAuditType = 2,
+                        nameEntity = "Airline",
+                        ocurrentAt = DateTime.UtcNow,
+                        idUser = userId,
+                        newValuesData = JsonSerializer.Serialize(updatedAirline)
+                    });
+
+                    if (!auditSaved)
+                        throw new InvalidOperationException("AIRLINE_AUDIT");
+
+                    return OperationResult<bool>.Ok(true, "Aerolínea actualizada correctamente");
+                });
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "AIRLINE_UPDATE")
+            {
+                return OperationResult<bool>.Fail("AIRLINE_UPDATE", "No se pudo actualizar la aerolínea");
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "AIRLINE_AUDIT")
+            {
+                return OperationResult<bool>.Fail("AIRLINE_AUDIT", "No se pudo completar la auditoría y la operación fue revertida");
             }
             catch (Exception ex)
             {
@@ -165,22 +195,35 @@ namespace AeroVeloz.Application.Services.Airlines
                 if (airline == null)
                     return OperationResult<bool>.Fail("AIRLINE_NOT_FOUND", "Aerolínea no encontrada");
 
-                var deleted = await _repo.DeleteEntity(airline);
-                if (!deleted)
-                    return OperationResult<bool>.Fail("AIRLINE_DELETE", "No se pudo realizar el borrado lógico");
-
-                await _auditRepo.RegisterAuditAsync(new Audit
+                return await _unitOfWork.ExecuteInTransactionAsync(async () =>
                 {
-                    Id = Guid.NewGuid(),
-                    IdAuditType = 3, // Delete
-                    nameEntity = "Airline",
-                    ocurrentAt = DateTime.UtcNow,
-                    idUser = userId,
-                   
-                    newValuesData = "{\"isActived\": false}"
-                });
+                    var deleted = await _repo.DeleteEntity(airline);
+                    if (!deleted)
+                        throw new InvalidOperationException("AIRLINE_DELETE");
 
-                return OperationResult<bool>.Ok(true, "Aerolínea desactivada correctamente");
+                    var auditSaved = await _auditRepo.RegisterAuditAsync(new Audit
+                    {
+                        Id = Guid.NewGuid(),
+                        IdAuditType = 3,
+                        nameEntity = "Airline",
+                        ocurrentAt = DateTime.UtcNow,
+                        idUser = userId,
+                        newValuesData = "{\"isActived\": false}"
+                    });
+
+                    if (!auditSaved)
+                        throw new InvalidOperationException("AIRLINE_AUDIT");
+
+                    return OperationResult<bool>.Ok(true, "Aerolínea desactivada correctamente");
+                });
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "AIRLINE_DELETE")
+            {
+                return OperationResult<bool>.Fail("AIRLINE_DELETE", "No se pudo realizar el borrado lógico");
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "AIRLINE_AUDIT")
+            {
+                return OperationResult<bool>.Fail("AIRLINE_AUDIT", "No se pudo completar la auditoría y la operación fue revertida");
             }
             catch (Exception ex)
             {
@@ -193,7 +236,7 @@ namespace AeroVeloz.Application.Services.Airlines
                     OrganizationId = orgId,
                     OccurredAt = DateTime.UtcNow
                 }, ex);
-                return OperationResult<bool>.Fail("AIRLINE_ERROR", $"Error interno: {ex.Message} | {ex.InnerException?.Message}");
+                return OperationResult<bool>.Fail("AIRLINE_ERROR", "Error interno al desactivar la aerolínea");
             }
         }
 

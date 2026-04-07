@@ -1,12 +1,13 @@
 using AeroVeloz.Application.Contracts.Flights;
 using AeroVeloz.Application.DTOs.Flights;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AeroVeloz.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FlightsController : ControllerBase
+    [Route("api/flights")]
+    [Authorize]
+    public class FlightsController : ApiBaseController
     {
         private readonly IFlightServicie _flightService;
 
@@ -15,58 +16,49 @@ namespace AeroVeloz.Api.Controllers
             _flightService = flightService;
         }
 
-        // oobtener vuelos publics activos tipo un dashboard
-        [HttpGet("GetPublicActiveFlightsAsync")]
-        public async Task<IActionResult> GetPublic()
+        [HttpGet("public")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IReadOnlyCollection<FlightReadDto>>> GetPublic()
         {
             var result = await _flightService.GetPublicActiveFlightsAsync();
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessResult(result);
         }
 
-        //Obtener vuelos de una aerolineaa
-        [HttpGet("GetFlightsByAirlineAsync/{codeAirlines}")]
-        public async Task<IActionResult> GetByAirline(string codeAirlines, [FromQuery] int orgId)
+        [HttpGet("airline/{codeAirlines}")]
+        public async Task<ActionResult<IReadOnlyCollection<FlightReadDto>>> GetByAirline(string codeAirlines, [FromQuery] int orgId)
         {
             var result = await _flightService.GetFlightsByAirlineAsync(codeAirlines, orgId);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessResult(result);
         }
 
-        // Obtener vuelos de un aeropuerto 
-        [HttpGet("GetPublicFlightsByAirportAsync/{airportCode}")]
-        public async Task<IActionResult> GetByAirport(string airportCode)
+        [HttpGet("airport/{airportCode}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IReadOnlyCollection<FlightReadDto>>> GetByAirport(string airportCode)
         {
             var result = await _flightService.GetPublicFlightsByAirportAsync(airportCode);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessResult(result);
         }
 
-        // obtener Detalles de un vuelo específico
-        [HttpGet("GetFlightDetailAsync/{flightNumber}/{codeAirlines}")]
-        public async Task<IActionResult> GetDetail(short flightNumber, string codeAirlines)
+        [HttpGet("{flightNumber}/{codeAirlines}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<FlightReadDto>> GetDetail(short flightNumber, string codeAirlines)
         {
             var result = await _flightService.GetFlightDetailAsync(flightNumber, codeAirlines);
-            if (result.Success) return Ok(result);
-            return NotFound(result); 
+            return ProcessResult(result);
         }
 
-        // Actualizar estado del vuelo usando el fromquery y el from body
-        [HttpPut("UpdateStateAsync")]
-        public async Task<IActionResult> UpdateState([FromBody] FlightUpdateStateDto dto, [FromQuery] Guid userId, [FromQuery] int orgId)
+        [HttpPut("state")]
+        public async Task<ActionResult> UpdateState([FromBody] FlightUpdateStateDto dto, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _flightService.UpdateStateAsync(dto, userId, orgId);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessNoContentResult(result);
         }
 
-        // Carga masiva por lotess
-        [HttpPost("UploadBatchAsync")]
-        public async Task<IActionResult> UploadBatch([FromBody] IEnumerable<FlightBatchItemDto> batch, [FromQuery] Guid userId, [FromQuery] int orgId)
+        [HttpPost("batch")]
+        public async Task<ActionResult<FlightBatchResultDto>> UploadBatch([FromBody] IEnumerable<FlightBatchItemDto> batch, [FromQuery] Guid userId, [FromQuery] int orgId)
         {
             var result = await _flightService.UploadBatchAsync(batch, userId, orgId);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
+            return ProcessResult(result);
         }
     }
 }
