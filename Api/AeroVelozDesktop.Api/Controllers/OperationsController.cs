@@ -66,6 +66,7 @@ namespace AeroVelozDesktop.Api.Controllers
         public async Task<IActionResult> Desactive([FromBody] OperationalChangeRemoveDto dto)
         {
             var userId = this.GetUserId();
+            var orgId = this.GetOrganizationId();
             var result = await _operationalService.DesactiveOperational(dto, userId, orgId);
             if (result.Success) return Ok(result);
             return BadRequest(result);

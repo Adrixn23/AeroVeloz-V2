@@ -6,6 +6,9 @@
     <Project Path="Core/AeroVeloz.Application/AeroVeloz.Application.csproj" />
     <Project Path="Core/AeroVeloz.Domain/AeroVeloz.Domain.csproj" />
   </Folder>
+  <Folder Name="/dosc/">
+    <File Path="lineamientos-desarrollo-capa-presentacion.md" />
+  </Folder>
   <Folder Name="/Infraestructure/">
     <Project Path="Infraestructure/AeroVeloz.Infraestructure/AeroVeloz.Infraestructure.csproj" />
   </Folder>
