@@ -1,14 +1,19 @@
 using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs;
 using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using AeroVeloz.Desktop.Views.SuperAdmin;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace AeroVeloz.Desktop.ViewModels;
 
-public partial class LoginViewModel : ObservableObject
+public partial class LoginViewModel : BaseViewModel
 {
     private readonly IAuthService _authService;
+    private readonly ISessionService _sessionService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
@@ -23,20 +28,18 @@ public partial class LoginViewModel : ObservableObject
     private string _password = string.Empty;
 
     [ObservableProperty]
-    private bool _isLoading;
-
-    [ObservableProperty]
     private string _errorMessage = string.Empty;
 
-    public LoginViewModel(IAuthService authService)
+    public LoginViewModel(IAuthService authService, ISessionService sessionService)
     {
         _authService = authService;
+        _sessionService = sessionService;
     }
 
     [RelayCommand(CanExecute = nameof(CanLogin))]
     private async Task LoginAsync()
     {
-        IsLoading = true;
+        IsBusy = true;
         ErrorMessage = string.Empty;
 
         LoginCommand.NotifyCanExecuteChanged();
@@ -52,8 +55,16 @@ public partial class LoginViewModel : ObservableObject
 
         if (response.Success)
         {
-            ErrorMessage = "¡Login exitoso! Token recibido.";
+            _sessionService.SetSession(response.UserId, response.OrganizationId, response.Token ?? string.Empty);
 
+            ErrorMessage = "¡Login exitoso! Redirigiendo...";
+
+            var mainView = App.AppHost?.Services.GetRequiredService<SuperAdminMainView>();
+            if (mainView != null)
+            {
+                mainView.Show();
+                System.Windows.Application.Current.MainWindow?.Close();
+            }
         }
         else
         {
@@ -61,7 +72,7 @@ public partial class LoginViewModel : ObservableObject
             Password = string.Empty;
         }
 
-        IsLoading = false;
+        IsBusy = false;
         LoginCommand.NotifyCanExecuteChanged();
     }
 
@@ -71,6 +82,6 @@ public partial class LoginViewModel : ObservableObject
             && System.Text.RegularExpressions.Regex.IsMatch(EmailOrganization, @"^[^@\s]+@[^@\s]+\.[^@\s]+$")
             && !string.IsNullOrWhiteSpace(NameUser)
             && !string.IsNullOrWhiteSpace(Password)
-            && !IsLoading; 
+            && !IsBusy; 
     }
 }

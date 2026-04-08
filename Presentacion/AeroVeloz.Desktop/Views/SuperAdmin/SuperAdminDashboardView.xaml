@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="AeroVeloz.Desktop.Views.SuperAdmin.SuperAdminDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels.SuperAdmin"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="14"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="Transparent"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             Loaded="UserControl_Loaded">
+
+    <Grid Margin="16" x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/> <!-- Quick Actions -->
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="Vista General" FontSize="26" FontWeight="SemiBold" Foreground="#333333"/>
+            <TextBlock Text="Métricas operativas del ecosistema." FontSize="14" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- Loading Indicator -->
+        <ProgressBar Grid.Row="1" Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                     Value="0" IsIndeterminate="True" 
+                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                     HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,64,0,0" Height="50" Width="50"/>
+
+        <!-- Stats Content -->
+        <Grid Grid.Row="1" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="32"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="130"/>
+            </Grid.RowDefinitions>
+
+            <!-- Card 1: Total Airports -->
+            <materialDesign:Card Grid.Row="0" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#1E88E5" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon Kind="Airport" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="Aeropuertos" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding GlobalStats.TotalAirports, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Card 2: Total Admins -->
+            <materialDesign:Card Grid.Row="0" Grid.Column="2" Padding="24,16" UniformCornerRadius="8" Background="#00897B" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon Kind="AccountTie" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="Administradores" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding GlobalStats.TotalAdmins, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+            
+            <!-- Card 3: Total Operators -->
+            <materialDesign:Card Grid.Row="2" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#F4511E" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon Kind="AccountHardHat" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="Operadores" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding GlobalStats.TotalOperators, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Card 4: Total Active Flights -->
+            <materialDesign:Card Grid.Row="2" Grid.Column="2" Padding="24,16" UniformCornerRadius="8" Background="#43A047" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon Kind="AirplaneTakeoff" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="Vuelos Activos" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding GlobalStats.TotalActiveFlights, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Quick Actions Pane -->
+        <Border Grid.Row="2" Margin="0,48,0,0" Padding="24" Background="White" CornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1">
+            <StackPanel>
+                <TextBlock Text="Acciones Rápidas del Sistema" FontSize="18" FontWeight="SemiBold" Foreground="#333333" Margin="0,0,0,16"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Registrar Nuevo Aeropuerto" Margin="0,0,16,0" Padding="16,8" Height="Auto" ToolTip="Abrir modal para crear aeropuerto"/>
+                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Asignar Admin. de Terminal" Margin="0,0,16,0" Padding="16,8" Height="Auto" ToolTip="Asignar usuario a un aeropuerto"/>
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Refrescar Indicadores" Command="{Binding LoadStatsCommand}" Margin="0,0,16,0" Padding="16,8" Height="Auto" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

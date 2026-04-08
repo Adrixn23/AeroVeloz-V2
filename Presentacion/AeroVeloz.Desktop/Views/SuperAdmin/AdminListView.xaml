@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="AeroVeloz.Desktop.Views.SuperAdmin.AdminListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels.SuperAdmin"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="14"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="Transparent"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             Loaded="UserControl_Loaded">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Asignación de Administradores" FontSize="26" FontWeight="SemiBold" Foreground="#333333"/>
+            <TextBlock Text="Delega el control de un aeropuerto a un usuario administrativo global." FontSize="14" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- Loading Indicator -->
+        <ProgressBar Grid.Row="1" Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                     Value="0" IsIndeterminate="True" 
+                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                     HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,0" Height="50" Width="50"/>
+
+        <!-- Allocation Form -->
+        <Grid Grid.Row="1" Margin="0,0,0,24" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <materialDesign:Card Padding="24" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="24" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Row 0: Helper Text -->
+                    <TextBlock Grid.ColumnSpan="4" Grid.Row="0" Text="Nueva Asignación de Terminal" FontWeight="Medium" Margin="0,0,0,16" Opacity="0.8"/>
+
+                    <!-- Row 1: Form Inputs -->
+                    <ComboBox Grid.Column="0" Grid.Row="1" 
+                              materialDesign:HintAssist.Hint="Buscar y seleccionar Administrador" 
+                              ItemsSource="{Binding AvailableAdmins}"
+                              SelectedItem="{Binding SelectedAdmin}"
+                              IsEditable="True" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="FullName" 
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                              ToolTip="Busca mediante nombre o correo a un usuario no asignado."/>
+
+                    <ComboBox Grid.Column="2" Grid.Row="1" 
+                              materialDesign:HintAssist.Hint="Seleccionar Aeropuerto Destino" 
+                              ItemsSource="{Binding Airports}"
+                              SelectedItem="{Binding SelectedAirport}"
+                              DisplayMemberPath="NameOrganization" 
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                              ToolTip="Indica a qué terminal pertenecerá este administrador."/>
+
+                    <Button Grid.Column="3" Grid.Row="1" Style="{StaticResource MaterialDesignRaisedButton}" 
+                            Command="{Binding AssignAdminCommand}" 
+                            Margin="24,0,0,0" Padding="24,8"
+                            ToolTip="Asigna como Administrador de este Aeropuerto">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountCheck" Width="20" Height="20" Margin="0,0,8,0"/>
+                            <TextBlock Text="Asignar Rol" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Current Available Admins View -->
+        <Grid Grid.Row="2" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="White" CornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Usuarios sin asignar que aplican al rol de Administrador:" 
+                               Margin="16" FontWeight="SemiBold" Foreground="Gray"/>
+                    
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding AvailableAdmins}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" materialDesign:DataGridAssist.CornerRadius="0,0,8,8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre Completo" Binding="{Binding FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Email Organizacional" Binding="{Binding Email}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>

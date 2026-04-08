@@ -5,16 +5,19 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs;
 using AeroVeloz.Desktop.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace AeroVeloz.Desktop.Services.Implementations;
 
 public class AuthService : IAuthService
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _endpoint;
 
-    public AuthService(IHttpClientFactory httpClientFactory)
+    public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
         _httpClientFactory = httpClientFactory;
+        _endpoint = configuration["ApiEndpoints:Login"] ?? "api/auth/login";
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
@@ -23,12 +26,25 @@ public class AuthService : IAuthService
         {
             var client = _httpClientFactory.CreateClient("AeroVelozApi");
 
-            var response = await client.PostAsJsonAsync("api/auth/login", request);
+            var response = await client.PostAsJsonAsync(_endpoint, request);
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
-                return result ?? new LoginResponseDto { Success = true }; 
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var result = await response.Content.ReadFromJsonAsync<OperationResult<UserLoginResultDto>>(options);
+
+                if (result?.Value != null)
+                {
+                    return new LoginResponseDto 
+                    { 
+                        Success = true,
+                        Token = result.Value.Token,
+                        UserId = result.Value.UserId,
+                        OrganizationId = result.Value.OrganizationId
+                    };
+                }
+
+                return new LoginResponseDto { Success = true }; 
             }
 
             var errorContent = await response.Content.ReadAsStringAsync();
