@@ -29,4 +29,9 @@
     <ProjectReference Include="..\..\Transversal\AeroVeloz.Transversal\AeroVeloz.Transversal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Stats\" />
+    <Folder Include="Repositories\Stats\" />
+  </ItemGroup>
+
 </Project>
