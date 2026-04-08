@@ -69,6 +69,7 @@
                     <DataGridTextColumn Header="Aeropuerto" Binding="{Binding NameOrganization}" Width="*"/>
                     <DataGridTextColumn Header="Ubicación" Binding="{Binding City, StringFormat='{}{0}, País'}" />
                     <DataGridTextColumn Header="API Key Maestro" Binding="{Binding ApiKeyMaster}" Width="*" />
+                    <DataGridCheckBoxColumn Header="Activo" Binding="{Binding IsActived, Mode=OneWay}" />
 
                     <DataGridTemplateColumn Header="Acciones">
                         <DataGridTemplateColumn.CellTemplate>

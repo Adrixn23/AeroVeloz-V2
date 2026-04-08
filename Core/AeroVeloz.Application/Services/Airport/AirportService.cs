@@ -196,7 +196,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     nameOrganization = dto.nameOrganization,
                     typeOrganization = "AIRPORT",
                     emailOrganization = dto.emailOrganization,
-                    isActived = true,
+                    isActived = dto.isActived,
                     createAt = DateTime.UtcNow
                 };
 
@@ -376,7 +376,7 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var result = OperationResult<bool>.Ok(true, "API Key generada exitosamente");
                 result.AddEvent(new AirportApiKeyGeneratedDomainEvent(
-                    codeAirport, airportData?.codeAirportIata, airportData?.nameAirport, userId, DateTime.UtcNow));
+                    codeAirport, airportData?.codeAirportIata, airportData?.nameOrganization, userId, DateTime.UtcNow));
 
                 foreach (var evt in result.DomainEvents)
                     await _mediator.Publish(evt);

@@ -131,12 +131,16 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                   on a.Id equals o.Id
                  where a.codeAirportIcao == codeAirport
                  select new AirportModel(
+                      a.Id,
                       a.codeAirportIcao,
                       a.codeAirportIata,
                       o.nameOrganization,
                       a.timeOffset,
                       a.city,
-                      a.country
+                      a.country,
+                      o.emailOrganization,
+                      o.isActived,
+                      a.apiKeyMaster
                      )).FirstOrDefaultAsync();
 
             if (airport != null)
@@ -156,12 +160,16 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                     join or in  _context.Organizations.AsNoTracking()
                         on air.Id equals or.Id
                     select new AirportModel(
+                          air.Id,
                           air.codeAirportIcao,
                           air.codeAirportIata,
                           or.nameOrganization,
                           air.timeOffset,
                           air.city,
-                          air.country
+                          air.country,
+                          or.emailOrganization,
+                          or.isActived,
+                          air.apiKeyMaster
                         )
                 ).ToListAsync();
             if(!airports.Any()) return Array.Empty<AirportModel>();

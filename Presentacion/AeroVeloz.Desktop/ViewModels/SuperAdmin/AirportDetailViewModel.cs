@@ -55,6 +55,10 @@ public partial class AirportDetailViewModel : BaseViewModel
     [ObservableProperty]
     private IReadOnlyList<TimeZoneModel> _availableTimeZones = TimeZoneModel.GetValidTimeZones();
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    private bool _isActived;
+
     public AirportDetailViewModel(
         IAirportService airportService, 
         IDialogService dialogService)
@@ -75,6 +79,7 @@ public partial class AirportDetailViewModel : BaseViewModel
         CodeAirportIata = string.Empty;
         Country = string.Empty;
         City = string.Empty;
+        IsActived = true;
         SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "+00:00");
     }
 
@@ -89,6 +94,7 @@ public partial class AirportDetailViewModel : BaseViewModel
         CodeAirportIata = airport.CodeAirportIata;
         Country = airport.Country;
         City = airport.City;
+        IsActived = airport.IsActived;
 
         var offset = airport.TimeOffset.Offset;
         SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.TimeSpan == offset) 
@@ -132,7 +138,7 @@ public partial class AirportDetailViewModel : BaseViewModel
                     City = City,
                     TimeOffset = timeOffset,
                     TypeOrganization = "Airport",
-                    IsActived = true, 
+                    IsActived = IsActived, 
                     CreateAt = DateTime.UtcNow
                 };
 

@@ -1,9 +1,7 @@
 using AeroVeloz.Application.Contracts.Airport;
 using AeroVeloz.Application.DTOs.Organization.Airports;
-using AeroVeloz.Domain.Entities.Users.User;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

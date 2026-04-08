@@ -95,7 +95,7 @@ public class AirportService : IAirportService
         try
         {
             var client = _httpClientFactory.CreateClient("AeroVelozApi");
-            var url = BuildQueryUrl($"{_endpoint}/{id}");
+            var url = BuildQueryUrl($"{_endpoint}");
 
             var updatePayload = new 
             {
@@ -106,7 +106,8 @@ public class AirportService : IAirportService
                 codeIATA = airportDto.CodeAirportIata,
                 country = airportDto.Country,
                 city = airportDto.City,
-                timeOffset = airportDto.TimeOffset
+                timeOffset = airportDto.TimeOffset,
+                isActived = airportDto.IsActived
             };
 
             var httpResponse = await client.PutAsJsonAsync(url, updatePayload);

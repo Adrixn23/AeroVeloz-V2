@@ -10,6 +10,7 @@ namespace AeroVeloz.Application.DTOs.Organization.Airports
         string? codeICAO,
         string? city,
         string? country,
-        DateTimeOffset timeOffset
+        DateTimeOffset timeOffset,
+        bool isActived
         ) : OrganizationBaseDto(nameOrganization,  emailOrganization);
 }

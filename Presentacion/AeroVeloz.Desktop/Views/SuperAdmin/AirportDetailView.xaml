@@ -43,6 +43,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="16" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="16" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Name -->
@@ -84,8 +86,27 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+
+            <!-- Active Toggle -->
+            <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7" Orientation="Horizontal" Margin="0,16,0,0">
+                <!-- Using a specific visibility trigger to show only when editing: -->
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <TextBlock Text="Estado activo:" VerticalAlignment="Center" Margin="0,0,16,0" Foreground="{DynamicResource MaterialDesignBody}"/>
+                <ToggleButton IsChecked="{Binding IsActived, Mode=TwoWay}" 
+                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                              ToolTip="Indica si la organización está activa"/>
+            </StackPanel>
         </Grid>
-        
+
         <!-- Loading -->
         <ProgressBar Grid.Row="1" Style="{StaticResource MaterialDesignCircularProgressBar}" 
                      Value="0" IsIndeterminate="True" 
