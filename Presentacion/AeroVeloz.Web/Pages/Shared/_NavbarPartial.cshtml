@@ -10,12 +10,42 @@
                 <ul class="navbar-nav flex-grow-1">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/Index">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Vuelos</a>
-                        </li>
+                        @if (User.IsInRole("AIRLINEADMIN") || User.IsInRole("SYSTEMADMIN"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/Index">Dashboard Aerolínea</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/BatchUpload">Carga Masiva</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("AIRPORTADMIN") || User.IsInRole("SYSTEMADMIN"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/AirportAdmin/Index">Monitor Vuelos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/AirportAdmin/Staff">Personal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/AirportAdmin/Airlines">Aerolíneas Locales</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("OPERATIONAIRPORT") || User.IsInRole("SYSTEMADMIN") || User.IsInRole("AIRLINEADMIN"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/Operator/Index">Mostrador (Boarding)</a>
+                            </li>
+                        }
+                        
+                        @if (User.IsInRole("SYSTEMADMIN"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/Audit">Auditoría Global</a>
+                            </li>
+                        }
                     }
                 </ul>
                 @if (User.Identity?.IsAuthenticated == true)

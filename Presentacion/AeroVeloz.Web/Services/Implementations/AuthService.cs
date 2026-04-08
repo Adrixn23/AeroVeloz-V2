@@ -25,14 +25,25 @@ namespace AeroVeloz.Web.Services.Implementations
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Deserializar la respuesta exitosa
+                    // Deserializar la respuesta exitosa (el objeto anonimo con user y token)
                     return await response.Content.ReadFromJsonAsync<LoginResponseDto>();
                 }
                 
-                // Si la API responde con 400 Bad Request o 401 Unauthorized
+                // Si falla, intentamos leer el mensaje de error del backend (OperationResult)
+                try 
+                {
+                    var errorResult = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                    if (errorResult != null && !string.IsNullOrEmpty(errorResult.Message))
+                    {
+                        throw new ApplicationException(errorResult.Message);
+                    }
+                }
+                catch { /* Ignorar error de parseo si no es un JSON válido */ }
+
                 _logger.LogWarning($"Login failed with status code {response.StatusCode}");
                 return null;
             }
+            catch (ApplicationException) { throw; } // Relanzar errores conocidos
             catch (Exception ex)
             {
                 // Manejo de Resiliencia: API caída o Timeouts

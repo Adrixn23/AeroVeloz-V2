@@ -1,0 +1,72 @@
+@page
+@model AeroVeloz.Web.Pages.Operator.UpdateStateModel
+@{
+    ViewData["Title"] = "Actualizar Estado - Boarding Web";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Actualizar Vuelo #@Model.Input.FlightNumber (@Model.Input.CodeAirlinesIcao)</h2>
+        <p class="text-muted">Proceso de Check-In y Abordaje en tiempo real.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a class="btn btn-outline-secondary" asp-page="/Operator/Index">Volver al Mostrador</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm border-0 border-top border-4 border-primary">
+            <div class="card-body p-4">
+                
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Ocurrió un error al actualizar:</strong><br />
+                        @Model.ErrorMessage
+                    </div>
+                }
+
+                <form method="post" id="updateStateForm">
+                    <input type="hidden" asp-for="Input.FlightNumber" />
+                    <input type="hidden" asp-for="Input.CodeAirlinesIcao" />
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Seleccione el Nuevo Estado</label>
+                        <select asp-for="Input.FlightStateId" class="form-select form-select-lg">
+                            <option value="2">2 - Boarding (Abordando)</option>
+                            <option value="3">3 - Delayed (Retrasado)</option>
+                            <option value="4">4 - In Flight (En Vuelo)</option>
+                            <option value="5">5 - Landed (Aterrizado)</option>
+                            <option value="6">6 - Completed (Completado)</option>
+                            <option value="7">7 - Cancelled (Cancelado)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.Reason" class="form-label fw-bold">Razón o Motivo del Cambio</label>
+                        <textarea asp-for="Input.Reason" class="form-control" rows="3" placeholder="Ej. Puerta lista para abordaje, Retraso por clima..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100" id="btnUpdate">
+                        <span id="spinnerUpdate" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <i class="bi bi-save"></i> Guardar Nuevo Estado
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Interacción UX (Heurística de Visibilidad del Sistema)
+        $('#updateStateForm').on('submit', function (e) {
+            // Verificar si el form es válido (nativo o jquery.validate)
+            if ($(this).valid ? $(this).valid() : this.checkValidity()) {
+                $('#spinnerUpdate').removeClass('d-none');
+                $('#btnUpdate').prop('disabled', true);
+            }
+        });
+    </script>
+}

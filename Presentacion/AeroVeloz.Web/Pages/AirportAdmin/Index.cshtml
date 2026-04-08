@@ -1,0 +1,52 @@
+@page
+@model AeroVeloz.Web.Pages.AirportAdmin.IndexModel
+@{
+    ViewData["Title"] = "Monitor de Vuelos - Aeropuerto";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2>Monitor de Vuelos en Vivo</h2>
+        <p class="text-muted mb-0">Aeropuerto: @Model.Organization</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 border-top border-4 border-info">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0 text-info">Llegadas y Salidas</h5>
+        <button class="btn btn-sm btn-outline-info" onclick="location.reload();">Actualizar Pantalla</button>
+    </div>
+    <div class="card-body p-0">
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-warning m-3">
+                <strong>Información:</strong> @Model.ErrorMessage
+            </div>
+        }
+
+        @if (Model.Flights != null && Model.Flights.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Vuelo</th>
+                            <th>Aerolínea</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Horario</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in Model.Flights)
+                        {
+                            <partial name="_FlightTableRowPartial" model="flight" />
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

@@ -49,8 +49,10 @@ namespace AeroVeloz.Application.Services.Auth
 
             var role = await _authzRepo.GetUserRolesAsync(userSystem.userId, org.Id);
 
-            if (role.nameRol != "AIRLINEADMIN")
-                return OperationResult<UserLoginResultDto>.Fail("LOGIN_ROLE", "Este aplicativo es exclusivo para administradores de aerolínea");
+            // Permite el acceso a administradores de aerolínea, de aeropuerto, operadores y súper administradores.
+            var allowedRoles = new[] { "AIRLINEADMIN", "SYSTEMADMIN", "AIRPORTADMIN", "OPERATIONAIRPORT" };
+            if (!allowedRoles.Contains(role.nameRol))
+                return OperationResult<UserLoginResultDto>.Fail("LOGIN_ROLE", "Rol no autorizado para acceder a este aplicativo.");
 
             var loginResult = new UserLoginResultDto(
                 userSystem.userId,

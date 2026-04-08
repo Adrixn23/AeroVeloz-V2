@@ -91,10 +91,13 @@ namespace AeroVeloz.Web.Pages.Auth
             if (User.IsInRole("AIRPORTADMIN"))
                 return RedirectToPage("/AirportAdmin/Index");
             
+            if (User.IsInRole("OPERATIONAIRPORT"))
+                return RedirectToPage("/Operator/Index");
+            
             if (User.IsInRole("AIRLINEADMIN"))
                 return RedirectToPage("/SuperAdmin/Index"); // O donde decidas enviarlo
                 
-            if (User.IsInRole("SUPERADMIN"))
+            if (User.IsInRole("SYSTEMADMIN"))
                 return RedirectToPage("/SuperAdmin/Index");
 
             return RedirectToPage("/Index");

@@ -12,7 +12,10 @@ namespace AeroVeloz.Web.Pages
                 if (User.IsInRole("AIRPORTADMIN"))
                     return RedirectToPage("/AirportAdmin/Index");
                 
-                if (User.IsInRole("AIRLINEADMIN") || User.IsInRole("SUPERADMIN"))
+                if (User.IsInRole("OPERATIONAIRPORT"))
+                    return RedirectToPage("/Operator/Index");
+                
+                if (User.IsInRole("AIRLINEADMIN") || User.IsInRole("SYSTEMADMIN"))
                     return RedirectToPage("/SuperAdmin/Index");
             }
             

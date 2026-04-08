@@ -42,7 +42,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
                 errors.Add(AuthorizationErrors.OrganizationNoActive);
                 return new ValidationResult().Failur(errors);
             }
-            if (org.typeOrganization != "AIRLINE")
+            if (org.typeOrganization != "AIRLINE" && org.typeOrganization != "ADMIN")
             {
                 errors.Add(AuthorizationErrors.InsufficientPermissions);
                 return new ValidationResult().Failur(errors);

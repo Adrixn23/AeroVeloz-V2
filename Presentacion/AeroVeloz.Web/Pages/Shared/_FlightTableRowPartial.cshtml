@@ -12,6 +12,8 @@
         </span>
     </td>
     <td>
-        <button class="btn btn-sm btn-outline-secondary">Ver Detalle</button>
+        <a class="btn btn-sm btn-outline-primary" asp-page="/Flights/Details" asp-route-flightNumber="@Model.FlightNumber" asp-route-airline="@Model.CodeAirlinesIcao">
+            <i class="bi bi-eye"></i> Ver Detalle
+        </a>
     </td>
 </tr>

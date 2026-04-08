@@ -1,0 +1,78 @@
+@page
+@model AeroVeloz.Web.Pages.Operator.IndexModel
+@{
+    ViewData["Title"] = "Mostrador - Boarding Web";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="text-primary"><i class="bi bi-airplane"></i> Mostrador de Operaciones</h2>
+        <p class="text-muted">Actualización rápida de estados de vuelo. Operador: @Model.UserName</p>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡Éxito!</strong> @Model.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @Model.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0">Seleccione un Vuelo para Actualizar</h5>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Flights != null && Model.Flights.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Vuelo</th>
+                            <th>Ruta</th>
+                            <th>Salida Programada</th>
+                            <th>Estado Actual</th>
+                            <th>Acciones Rápidas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in Model.Flights)
+                        {
+                            <tr>
+                                <td><strong>#@flight.FlightNumber</strong> (@flight.CodeAirlinesIcao)</td>
+                                <td>@flight.OriginAirport &rarr; @flight.DestinationAirport</td>
+                                <td>@flight.ScheduledDeparture.ToString("HH:mm")</td>
+                                <td>
+                                    <span class="badge @(flight.FlightStateId == 6 ? "bg-success" : flight.FlightStateId == 7 ? "bg-danger" : "bg-primary")">
+                                        @flight.FlightStateName
+                                    </span>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" asp-page="/Operator/UpdateState" asp-route-flightNumber="@flight.FlightNumber" asp-route-airline="@flight.CodeAirlinesIcao">
+                                        Actualizar Estado
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                <p>No hay vuelos disponibles para mostrar en su mostrador.</p>
+            </div>
+        }
+    </div>
+</div>

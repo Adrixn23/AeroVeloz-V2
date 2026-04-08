@@ -168,13 +168,13 @@ namespace AeroVeloz.Application.Services.Flights
                 if (flight == null)
                     return OperationResult<bool>.Fail("FLIGHT_NOT_FOUND", "Vuelo no encontrado");
 
-                            var sameState = _flightValidator.ValidateStateTransition(flight.flightStatesId, dto.FlightStateId);
-                if (!sameState.IsCompleted)
-                    return OperationResult<bool>.FromValidation(await sameState);
+                var transitionValidation = await _flightValidator.ValidateStateTransition(flight.flightStatesId, dto.FlightStateId);
+                if (!transitionValidation.IsValid)
+                    return OperationResult<bool>.FromValidation(transitionValidation);
 
-                var transition = await _flightDomain.IsValidStatusTransitionAsync(flight.flightStatesId, (FlightStateEnum)dto.FlightStateId);
-                if (!transition.IsValid)
-                    return OperationResult<bool>.FromValidation(transition);
+                var domainTransition = await _flightDomain.IsValidStatusTransitionAsync(flight.flightStatesId, (FlightStateEnum)dto.FlightStateId);
+                if (!domainTransition.IsValid)
+                    return OperationResult<bool>.FromValidation(domainTransition);
 
                 var updated = await _flightRepo.UpdateFlightStateAsync(dto.FlightNumber, dto.codeAirlinesIcao!, dto.FlightStateId);
                 if (!updated)

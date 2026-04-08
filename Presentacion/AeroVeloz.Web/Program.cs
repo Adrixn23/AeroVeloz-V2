@@ -17,6 +17,10 @@ builder.Services.AddHttpClient("AeroVelozApi", client =>
 // 3. Registro de Servicios del Frontend
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFlightApiService, FlightApiService>();
+builder.Services.AddScoped<IAirlineApiService, AirlineApiService>();
+builder.Services.AddScoped<IAuditApiService, AuditApiService>();
+builder.Services.AddScoped<ISubscriptionApiService, SubscriptionApiService>();
+builder.Services.AddScoped<IUserApiService, UserApiService>();
 
 // 4. Configuración de Cookies para manejar la sesión del usuario (guardar JWT)
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
