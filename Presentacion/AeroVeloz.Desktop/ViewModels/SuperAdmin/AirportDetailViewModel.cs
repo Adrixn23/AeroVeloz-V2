@@ -1,12 +1,11 @@
-using System;
-using System.Threading.Tasks;
-using AeroVeloz.Desktop.Models.DTOs;
+using AeroVeloz.Desktop.Models.DTOs.Airport;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces;
 using AeroVeloz.Desktop.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using TimeZoneModel = AeroVeloz.Desktop.Models.AirportTimeZone;
 
 namespace AeroVeloz.Desktop.ViewModels.SuperAdmin;
 
@@ -51,8 +50,10 @@ public partial class AirportDetailViewModel : BaseViewModel
     private string _city = string.Empty;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
-    private string _timeOffsetInput = "+00:00"; // Simplification for UI binding
+    private TimeZoneModel? _selectedTimeZone;
+
+    [ObservableProperty]
+    private IReadOnlyList<TimeZoneModel> _availableTimeZones = TimeZoneModel.GetValidTimeZones();
 
     public AirportDetailViewModel(
         IAirportService airportService, 
@@ -60,6 +61,7 @@ public partial class AirportDetailViewModel : BaseViewModel
     {
         _airportService = airportService;
         _dialogService = dialogService;
+        SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "+00:00");
     }
 
     public void InitializeForCreate()
@@ -73,7 +75,7 @@ public partial class AirportDetailViewModel : BaseViewModel
         CodeAirportIata = string.Empty;
         Country = string.Empty;
         City = string.Empty;
-        TimeOffsetInput = "+00:00";
+        SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "+00:00");
     }
 
     public void InitializeForEdit(AirportDto airport)
@@ -87,17 +89,30 @@ public partial class AirportDetailViewModel : BaseViewModel
         CodeAirportIata = airport.CodeAirportIata;
         Country = airport.Country;
         City = airport.City;
-        TimeOffsetInput = airport.TimeOffset.ToString("hh\\:mm");
+
+        var offset = airport.TimeOffset.Offset;
+        SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.TimeSpan == offset) 
+            ?? AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "+00:00");
+    }
+
+    private string FormatTimeOffset(TimeSpan offset)
+    {
+        var sign = offset < TimeSpan.Zero ? "-" : "+";
+        var absoluteOffset = offset < TimeSpan.Zero ? -offset : offset;
+        return $"{sign}{absoluteOffset:hh\\:mm}";
     }
 
     [RelayCommand(CanExecute = nameof(CanSave))]
     private async Task SaveAsync()
     {
-        if (!TimeSpan.TryParse(TimeOffsetInput.Replace("+", "").Replace("-", ""), out var offset))
+        if (SelectedTimeZone == null)
         {
-            await _dialogService.ShowWarningAsync("Formato de diferencia horaria incorrecto.");
+            await _dialogService.ShowWarningAsync("Por favor selecciona una zona horaria válida.");
             return;
         }
+
+       
+        var timeOffset = DateTimeOffset.UtcNow.ToOffset(SelectedTimeZone.TimeSpan);
 
         IsBusy = true;
         bool success = false;
@@ -115,7 +130,7 @@ public partial class AirportDetailViewModel : BaseViewModel
                     CodeAirportIata = CodeAirportIata,
                     Country = Country,
                     City = City,
-                    TimeOffset = new DateTimeOffset(DateTime.UtcNow.Date, TimeOffsetInput.StartsWith("-") ? -offset : offset),
+                    TimeOffset = timeOffset,
                     TypeOrganization = "Airport",
                     IsActived = true, 
                     CreateAt = DateTime.UtcNow
@@ -133,7 +148,7 @@ public partial class AirportDetailViewModel : BaseViewModel
                     CodeAirportIata = CodeAirportIata,
                     Country = Country,
                     City = City,
-                    TimeOffset = new DateTimeOffset(DateTime.UtcNow.Date, TimeOffsetInput.StartsWith("-") ? -offset : offset)
+                    TimeOffset = timeOffset
                 };
 
                 var createdItem = await _airportService.CreateAsync(dto);
@@ -149,7 +164,6 @@ public partial class AirportDetailViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-             // Excepciones HTTP serán manejadas globalmente
             await _dialogService.ShowErrorAsync($"Error no controlado al guardar: {ex.Message}");
         }
         finally
@@ -166,7 +180,6 @@ public partial class AirportDetailViewModel : BaseViewModel
 
     private bool CanSave()
     {
-        // Simple validations aligned with Heuristica 5
         return !string.IsNullOrWhiteSpace(NameOrganization) &&
                !string.IsNullOrWhiteSpace(Country) &&
                !string.IsNullOrWhiteSpace(City) &&

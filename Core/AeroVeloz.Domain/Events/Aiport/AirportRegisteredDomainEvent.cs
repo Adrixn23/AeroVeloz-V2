@@ -10,7 +10,7 @@ namespace AeroVeloz.Domain.Events.Aiport
         string? City,
         string? EmailOrganization,
         string? DefaultUserName,
-        string? DefaultPasswordHash,
+        string? DefaultPassword,
         DateTime CreatedAt
     ) : INotification;
 }

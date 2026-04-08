@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AeroVeloz.Desktop.Models.DTOs;
+using AeroVeloz.Desktop.Models.DTOs.AdminControl;
+using AeroVeloz.Desktop.Models.DTOs.Auth;
 
 namespace AeroVeloz.Desktop.Services.Interfaces;
 

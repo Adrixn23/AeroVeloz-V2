@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using AeroVeloz.Desktop.Models.DTOs;
+using AeroVeloz.Desktop.Models.DTOs.StatusSystem;
 using AeroVeloz.Desktop.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 

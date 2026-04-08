@@ -1,7 +1,8 @@
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using AeroVeloz.Desktop.Models.DTOs;
+
+using AeroVeloz.Desktop.Models.DTOs.AdminControl;
+using AeroVeloz.Desktop.Models.DTOs.Airport;
+using AeroVeloz.Desktop.Models.DTOs.Auth;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces;
 using AeroVeloz.Desktop.ViewModels.Base;
@@ -112,7 +113,7 @@ public partial class AdminListViewModel : BaseViewModel
             await _dialogService.ShowInfoAsync($"Se asignó correctamente a {SelectedAdmin.FullName} al aeropuerto de {SelectedAirport.NameOrganization}.", "Asignación Exitosa");
             SelectedAdmin = null;
             SelectedAirport = null;
-            await LoadDataAsync(); // Refresh lists
+            await LoadDataAsync();
         }
     }
 

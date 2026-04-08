@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using AeroVeloz.Infraestructure.Persistence.context;
 using AeroVeloz.IOC.Dependencies;
+using AeroVeloz.Infraestructure.Integrations.Notifications.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -48,8 +49,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-
 var app = builder.Build();
+
+
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+logger.LogInformation("========================================");
+logger.LogInformation("🚀 Iniciando AeroVeloz API");
+logger.LogInformation("========================================");
+
+SmtpConfigurationValidator.ValidateConfiguration(app.Configuration, logger);
+OneSignalConfigurationValidator.ValidateConfiguration(app.Configuration, logger);
+
+logger.LogInformation("========================================");
 
 if (app.Environment.IsDevelopment())
 {
@@ -58,7 +70,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();

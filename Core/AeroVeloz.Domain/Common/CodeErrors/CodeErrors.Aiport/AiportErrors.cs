@@ -36,6 +36,8 @@ namespace AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport
         public static ErrosValidationResults AirportCityInvalid =>
             ErrosValidationResults.Create("AIRPORT_08", "La ciudad del aeropuerto es inválida o está vacía.");
 
+        public static ErrosValidationResults AirportTimeOffsetInvalid =>
+            ErrosValidationResults.Create("AIRPORT_09", "La zona horaria (TimeOffset) debe estar entre -12:00 y +14:00.");
 
     }
 }

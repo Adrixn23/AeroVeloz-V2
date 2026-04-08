@@ -61,6 +61,11 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             if (string.IsNullOrWhiteSpace(airport.city))
                 errors.Add(AirportErrors.AirportCityInvalid);
 
+            // Validate TimeOffset is within valid range (-12:00 to +14:00)
+            var offset = airport.timeOffset.Offset;
+            if (offset < TimeSpan.FromHours(-12) || offset > TimeSpan.FromHours(14))
+                errors.Add(AirportErrors.AirportTimeOffsetInvalid);
+
             // Si ya existen errores de formato o datos faltantes, retornar de inmediato
             if (errors.Any())
                 return new ValidationResult().Failur(errors);

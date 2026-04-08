@@ -68,7 +68,7 @@ public partial class LoginViewModel : BaseViewModel
         }
         else
         {
-            ErrorMessage = response.ErrorMessage;
+            ErrorMessage = response.ErrorMessage!;
             Password = string.Empty;
         }
 

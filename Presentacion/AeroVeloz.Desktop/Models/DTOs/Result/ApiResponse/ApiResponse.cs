@@ -1,6 +1,6 @@
-namespace AeroVeloz.Desktop.Models.DTOs;
+namespace AeroVeloz.Desktop.Models.DTOs.Result.ApiResponse;
 
-public class OperationResult<T>
+public class ApiResponse<T>
 {
     public T? Value { get; set; }
     public bool Success { get; set; }

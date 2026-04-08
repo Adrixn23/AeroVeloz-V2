@@ -4,6 +4,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs;
+using AeroVeloz.Desktop.Models.DTOs.Auth;
+using AeroVeloz.Desktop.Models.DTOs.Result;
+using AeroVeloz.Desktop.Models.DTOs.Result.ApiResponse;
 using AeroVeloz.Desktop.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 

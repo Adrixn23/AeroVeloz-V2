@@ -1,17 +1,9 @@
-﻿using System;
-using System.Net.Http;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AeroVeloz.Desktop.Services.Implementations;
-using AeroVeloz.Desktop.Services.Interfaces;
-using AeroVeloz.Desktop.Services.Dialog;
-using AeroVeloz.Desktop.Services.Http;
-using AeroVeloz.Desktop.ViewModels;
-using AeroVeloz.Desktop.ViewModels.SuperAdmin;
-using AeroVeloz.Desktop.Views.SuperAdmin;
-using AeroVeloz.Desktop.Views;
 using Microsoft.Extensions.Configuration;
+using AeroVeloz.Desktop.Dependencies;
+using AeroVeloz.Desktop.Views;
 
 namespace AeroVeloz.Desktop
 {
@@ -31,63 +23,12 @@ namespace AeroVeloz.Desktop
                     })
                     .ConfigureServices((context, services) =>
                     {
-                        var baseUrl = context.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7126";
-                        services.AddTransient<HttpErrorInterceptorHandler>(provider => new HttpErrorInterceptorHandler(provider.GetRequiredService<IDialogService>()));
-
-                        services.AddHttpClient("AeroVelozApi", client =>
-                        {
-                            client.BaseAddress = new Uri(baseUrl);
-                        })
-                        .AddHttpMessageHandler<HttpErrorInterceptorHandler>();
-
-                        services.AddSingleton<IAuthService, AuthService>();
-                        services.AddSingleton<IDialogService, DialogService>();
-                        services.AddSingleton<ISessionService, SessionService>();
-                        services.AddTransient<IAirportService, AirportService>();
-                        services.AddTransient<ISuperAdminStatService, SuperAdminStatService>();
-                        services.AddTransient<IAdminManagerService, AdminManagerService>();
-
-                        services.AddTransient<LoginViewModel>();
-                        services.AddTransient<LoginView>();
-                        services.AddTransient<SuperAdminDashboardViewModel>();
-                        services.AddTransient<AdminListViewModel>();
-                        services.AddTransient<AirportListViewModel>();
-                        services.AddTransient<AirportDetailViewModel>();
-                        services.AddTransient<SuperAdminDashboardView>(provider => 
-                        {
-                            var view = new SuperAdminDashboardView();
-                            view.DataContext = provider.GetRequiredService<SuperAdminDashboardViewModel>();
-                            return view;
-                        });
-
-                        services.AddTransient<AdminListView>(provider => 
-                        {
-                            var view = new AdminListView();
-                            view.DataContext = provider.GetRequiredService<AdminListViewModel>();
-                            return view;
-                        });
-
-                        services.AddTransient<AirportListView>(provider => 
-                        {
-                            var view = new AirportListView();
-                            view.DataContext = provider.GetRequiredService<AirportListViewModel>();
-                            return view;
-                        });
-
-                        services.AddTransient<AirportDetailView>(provider => 
-                        {
-                            var view = new AirportDetailView();
-                            view.DataContext = provider.GetRequiredService<AirportDetailViewModel>();
-                            return view;
-                        });
-
-                        services.AddTransient<SuperAdminMainViewModel>();
-                        services.AddTransient<SuperAdminMainView>(provider => 
-                        {
-                            var view = new SuperAdminMainView();
-                            view.DataContext = provider.GetRequiredService<SuperAdminMainViewModel>();
-                            return view;
-                        });
+                       
+                        services.AddPresentationHttpServices(context.Configuration);
+                        services.AddPresentationCoreServices();
+                        services.AddPresentationApiServices(context.Configuration);
+                        services.AddPresentationViewModels();
+                        services.AddPresentationViews();
                     })
                     .Build();
             }

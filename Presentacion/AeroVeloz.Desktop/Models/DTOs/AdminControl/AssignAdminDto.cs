@@ -1,4 +1,4 @@
-namespace AeroVeloz.Desktop.Models.DTOs;
+namespace AeroVeloz.Desktop.Models.DTOs.AdminControl;
 
 public class AssignAdminDto
 {
