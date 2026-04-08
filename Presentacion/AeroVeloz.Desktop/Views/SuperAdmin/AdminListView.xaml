@@ -21,11 +21,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="Asignación de Administradores" FontSize="26" FontWeight="SemiBold" Foreground="#333333"/>
-            <TextBlock Text="Delega el control de un aeropuerto a un usuario administrativo global." FontSize="14" Foreground="Gray"/>
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="Administración de Usuarios" FontSize="26" FontWeight="SemiBold" Foreground="#333333"/>
+            <TextBlock Text="Gestiona usuarios del sistema: crear, editar, desactivar y consultar historial de cambios." FontSize="14" Foreground="Gray"/>
         </StackPanel>
 
         <!-- Loading Indicator -->
@@ -34,76 +36,142 @@
                      Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
                      HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,0" Height="50" Width="50"/>
 
-        <!-- Allocation Form -->
-        <Grid Grid.Row="1" Margin="0,0,0,24" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <materialDesign:Card Padding="24" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp2">
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Toolbar Card with Actions -->
+            <materialDesign:Card Grid.Row="0" Padding="24" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp2" Margin="0,0,0,24">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="24" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Row 0: Helper Text -->
-                    <TextBlock Grid.ColumnSpan="4" Grid.Row="0" Text="Nueva Asignación de Terminal" FontWeight="Medium" Margin="0,0,0,16" Opacity="0.8"/>
+                    <!-- Search Box -->
+                    <TextBox Grid.Column="0" 
+                             materialDesign:HintAssist.Hint="Buscar usuario por nombre o email..." 
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,16,0"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                    <!-- Row 1: Form Inputs -->
-                    <ComboBox Grid.Column="0" Grid.Row="1" 
-                              materialDesign:HintAssist.Hint="Buscar y seleccionar Administrador" 
-                              ItemsSource="{Binding AvailableAdmins}"
-                              SelectedItem="{Binding SelectedAdmin}"
-                              IsEditable="True" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                              DisplayMemberPath="FullName" 
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
-                              ToolTip="Busca mediante nombre o correo a un usuario no asignado."/>
-
-                    <ComboBox Grid.Column="2" Grid.Row="1" 
-                              materialDesign:HintAssist.Hint="Seleccionar Aeropuerto Destino" 
-                              ItemsSource="{Binding Airports}"
-                              SelectedItem="{Binding SelectedAirport}"
-                              DisplayMemberPath="NameOrganization" 
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
-                              ToolTip="Indica a qué terminal pertenecerá este administrador."/>
-
-                    <Button Grid.Column="3" Grid.Row="1" Style="{StaticResource MaterialDesignRaisedButton}" 
-                            Command="{Binding AssignAdminCommand}" 
-                            Margin="24,0,0,0" Padding="24,8"
-                            ToolTip="Asigna como Administrador de este Aeropuerto">
+                    <!-- Refresh Button -->
+                    <Button Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedButton}" 
+                            Command="{Binding LoadDataCommand}"
+                            Margin="0,0,8,0" Padding="16,8"
+                            ToolTip="Refrescar y recargar la tabla">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="AccountCheck" Width="20" Height="20" Margin="0,0,8,0"/>
-                            <TextBlock Text="Asignar Rol" FontWeight="SemiBold"/>
+                            <materialDesign:PackIcon Kind="Refresh" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Refrescar" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Create Button -->
+                    <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" 
+                            Command="{Binding CreateUserCommand}"
+                            Margin="0,0,0,0" Padding="16,8"
+                            ToolTip="Crear nuevo usuario">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="UserPlus" Width="20" Height="20" Margin="0,0,8,0"/>
+                            <TextBlock Text="Nuevo Usuario" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
                 </Grid>
             </materialDesign:Card>
-        </Grid>
 
-        <!-- Current Available Admins View -->
-        <Grid Grid.Row="2" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Border Background="White" CornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1">
+            <!-- Users List DataGrid -->
+            <materialDesign:Card Grid.Row="1" Padding="24" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="Usuarios sin asignar que aplican al rol de Administrador:" 
-                               Margin="16" FontWeight="SemiBold" Foreground="Gray"/>
-                    
-                    <DataGrid Grid.Row="1" ItemsSource="{Binding AvailableAdmins}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" materialDesign:DataGridAssist.CornerRadius="0,0,8,8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                    <TextBlock Grid.Row="0" Text="Usuarios del Sistema" 
+                               Margin="0,0,0,16" FontWeight="SemiBold" Foreground="#333333"/>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding SystemUsers}" 
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" 
+                              SelectionMode="Single" 
+                              SelectedItem="{Binding SelectedUser}"
+                              materialDesign:DataGridAssist.CornerRadius="0,0,8,8" 
+                              IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Nombre Completo" Binding="{Binding FullName}" Width="*"/>
-                            <DataGridTextColumn Header="Email Organizacional" Binding="{Binding Email}" Width="*"/>
+                            <DataGridTextColumn Header="Nombre de Usuario" Binding="{Binding FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Rol" Binding="{Binding Role}" Width="150"/>
+                            <DataGridCheckBoxColumn Header="Activo" Binding="{Binding IsActive, Mode=OneWay}" Width="80"/>
+                            <DataGridCheckBoxColumn Header="Bloqueado" Binding="{Binding IsBlocked, Mode=OneWay}" Width="100"/>
+
+                            <DataGridTemplateColumn Header="Acciones" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                    ToolTip="Editar" 
+                                                    Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding}" 
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                                <materialDesign:PackIcon Kind="Pencil" />
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                    ToolTip="Desactivar" 
+                                                    Command="{Binding DataContext.DeactivateUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding}" 
+                                                    Foreground="#D32F2F" 
+                                                    Margin="8,0,0,0">
+                                                <materialDesign:PackIcon Kind="UserRemove" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-            </Border>
-        </Grid>
+            </materialDesign:Card>
 
+            <!-- Audit Section (Expandible) -->
+            <Expander Grid.Row="2" Margin="0,24,0,0" Padding="0" 
+                      IsExpanded="{Binding IsAuditVisible, Mode=TwoWay}"
+                      Visibility="{Binding IsAuditVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal" Margin="16,12">
+                        <materialDesign:PackIcon Kind="History" Width="24" Height="24" Margin="0,0,12,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                        <TextBlock Text="Historial de Cambios" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding SelectedUserAudit.Count, StringFormat='({0})'}" Margin="8,0,0,0" Foreground="Gray" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Expander.Header>
+
+                <Border Background="White" CornerRadius="0,0,8,8" materialDesign:ElevationAssist.Elevation="Dp1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Registro de auditoría de este usuario" 
+                                   Margin="24,16" FontSize="13" Foreground="Gray" FontWeight="Medium"/>
+
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding SelectedUserAudit}" 
+                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                                  materialDesign:DataGridAssist.CornerRadius="0,0,8,8"
+                                  IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tipo de Acción" Binding="{Binding AuditTypeName}" Width="140"/>
+                                <DataGridTextColumn Header="Realizado por" Binding="{Binding NameUser}" Width="180"/>
+                                <DataGridTextColumn Header="Entidad" Binding="{Binding NameEntity}" Width="100"/>
+                                <DataGridTextColumn Header="Fecha y Hora" Binding="{Binding OccurredAt, StringFormat='dd/MM/yyyy HH:mm:ss'}" Width="160"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Expander>
+        </Grid>
     </Grid>
 </UserControl>
+

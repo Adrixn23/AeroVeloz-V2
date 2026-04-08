@@ -9,6 +9,7 @@ namespace AeroVeloz.Domain.Models.Users
          string? nameOrganization,
          string? OrganizationType,
          bool isActive,
+         bool isBlocked,
          string? nameRol,
          DateTime createAt
         );

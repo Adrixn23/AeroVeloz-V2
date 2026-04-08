@@ -12,6 +12,7 @@ public static class PresentationViewModels
         services.AddTransient<SuperAdminDashboardViewModel>();
         services.AddTransient<SuperAdminMainViewModel>();
         services.AddTransient<AdminListViewModel>();
+        services.AddTransient<AdminDetailViewModel>();
         services.AddTransient<AirportListViewModel>();
         services.AddTransient<AirportDetailViewModel>();
 

@@ -33,6 +33,13 @@ public static class PresentationViews
             return view;
         });
 
+        services.AddTransient<AdminDetailView>(provider =>
+        {
+            var view = new AdminDetailView();
+            view.DataContext = provider.GetRequiredService<AdminDetailViewModel>();
+            return view;
+        });
+
         services.AddTransient<AirportListView>(provider =>
         {
             var view = new AirportListView();

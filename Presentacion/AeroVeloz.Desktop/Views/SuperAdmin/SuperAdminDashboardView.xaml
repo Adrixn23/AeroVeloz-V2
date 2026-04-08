@@ -77,32 +77,17 @@
                 </Grid>
             </materialDesign:Card>
             
-            <!-- Card 3: Total Operators -->
+            <!-- Card 3: Total Airlines -->
             <materialDesign:Card Grid.Row="2" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#F4511E" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon Kind="AccountHardHat" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
+                    <materialDesign:PackIcon Kind="Airplane" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
-                        <TextBlock Text="Operadores" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
-                        <TextBlock Text="{Binding GlobalStats.TotalOperators, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </Grid>
-            </materialDesign:Card>
-
-            <!-- Card 4: Total Active Flights -->
-            <materialDesign:Card Grid.Row="2" Grid.Column="2" Padding="24,16" UniformCornerRadius="8" Background="#43A047" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
-                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon Kind="AirplaneTakeoff" Width="64" Height="64" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
-                        <TextBlock Text="Vuelos Activos" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
-                        <TextBlock Text="{Binding GlobalStats.TotalActiveFlights, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        <TextBlock Text="Aerolíneas" FontSize="16" Opacity="0.9" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding GlobalStats.TotalAirlines, FallbackValue='0'}" FontSize="42" FontWeight="Bold" HorizontalAlignment="Right"/>
                     </StackPanel>
                 </Grid>
             </materialDesign:Card>
@@ -113,8 +98,8 @@
             <StackPanel>
                 <TextBlock Text="Acciones Rápidas del Sistema" FontSize="18" FontWeight="SemiBold" Foreground="#333333" Margin="0,0,0,16"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Registrar Nuevo Aeropuerto" Margin="0,0,16,0" Padding="16,8" Height="Auto" ToolTip="Abrir modal para crear aeropuerto"/>
-                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Asignar Admin. de Terminal" Margin="0,0,16,0" Padding="16,8" Height="Auto" ToolTip="Asignar usuario a un aeropuerto"/>
+                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Registrar Nuevo Aeropuerto" Command="{Binding OpenCreateAirportDialogCommand}" Margin="0,0,16,0" Padding="16,8" Height="Auto" ToolTip="Abrir modal para crear aeropuerto"/>
+                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Asignar Admin. de Terminal" Command="{Binding OpenCreateAdminDialogCommand}" Margin="0,0,16,0" Padding="16,8" Height="Auto" ToolTip="Asignar usuario a un aeropuerto"/>
                     <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Refrescar Indicadores" Command="{Binding LoadStatsCommand}" Margin="0,0,16,0" Padding="16,8" Height="Auto" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                 </StackPanel>
             </StackPanel>

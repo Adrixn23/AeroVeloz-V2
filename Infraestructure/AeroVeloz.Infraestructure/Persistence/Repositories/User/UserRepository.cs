@@ -90,7 +90,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
                      join o in _context.Organizations.AsNoTracking()
                      on  u.idOrganization equals o.Id
                      where u.idOrganization == orgId
-                     select  new UserDetailModel(u.Id, u.nameUser, o.nameOrganization, o.typeOrganization, u.isActive, r.nameRol , u.createAt )
+                     select  new UserDetailModel(u.Id, u.nameUser, o.nameOrganization, o.typeOrganization, u.isActive, u.lockedUntil.HasValue && u.lockedUntil.Value > DateTime.UtcNow, r.nameRol , u.createAt )
 
                     ).ToListAsync();
                 if (users.Any())

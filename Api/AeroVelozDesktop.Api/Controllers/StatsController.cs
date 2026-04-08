@@ -1,5 +1,4 @@
 using AeroVeloz.Application.Contracts.Airport;
-using AeroVeloz.Application.Contracts.Operations;
 using AeroVeloz.Application.Contracts.Users;
 using AeroVeloz.Application.DTOs.StatusSystem;
 using AeroVelozDesktop.Api.Extensions;
@@ -13,18 +12,11 @@ namespace AeroVelozDesktop.Api.Controllers
     [Authorize]
     public class StatsController : ControllerBase
     {
-        private readonly IAirportService _airportService;
-        private readonly IUserService _userService;
-        private readonly IOperationalService _operationalService;
+        private readonly AeroVeloz.Application.Contracts.StatusSystem.IStatsService _statsService;
 
-        public StatsController(
-            IAirportService airportService,
-            IUserService userService,
-            IOperationalService operationalService)
+        public StatsController(AeroVeloz.Application.Contracts.StatusSystem.IStatsService statsService)
         {
-            _airportService = airportService;
-            _userService = userService;
-            _operationalService = operationalService;
+            _statsService = statsService;
         }
 
         [HttpGet("global")]
@@ -33,27 +25,12 @@ namespace AeroVelozDesktop.Api.Controllers
             var userId = this.GetUserId();
             var orgId = this.GetOrganizationId();
 
-            var airportsResult = await _airportService.GetAllAsync(userId, orgId);
-            int totalAirports = airportsResult.Success && airportsResult.Value != null ? airportsResult.Value.Count : 0;
-
-            var usersResult = await _userService.GetUsersByOrganizationAsync(userId, orgId);
-            var users = usersResult.Success && usersResult.Value != null ? usersResult.Value : new List<AeroVeloz.Domain.Models.Users.UserDetailModel>();
-            
-            int totalAdmins = users.Count(u => u.nameRol != null && (u.nameRol.Contains("Admin", StringComparison.OrdinalIgnoreCase) || u.nameRol.Contains("SuperAdmin", StringComparison.OrdinalIgnoreCase)));
-            int totalOperators = users.Count(u => u.nameRol != null && (u.nameRol.Contains("Operador", StringComparison.OrdinalIgnoreCase) || u.nameRol.Contains("Operator", StringComparison.OrdinalIgnoreCase)));
-
-            var flightsResult = await _operationalService.GetAirportChangesAsync(userId, orgId);
-            int totalActiveFlights = flightsResult.Success && flightsResult.Value != null ? flightsResult.Value.Count : 0;
-
-            var dto = new GlobalStatsDto
+            var result = await _statsService.GetGlobalStatsAsync(userId, orgId);
+            if (result.Success)
             {
-                TotalAirports = totalAirports,
-                TotalAdmins = totalAdmins,
-                TotalOperators = totalOperators,
-                TotalActiveFlights = totalActiveFlights
-            };
-
-            return Ok(dto);
+                return Ok(result.Value);
+            }
+            return BadRequest(result.Message);
         }
     }
 }

@@ -13,6 +13,7 @@ public static class PresentationApiServices
         services.AddTransient<IAirportService, AirportService>();
         services.AddTransient<ISuperAdminStatService, SuperAdminStatService>();
         services.AddTransient<IAdminManagerService, AdminManagerService>();
+        services.AddTransient<IAuditService, AuditService>();
 
         return services;
     }

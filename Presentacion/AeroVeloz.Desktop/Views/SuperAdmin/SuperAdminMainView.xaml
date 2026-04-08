@@ -31,6 +31,9 @@
         <DataTemplate DataType="{x:Type viewmodels:AirportDetailViewModel}">
             <views:AirportDetailView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AdminDetailViewModel}">
+            <views:AdminDetailView />
+        </DataTemplate>
     </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog" DialogTheme="Inherit">
@@ -74,17 +77,17 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" ToolTip="[Tarea 5] Ir a gesti�n de administradores">
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateToAdminsCommand}" ToolTip="Gestionar asignación de administradores a terminales">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="AccountTie" Width="24" Height="24" Margin="0,0,16,0" Foreground="Gray"/>
-                                <TextBlock Text="Administradores" VerticalAlignment="Center" FontSize="15" Foreground="Gray"/>
+                                <materialDesign:PackIcon Kind="AccountTie" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Administradores" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
 
                     <!-- Footer / Logout -->
                     <StackPanel Grid.Row="2" Margin="16" VerticalAlignment="Bottom">
-                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding LogoutCommand}" CommandParameter="{Binding ElementName=MainAdminWindow}" Background="#D32F2F" Foreground="White" BorderBrush="Transparent">
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LogoutCommand}" CommandParameter="{Binding ElementName=MainAdminWindow}" Background="#D32F2F" Foreground="White">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Logout" Margin="0,0,8,0"/>
                                 <TextBlock Text="Cerrar Sesi�n" />

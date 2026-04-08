@@ -99,7 +99,7 @@ namespace AeroVeloz.Application.Handlers.Users
                     newValuesData = newValues,
                   
 
-                }); // -testear estos elementos fallo en auditoria consultar el problema que presenta este punto
+                }); 
 
                 //
 
@@ -307,6 +307,6 @@ namespace AeroVeloz.Application.Handlers.Users
         }
 
 
-        //agregar metodo para obtener usuario en especifico
+      
     }
 }
