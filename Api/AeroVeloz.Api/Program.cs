@@ -152,4 +152,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<object>();
+var hashFabricado = hasher.HashPassword(null!, "Admin123!");
+Console.WriteLine("\n\n=======================================================");
+Console.WriteLine("COPIA ESTE TEXTO Y PEGALO EN TU SQL:");
+Console.WriteLine(hashFabricado);
+Console.WriteLine("=======================================================\n\n");
+
 app.Run();

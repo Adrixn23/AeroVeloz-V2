@@ -69,8 +69,10 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Auth
             if (user == null)
                 return new ValidationResult().Failur(AuthenticationErrors.UserNotFound);
 
+            // Verificación del hash con la contraseña que viene del request.
             var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
             var result = hasher.VerifyHashedPassword(null!, user.passwordHash!, password);
+            
             if (result == PasswordVerificationResult.Success)
                 return new ValidationResult().Success();
 

@@ -1,0 +1,17 @@
+@model AeroVeloz.Web.Models.Flights.FlightReadDto
+
+<tr>
+    <td><strong>#@Model.FlightNumber</strong></td>
+    <td>@Model.CodeAirlinesIcao</td>
+    <td>@Model.OriginAirport</td>
+    <td>@Model.DestinationAirport</td>
+    <td>@Model.ScheduledDeparture.ToString("dd/MM/yyyy HH:mm")</td>
+    <td>
+        <span class="badge @(Model.FlightStateId == 6 ? "bg-success" : Model.FlightStateId == 7 ? "bg-danger" : "bg-primary")">
+            @Model.FlightStateName
+        </span>
+    </td>
+    <td>
+        <button class="btn btn-sm btn-outline-secondary">Ver Detalle</button>
+    </td>
+</tr>

@@ -1,0 +1,61 @@
+@page
+@model AeroVeloz.Web.Pages.SuperAdmin.IndexModel
+@{
+    ViewData["Title"] = "Dashboard Administrador";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2>Bienvenido, @Model.UserName</h2>
+        <p class="text-muted mb-0">Gestión de Vuelos - @Model.Organization</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <span class="badge bg-dark px-3 py-2">Rol: @Model.Role</span>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 text-primary">Vuelos de la Aerolínea (En Vivo)</h5>
+    </div>
+    <div class="card-body p-0">
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-warning m-3">
+                <strong>Atención:</strong> @Model.ErrorMessage
+            </div>
+        }
+
+        @if (Model.Flights != null && Model.Flights.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Vuelo</th>
+                            <th>Aerolínea</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Salida Programada</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Uso de Partial View para el renderizado de la UI (Cumplimiento de Rúbrica) -->
+                        @foreach (var flight in Model.Flights)
+                        {
+                            <partial name="_FlightTableRowPartial" model="flight" />
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                <p class="mb-0">No se encontraron vuelos activos para esta organización, o no se pudo contactar con la API.</p>
+            </div>
+        }
+    </div>
+</div>

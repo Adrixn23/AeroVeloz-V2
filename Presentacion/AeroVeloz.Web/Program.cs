@@ -1,41 +1,40 @@
-using AeroVeloz.Infraestructure.Persistence.context;
-using AeroVeloz.Infraestructure.Integrations.OneSignal;
-using AeroVeloz.IOC.Dependencies;
-using Microsoft.EntityFrameworkCore;
+using AeroVeloz.Web.Services.Interfaces;
+using AeroVeloz.Web.Services.Implementations;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Agregar soporte para Razor Pages
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<AeroVelozContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AeroVelozDb"))
-           .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
+// 2. Configurar la URL Base de la API
+builder.Services.AddHttpClient("AeroVelozApi", client =>
+{
+    var baseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5006/";
+    client.BaseAddress = new Uri(baseUrl);
+});
 
-builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices();
-builder.Services.AddDomainServices();
-builder.Services.AddNotificationServices(builder.Configuration);
+// 3. Registro de Servicios del Frontend
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFlightApiService, FlightApiService>();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AeroVeloz.Application.Services.Flights.FlightService>());
-
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+// 4. Configuración de Cookies para manejar la sesión del usuario (guardar JWT)
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-        };
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.Cookie.Name = "AeroVeloz.AuthCookie";
+        options.Cookie.HttpOnly = true;
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
     });
+
+// Nota: Hemos eliminado las inyecciones de DbContext y capa Core (Domain/Application) 
+// porque la capa de Presentación Web SOLO debe consumir la API RESTful.
 
 var app = builder.Build();
 
+// Configuración del Pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -43,14 +42,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseRouting();
 
+// 5. Agregar Autenticación y Autorización al Pipeline
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
-app.MapControllers();
+app.MapRazorPages();
+
 app.Run();
