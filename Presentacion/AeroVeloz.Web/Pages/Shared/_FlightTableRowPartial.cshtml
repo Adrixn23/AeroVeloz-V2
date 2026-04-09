@@ -1,47 +1,40 @@
 @model AeroVeloz.Web.Models.Flights.FlightReadDto
 
-<tr class="hover-actions">
+<tr>
     <td>
         <div class="d-flex align-items-center">
-            <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3 text-primary">
-                <i class="bi bi-airplane"></i>
+            <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3 text-primary d-none d-md-block">
+                <i class="bi bi-airplane-fill"></i>
             </div>
             <div>
                 <div class="fw-bold text-dark">#@Model.FlightNumber</div>
-                <div class="text-muted" style="font-size: 0.75rem;">@Model.CodeAirlinesIcao</div>
+                <div class="text-muted small">@Model.CodeAirlinesIcao</div>
             </div>
         </div>
     </td>
-    <td>
-        <div class="d-flex align-items-center">
-            <span class="text-dark fw-medium">@Model.OriginAirport</span>
-            <i class="bi bi-arrow-right mx-2 text-muted"></i>
-            <span class="text-dark fw-medium">@Model.DestinationAirport</span>
-        </div>
-    </td>
-    <td>
-        <div class="text-dark small">@Model.ScheduledDeparture.ToString("dd MMM, HH:mm")</div>
-    </td>
+    <td><span class="fw-medium">@Model.CodeAirlinesIcao</span></td>
+    <td>@Model.OriginAirport</td>
+    <td>@Model.DestinationAirport</td>
+    <td>@Model.ScheduledDeparture.ToString("dd/MM/yyyy HH:mm")</td>
     <td>
         @{
-            var (badgeClass, dotClass) = Model.FlightStateId switch {
-                1 => ("bg-secondary bg-opacity-10 text-secondary", "bg-secondary"), // Scheduled
-                2 => ("bg-warning bg-opacity-10 text-warning", "bg-warning"),   // Boarding
-                3 => ("bg-danger bg-opacity-10 text-danger", "bg-danger"),     // Delayed
-                4 => ("bg-info bg-opacity-10 text-info", "bg-info"),           // In Flight
-                5 => ("bg-success bg-opacity-10 text-success", "bg-success"),   // Landed
-                6 => ("bg-primary bg-opacity-10 text-primary", "bg-primary"),   // Completed
-                _ => ("bg-light text-dark", "bg-dark")
+            var badgeClass = Model.FlightStateId switch {
+                1 => "bg-secondary", // Scheduled
+                2 => "bg-warning text-dark",   // Boarding
+                3 => "bg-danger",     // Delayed
+                4 => "bg-info text-dark",           // In Flight
+                5 => "bg-success",   // Landed
+                6 => "bg-primary",   // Completed
+                _ => "bg-light text-dark"
             };
         }
-        <span class="badge @badgeClass d-inline-flex align-items-center">
-            <span class="rounded-circle me-1 @dotClass" style="width: 6px; height: 6px;"></span>
+        <span class="badge @badgeClass">
             @Model.FlightStateName
         </span>
     </td>
-    <td class="text-end">
-        <a class="btn btn-sm btn-light border rounded-pill px-3 shadow-sm" asp-page="/Flights/Details" asp-route-flightNumber="@Model.FlightNumber" asp-route-airline="@Model.CodeAirlinesIcao">
-            <i class="bi bi-info-circle me-1"></i> Detalles
+    <td>
+        <a class="btn btn-sm btn-outline-primary" asp-page="/Flights/Details" asp-route-flightNumber="@Model.FlightNumber" asp-route-airline="@Model.CodeAirlinesIcao">
+            <i class="bi bi-eye"></i> Ver Detalle
         </a>
     </td>
 </tr>

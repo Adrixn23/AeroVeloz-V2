@@ -45,6 +45,19 @@ namespace AeroVeloz.Web.Services.Implementations
             catch { return false; }
         }
 
+        public async Task<bool> UpdateUserAsync(Guid userId, CreateStaffDto dto, string token)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient("AeroVelozApi");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                
+                var response = await client.PutAsJsonAsync($"api/users/{userId}", dto);
+                return response.IsSuccessStatusCode;
+            }
+            catch { return false; }
+        }
+
         public async Task<bool> DeleteUserAsync(Guid userId, string token)
         {
             try

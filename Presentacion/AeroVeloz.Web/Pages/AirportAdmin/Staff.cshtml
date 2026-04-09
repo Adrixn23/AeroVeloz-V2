@@ -56,7 +56,7 @@
                                 <td>@user.RoleId</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-primary" title="Editar">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="editStaff('@user.Id', '@user.UserName', '@user.RoleId')">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <form method="post" asp-page-handler="Delete" asp-route-userId="@user.Id" onsubmit="return confirm('¿Está seguro de eliminar este usuario?');" style="display:inline;">
@@ -90,18 +90,24 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form method="post">
+                <input type="hidden" asp-for="EditingUserId" />
                 <div class="modal-body">
                     <div class="mb-3">
                         <label asp-for="NewStaff.UserName" class="form-label">Nombre de Usuario</label>
                         <input asp-for="NewStaff.UserName" type="text" class="form-control" placeholder="Ej: OperadorPuerta1" required>
                     </div>
-                    <div class="mb-3">
+                    <div id="passwordField" class="mb-3">
                         <label asp-for="NewStaff.Password" class="form-label">Contraseña Temporal</label>
                         <input asp-for="NewStaff.Password" type="password" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Rol</label>
-                        <input type="text" class="form-control" value="OPERATIONAIRPORT" disabled>
+                        <label asp-for="NewStaff.RoleId" class="form-label">Rol del Usuario</label>
+                        <select asp-for="NewStaff.RoleId" class="form-select">
+                            <option value="4">OPERATIONAIRPORT (Operador)</option>
+                            <option value="3">AIRLINEADMIN (Admin Aerolínea)</option>
+                            <option value="2">AIRPORTADMIN (Admin Aeropuerto)</option>
+                        </select>
+                        <span class="text-muted small">Selecciona el nivel de acceso para este usuario.</span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -112,3 +118,32 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function editStaff(id, username, roleId) {
+            $('.modal-title').text('Editar Usuario: ' + username);
+            $('input[name="EditingUserId"]').val(id);
+            $('input[name="NewStaff.UserName"]').val(username);
+            $('select[name="NewStaff.RoleId"]').val(roleId);
+            
+            // Ocultar campo de contraseña en edición por simplicidad
+            $('#passwordField').hide();
+            $('input[name="NewStaff.Password"]').prop('required', false).val('********');
+
+            $('#newStaffModal').modal('show');
+        }
+
+        // Reset modal on close
+        $('#newStaffModal').on('hidden.bs.modal', function () {
+            $('.modal-title').text('Registrar Nuevo Operador');
+            $('input[name="EditingUserId"]').val('');
+            $('input[name="NewStaff.UserName"]').val('');
+            $('select[name="NewStaff.RoleId"]').val('4');
+            $('#passwordField').show();
+            $('input[name="NewStaff.Password"]').prop('required', true).val('');
+        });
+    </script>
+}

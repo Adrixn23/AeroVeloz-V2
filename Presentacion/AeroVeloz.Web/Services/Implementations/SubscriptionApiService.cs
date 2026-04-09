@@ -61,18 +61,26 @@ namespace AeroVeloz.Web.Services.Implementations
                 var client = _httpClientFactory.CreateClient("AeroVelozApi");
                 var body = new
                 {
-                    flightNumber = flightNumber,
-                    codeAirlinesIcao = airlineCode,
-                    contactValue = email,
-                    codeChannel = 1 // Email
+                    FlightNumber = flightNumber,
+                    CodeAirlines = airlineCode,
+                    ContactValue = email,
+                    CodeChannel = (byte)1 // 1 = Email
                 };
 
                 var response = await client.PostAsJsonAsync("api/subscriptions/external", body);
-                return response.IsSuccessStatusCode;
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+                    throw new ApplicationException(error?.Message ?? "Error desconocido en la API de suscripciones.");
+                }
+
+                return true;
             }
-            catch
+            catch (ApplicationException) { throw; }
+            catch (Exception ex)
             {
-                return false;
+                throw new ApplicationException($"Error de conexión: {ex.Message}");
             }
         }
 

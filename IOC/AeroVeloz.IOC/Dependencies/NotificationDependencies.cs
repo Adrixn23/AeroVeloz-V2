@@ -17,7 +17,7 @@ namespace AeroVeloz.IOC.Dependencies
             
             services.AddScoped<INotificationDispatcher, NotificationDispatcher>();
 
-            // Canales de notificación que usan HttpClient
+            // Canales de notificación
             services.AddHttpClient<OneSignalPushChannel>();
             services.AddHttpClient<OneSignalInAppChannel>();
             

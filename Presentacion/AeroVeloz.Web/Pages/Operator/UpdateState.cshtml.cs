@@ -62,8 +62,15 @@ namespace AeroVeloz.Web.Pages.Operator
             }
             catch (ApplicationException ex)
             {
-                // Este catch atrapa los 400 Bad Request o reglas del dominio (como FLIGHT_BACKWARD)
-                ErrorMessage = ex.Message;
+                // Si es un error de validación (como saltarse estados), mostramos un aviso informativo
+                if (ex.Message.Contains("validación"))
+                {
+                    ErrorMessage = "⚠️ REGLA DE NEGOCIO: " + ex.Message + " (Recuerde el orden: Scheduled -> Boarding -> In Flight -> Landed).";
+                }
+                else 
+                {
+                    ErrorMessage = ex.Message;
+                }
                 return Page();
             }
             catch (Exception ex)

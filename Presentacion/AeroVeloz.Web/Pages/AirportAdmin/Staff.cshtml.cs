@@ -22,6 +22,9 @@ namespace AeroVeloz.Web.Pages.AirportAdmin
         [BindProperty]
         public CreateStaffDto NewStaff { get; set; } = new();
 
+        [BindProperty]
+        public Guid? EditingUserId { get; set; }
+
         public string? SuccessMessage { get; set; }
         public string? ErrorMessage { get; set; }
 
@@ -48,16 +51,27 @@ namespace AeroVeloz.Web.Pages.AirportAdmin
                 return Page();
 
             NewStaff.OrganizationId = orgId;
-            NewStaff.RoleId = 4; // OPERATIONAIRPORT
+            
+            bool result;
+            if (EditingUserId.HasValue && EditingUserId.Value != Guid.Empty)
+            {
+                // Es una actualización
+                result = await _userService.UpdateUserAsync(EditingUserId.Value, NewStaff, token);
+                if (result) TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
+            }
+            else 
+            {
+                // Es una creación
+                result = await _userService.CreateStaffAsync(NewStaff, token);
+                if (result) TempData["SuccessMessage"] = "Operador creado con éxito.";
+            }
 
-            var result = await _userService.CreateStaffAsync(NewStaff, token);
             if (result)
             {
-                TempData["SuccessMessage"] = "Operador creado con éxito.";
                 return RedirectToPage();
             }
 
-            ErrorMessage = "No se pudo crear el usuario.";
+            ErrorMessage = "No se pudo procesar la solicitud de usuario.";
             return Page();
         }
 

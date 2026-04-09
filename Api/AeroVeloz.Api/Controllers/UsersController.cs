@@ -58,6 +58,27 @@ namespace AeroVeloz.Api.Controllers
             return Ok(OperationResult<IEnumerable<object>>.Ok(users));
         }
 
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult> UpdateUser(Guid id, [FromBody] CreateUserDto dto)
+        {
+            try 
+            {
+                var rowsAffected = await _context.Users
+                    .Where(u => u.Id == id)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(u => u.nameUser, dto.UserName)
+                        .SetProperty(u => u.idRol, dto.RoleId));
+
+                if (rowsAffected == 0) return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(OperationResult<bool>.Fail("USER_UPDATE_ERROR", ex.Message));
+            }
+        }
+
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteUser(Guid id)
         {

@@ -52,14 +52,21 @@ namespace AeroVeloz.Web.Pages.Flights
         {
             if (string.IsNullOrEmpty(email)) return Page();
 
-            var result = await _subscriptionService.SubscribeExternalAsync(email, flightNumber, airline);
-            if (result)
+            try 
             {
-                TempData["SuccessMessage"] = "Te has suscrito correctamente a las notificaciones.";
+                var result = await _subscriptionService.SubscribeExternalAsync(email, flightNumber, airline);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Te has suscrito correctamente a las notificaciones.";
+                }
             }
-            else
+            catch (ApplicationException ex)
             {
-                TempData["ErrorMessage"] = "No se pudo realizar la suscripción.";
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado al procesar la suscripción.";
             }
 
             return RedirectToPage(new { flightNumber, airline });
