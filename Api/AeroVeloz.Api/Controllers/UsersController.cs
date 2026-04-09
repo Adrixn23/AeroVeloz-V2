@@ -57,6 +57,24 @@ namespace AeroVeloz.Api.Controllers
             
             return Ok(OperationResult<IEnumerable<object>>.Ok(users));
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult> DeleteUser(Guid id)
+        {
+            try 
+            {
+                var user = await _context.Users.FindAsync(id);
+                if (user == null) return NotFound();
+
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(OperationResult<bool>.Fail("USER_DELETE_ERROR", ex.Message));
+            }
+        }
     }
 
     public class CreateUserDto

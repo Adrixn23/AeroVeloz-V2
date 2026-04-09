@@ -79,6 +79,13 @@
                                         <tr>
                                             <td>@sub.ContactValue</td>
                                             <td>@sub.CreateDate.ToString("g")</td>
+                                            <td class="text-end">
+                                                <form method="post" asp-page-handler="CancelSubscription" asp-route-id="@sub.Id" asp-route-flightNumber="@Model.Flight.FlightNumber" asp-route-airline="@Model.Flight.CodeAirlinesIcao">
+                                                    <button type="submit" class="btn btn-sm text-danger" title="Cancelar Suscripción">
+                                                        <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>

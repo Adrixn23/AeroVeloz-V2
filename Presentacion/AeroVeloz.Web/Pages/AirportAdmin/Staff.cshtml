@@ -55,7 +55,16 @@
                                 </td>
                                 <td>@user.RoleId</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-secondary">Editar</button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <form method="post" asp-page-handler="Delete" asp-route-userId="@user.Id" onsubmit="return confirm('¿Está seguro de eliminar este usuario?');" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         }

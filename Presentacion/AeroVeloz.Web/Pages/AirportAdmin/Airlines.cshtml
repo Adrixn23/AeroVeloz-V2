@@ -60,11 +60,16 @@
                                 </td>
                                 <td>@airline.CreateAt.ToString("dd/MM/yyyy")</td>
                                 <td>
-                                    <form method="post" asp-page-handler="Delete" asp-route-codeIcao="@airline.CodeAirlinesIcao" onsubmit="return confirm('¿Está seguro de eliminar esta aerolínea?');" style="display:inline;">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i> Eliminar
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="editAirline('@airline.CodeAirlinesIcao', '@airline.CodeIata', '@airline.NameOrganization')">
+                                            <i class="bi bi-pencil"></i>
                                         </button>
-                                    </form>
+                                        <form method="post" asp-page-handler="Delete" asp-route-codeIcao="@airline.CodeAirlinesIcao" onsubmit="return confirm('¿Está seguro de eliminar esta aerolínea?');" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -118,4 +123,21 @@
 @section Scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function editAirline(icao, iata, name) {
+            $('.modal-title').text('Editar Aerolínea: ' + icao);
+            $('input[name="NewAirline.CodeAirlinesIcao"]').val(icao).prop('readonly', true);
+            $('input[name="NewAirline.CodeIata"]').val(iata);
+            $('input[name="NewAirline.NameOrganization"]').val(name);
+            $('#newAirlineModal').modal('show');
+        }
+
+        // Reset modal on close
+        $('#newAirlineModal').on('hidden.bs.modal', function () {
+            $('.modal-title').text('Registrar Nueva Aerolínea');
+            $('input[name="NewAirline.CodeAirlinesIcao"]').val('').prop('readonly', false);
+            $('input[name="NewAirline.CodeIata"]').val('');
+            $('input[name="NewAirline.NameOrganization"]').val('');
+        });
+    </script>
 }

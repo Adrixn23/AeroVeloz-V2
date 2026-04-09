@@ -7,7 +7,7 @@ using AeroVeloz.Web.Models.Flights;
 
 namespace AeroVeloz.Web.Pages.Operator
 {
-    [Authorize(Roles = "OPERATIONAIRPORT,SYSTEMADMIN,AIRLINEADMIN")] // Añadido SYSTEMADMIN para pruebas
+    [Authorize(Roles = "OPERATIONAIRPORT,SYSTEMADMIN")] // Seguridad real aplicada
     public class IndexModel : PageModel
     {
         private readonly IFlightApiService _flightService;

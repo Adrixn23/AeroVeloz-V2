@@ -60,5 +60,23 @@ namespace AeroVeloz.Web.Pages.AirportAdmin
             ErrorMessage = "No se pudo crear el usuario.";
             return Page();
         }
+
+        public async Task<IActionResult> OnPostDeleteAsync(Guid userId)
+        {
+            var token = User.Claims.FirstOrDefault(c => c.Type == "JwtToken")?.Value;
+            if (string.IsNullOrEmpty(token)) return RedirectToPage("/Auth/Login");
+
+            var result = await _userService.DeleteUserAsync(userId, token);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Usuario eliminado correctamente.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se pudo eliminar el usuario.";
+            }
+
+            return RedirectToPage();
+        }
     }
 }

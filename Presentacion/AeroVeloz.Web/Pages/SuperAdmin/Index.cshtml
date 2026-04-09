@@ -1,61 +1,75 @@
 @page
 @model AeroVeloz.Web.Pages.SuperAdmin.IndexModel
 @{
-    ViewData["Title"] = "Dashboard Administrador";
+    ViewData["Title"] = "Dashboard Aerolínea";
 }
 
-<div class="row mb-4 align-items-center">
+<div class="row mb-5 align-items-end">
     <div class="col-md-8">
-        <h2>Bienvenido, @Model.UserName</h2>
-        <p class="text-muted mb-0">Gestión de Vuelos - @Model.Organization</p>
+        <h6 class="text-primary fw-bold text-uppercase mb-1" style="letter-spacing: 0.1em;">Panel de Control</h6>
+        <h1 class="display-5 fw-bold">Hola, @Model.UserName</h1>
+        <p class="text-muted fs-5">Gestionando la flota de <span class="text-dark fw-semibold">@Model.Organization</span></p>
     </div>
-    <div class="col-md-4 text-end">
-        <span class="badge bg-dark px-3 py-2">Rol: @Model.Role</span>
+    <div class="col-md-4 text-end pb-2">
+        <div class="bg-white shadow-sm rounded-4 p-3 d-inline-block border">
+            <div class="text-muted small text-uppercase fw-bold mb-1" style="font-size: 0.6rem;">Estado del Sistema</div>
+            <div class="d-flex align-items-center text-success fw-bold">
+                <span class="spinner-grow spinner-grow-sm me-2" role="status"></span>
+                Sincronizado
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="card shadow-sm">
-    <div class="card-header bg-white py-3">
-        <h5 class="card-title mb-0 text-primary">Vuelos de la Aerolínea (En Vivo)</h5>
+<div class="card shadow-lg border-0 overflow-hidden mb-5">
+    <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="fw-bold mb-0">Itinerarios Activos</h4>
+            <span class="text-muted small">Actualizado en tiempo real desde la API</span>
+        </div>
+        <a asp-page="/SuperAdmin/BatchUpload" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle me-1"></i> Nueva Carga
+        </a>
     </div>
+    
     <div class="card-body p-0">
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
-            <div class="alert alert-warning m-3">
-                <strong>Atención:</strong> @Model.ErrorMessage
+            <div class="alert alert-warning m-4 rounded-4 border-0">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> @Model.ErrorMessage
             </div>
         }
 
-        @if (Model.Flights != null && Model.Flights.Any())
-        {
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Vuelo</th>
-                            <th>Aerolínea</th>
-                            <th>Origen</th>
-                            <th>Destino</th>
-                            <th>Salida Programada</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Uso de Partial View para el renderizado de la UI (Cumplimiento de Rúbrica) -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Vuelo / Aerolínea</th>
+                        <th>Ruta</th>
+                        <th>Salida</th>
+                        <th>Estado</th>
+                        <th class="pe-4 text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    @if (Model.Flights != null && Model.Flights.Any())
+                    {
                         @foreach (var flight in Model.Flights)
                         {
                             <partial name="_FlightTableRowPartial" model="flight" />
                         }
-                    </tbody>
-                </table>
-            </div>
-        }
-        else
-        {
-            <div class="p-5 text-center text-muted">
-                <p class="mb-0">No se encontraron vuelos activos para esta organización, o no se pudo contactar con la API.</p>
-            </div>
-        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="py-5 text-center text-muted">
+                                <i class="bi bi-cloud-slash display-4 mb-3 d-block"></i>
+                                No hay vuelos activos para mostrar.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

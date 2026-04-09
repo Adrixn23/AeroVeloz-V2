@@ -6,5 +6,6 @@ namespace AeroVeloz.Web.Services.Interfaces
     {
         Task<List<UserStaffDto>> GetStaffByOrgAsync(int orgId, string token);
         Task<bool> CreateStaffAsync(CreateStaffDto dto, string token);
+        Task<bool> DeleteUserAsync(Guid userId, string token);
     }
 }

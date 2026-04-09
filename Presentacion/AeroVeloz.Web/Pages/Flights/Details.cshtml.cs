@@ -64,5 +64,18 @@ namespace AeroVeloz.Web.Pages.Flights
 
             return RedirectToPage(new { flightNumber, airline });
         }
+
+        public async Task<IActionResult> OnPostCancelSubscriptionAsync(Guid id, short flightNumber, string airline)
+        {
+            var token = User.Claims.FirstOrDefault(c => c.Type == "JwtToken")?.Value;
+            if (string.IsNullOrEmpty(token)) return RedirectToPage("/Auth/Login");
+
+            var result = await _subscriptionService.CancelSubscriptionAsync(id, token);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Suscripción cancelada.";
+            }
+            return RedirectToPage(new { flightNumber, airline });
+        }
     }
 }

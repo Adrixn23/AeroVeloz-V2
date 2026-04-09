@@ -62,13 +62,24 @@ namespace AeroVeloz.Web.Pages.AirportAdmin
 
             try
             {
-                // Consumir el POST /api/airlines (CRUD)
-                var result = await _airlineService.CreateAirlineAsync(NewAirline, token, userId, orgId);
-                if (result)
+                // Si el campo oculto CodeAirlinesIcao tiene valor, es un Update, si no, es un Create.
+                // Pero como CodeAirlinesIcao es la PK en el DTO, usaremos un truco simple o un campo extra.
+                // Para este prototipo, si la aerolinea ya existe en la lista, la actualizamos.
+                var existing = await _airlineService.GetAirlineByCodeAsync(NewAirline.CodeAirlinesIcao, token);
+                
+                bool result;
+                if (existing != null)
                 {
-                    TempData["SuccessMessage"] = $"Aerolínea {NewAirline.CodeAirlinesIcao} autorizada correctamente.";
-                    return RedirectToPage();
+                    result = await _airlineService.UpdateAirlineAsync(NewAirline.CodeAirlinesIcao, NewAirline, token, userId, orgId);
+                    if (result) TempData["SuccessMessage"] = $"Aerolínea {NewAirline.CodeAirlinesIcao} actualizada.";
                 }
+                else
+                {
+                    result = await _airlineService.CreateAirlineAsync(NewAirline, token, userId, orgId);
+                    if (result) TempData["SuccessMessage"] = $"Aerolínea {NewAirline.CodeAirlinesIcao} creada.";
+                }
+
+                if (result) return RedirectToPage();
                 return Page();
             }
             catch (ApplicationException ex)

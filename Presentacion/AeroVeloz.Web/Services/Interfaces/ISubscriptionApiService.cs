@@ -10,5 +10,6 @@ namespace AeroVeloz.Web.Services.Interfaces
         Task<int> GetSubscriptionCountAsync(short flightNumber, string airlineCode, string token);
         Task<List<SubscriptionReadDto>> GetSubscriptionsByFlightAsync(short flightNumber, string airlineCode, string token);
         Task<bool> SubscribeExternalAsync(string email, short flightNumber, string airlineCode);
+        Task<bool> CancelSubscriptionAsync(Guid id, string token);
     }
 }

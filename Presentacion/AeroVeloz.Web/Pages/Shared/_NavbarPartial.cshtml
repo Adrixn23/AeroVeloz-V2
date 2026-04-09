@@ -1,59 +1,82 @@
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand text-white" asp-area="" asp-page="/Index">AeroVeloz Admin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+<header class="sticky-top p-3">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-lg rounded-4 container">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center fw-bold text-primary" asp-area="" asp-page="/Index">
+                <i class="bi bi-airplane-engines-fill me-2 fs-3"></i>
+                <span class="tracking-tighter">AeroVeloz</span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link px-3" asp-area="" asp-page="/PublicBoard">
+                            <i class="bi bi-broadcast me-1"></i> En Vivo
+                        </a>
+                    </li>
+                    
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         @if (User.IsInRole("AIRLINEADMIN") || User.IsInRole("SYSTEMADMIN"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/Index">Dashboard Aerolínea</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/BatchUpload">Carga Masiva</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown">
+                                    Aerolínea
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark border-0 shadow mt-2 rounded-3">
+                                    <li><a class="dropdown-item" asp-page="/SuperAdmin/Index">Dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-page="/SuperAdmin/BatchUpload">Carga Masiva</a></li>
+                                </ul>
                             </li>
                         }
 
                         @if (User.IsInRole("AIRPORTADMIN") || User.IsInRole("SYSTEMADMIN"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/AirportAdmin/Index">Monitor Vuelos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/AirportAdmin/Staff">Personal</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/AirportAdmin/Airlines">Aerolíneas Locales</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown">
+                                    Aeropuerto
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark border-0 shadow mt-2 rounded-3">
+                                    <li><a class="dropdown-item" asp-page="/AirportAdmin/Index">Monitor de Vuelos</a></li>
+                                    <li><a class="dropdown-item" asp-page="/AirportAdmin/Staff">Gestión Personal</a></li>
+                                    <li><a class="dropdown-item" asp-page="/AirportAdmin/Airlines">Aerolíneas Autorizadas</a></li>
+                                </ul>
                             </li>
                         }
 
-                        @if (User.IsInRole("OPERATIONAIRPORT") || User.IsInRole("SYSTEMADMIN") || User.IsInRole("AIRLINEADMIN"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/Operator/Index">Mostrador (Boarding)</a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-area="" asp-page="/Operator/Index">Boarding</a>
+                        </li>
                         
                         @if (User.IsInRole("SYSTEMADMIN"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/SuperAdmin/Audit">Auditoría Global</a>
+                                <a class="nav-link px-3 text-info" asp-area="" asp-page="/SuperAdmin/Audit">
+                                    <i class="bi bi-shield-check"></i> Auditoría
+                                </a>
                             </li>
                         }
                     }
                 </ul>
+
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <span class="navbar-text text-white me-3">
-                        <small>@User.Identity.Name (@User.Claims.FirstOrDefault(c => c.Type == "OrganizationName")?.Value)</small>
-                    </span>
-                    <a class="btn btn-outline-light btn-sm" asp-area="" asp-page="/Auth/Logout">Salir</a>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-end d-none d-sm-block">
+                            <div class="text-white small fw-bold">@User.Identity.Name</div>
+                            <div class="text-muted" style="font-size: 0.7rem;">@User.Claims.FirstOrDefault(c => c.Type == "OrganizationName")?.Value</div>
+                        </div>
+                        <a class="btn btn-outline-danger btn-sm rounded-3 px-3" asp-area="" asp-page="/Auth/Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <a class="btn btn-primary btn-sm rounded-pill px-4" asp-page="/Auth/Login">Login</a>
                 }
             </div>
         </div>
