@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using AeroVeloz.Desktop.Views.SuperAdmin;
+using AeroVeloz.Desktop.Views.AirportAdmin;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AeroVeloz.Desktop.ViewModels;
@@ -59,7 +60,17 @@ public partial class LoginViewModel : BaseViewModel
 
             ErrorMessage = "¡Login exitoso! Redirigiendo...";
 
-            var mainView = App.AppHost?.Services.GetRequiredService<SuperAdminMainView>();
+            System.Windows.Window? mainView = null;
+
+            if (response.RoleName?.ToUpper() == "AIRPORTADMIN")
+            {
+                mainView = App.AppHost?.Services.GetRequiredService<AirportAdminMainView>();
+            }
+            else
+            {
+                mainView = App.AppHost?.Services.GetRequiredService<SuperAdminMainView>();
+            }
+
             if (mainView != null)
             {
                 mainView.Show();

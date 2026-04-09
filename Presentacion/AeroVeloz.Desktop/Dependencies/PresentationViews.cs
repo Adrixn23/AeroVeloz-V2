@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using AeroVeloz.Desktop.Views;
 using AeroVeloz.Desktop.Views.SuperAdmin;
 using AeroVeloz.Desktop.ViewModels.SuperAdmin;
+using AeroVeloz.Desktop.ViewModels.AirportAdmin;
+using AeroVeloz.Desktop.Views.AirportAdmin;
 
 namespace AeroVeloz.Desktop.Dependencies;
 
@@ -54,6 +56,55 @@ public static class PresentationViews
             return view;
         });
 
+                services.AddTransient<AirportAdminMainView>(provider =>
+        {
+            var view = new AirportAdminMainView();
+            view.DataContext = provider.GetRequiredService<AirportAdminMainViewModel>();
+            return view;
+        });
+        services.AddTransient<AirportAdminDashboardView>(provider =>
+        {
+            var view = new AirportAdminDashboardView();
+            view.DataContext = provider.GetRequiredService<AirportAdminDashboardViewModel>();
+            return view;
+        });
+        services.AddTransient<UserListView>(provider =>
+        {
+            var view = new UserListView();
+            view.DataContext = provider.GetRequiredService<UserListViewModel>();
+            return view;
+        });
+        services.AddTransient<UserDetailView>(provider =>
+        {
+            var view = new UserDetailView();
+            view.DataContext = provider.GetRequiredService<UserDetailViewModel>();
+            return view;
+        });
+        services.AddTransient<OperationsListView>(provider =>
+        {
+            var view = new OperationsListView();
+            view.DataContext = provider.GetRequiredService<OperationsListViewModel>();
+            return view;
+        });
+        services.AddTransient<OperationDetailView>(provider =>
+        {
+            var view = new OperationDetailView();
+            view.DataContext = provider.GetRequiredService<OperationDetailViewModel>();
+            return view;
+        });
+        services.AddTransient<ConnectionListView>(provider =>
+        {
+            var view = new ConnectionListView();
+            view.DataContext = provider.GetRequiredService<ConnectionListViewModel>();
+            return view;
+        });
+        services.AddTransient<AuditLogView>(provider =>
+        {
+            var view = new AuditLogView();
+            view.DataContext = provider.GetRequiredService<AuditLogViewModel>();
+            return view;
+        });
         return services;
     }
 }
+

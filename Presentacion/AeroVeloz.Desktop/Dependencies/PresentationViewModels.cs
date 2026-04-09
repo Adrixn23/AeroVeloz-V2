@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using AeroVeloz.Desktop.ViewModels;
 using AeroVeloz.Desktop.ViewModels.SuperAdmin;
+using AeroVeloz.Desktop.ViewModels.AirportAdmin;
 
 namespace AeroVeloz.Desktop.Dependencies;
 
@@ -16,6 +17,17 @@ public static class PresentationViewModels
         services.AddTransient<AirportListViewModel>();
         services.AddTransient<AirportDetailViewModel>();
 
+        // Airport Admin ViewModels
+        services.AddTransient<AirportAdminDashboardViewModel>();
+        services.AddTransient<AirportAdminMainViewModel>();
+        services.AddTransient<UserListViewModel>();
+        services.AddTransient<UserDetailViewModel>();
+        services.AddTransient<OperationsListViewModel>();
+        services.AddTransient<OperationDetailViewModel>();
+        services.AddTransient<ConnectionListViewModel>();
+        services.AddTransient<AuditLogViewModel>();
+
         return services;
     }
 }
+

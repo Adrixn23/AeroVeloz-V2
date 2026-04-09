@@ -43,7 +43,8 @@ public class AuthService : IAuthService
                         Success = true,
                         Token = result.Value.Token,
                         UserId = result.Value.UserId,
-                        OrganizationId = result.Value.OrganizationId
+                        OrganizationId = result.Value.OrganizationId,
+                        RoleName = result.Value.RoleName
                     };
                 }
 

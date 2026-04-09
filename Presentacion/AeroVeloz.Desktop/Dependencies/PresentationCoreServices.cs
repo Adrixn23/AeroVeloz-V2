@@ -13,6 +13,12 @@ public static class PresentationCoreServices
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<ISessionService, SessionService>();
 
+        services.AddTransient<IAirportAdminStatService, AirportAdminStatService>();
+        services.AddTransient<IManagerUserService, ManagerUserService>();
+        services.AddTransient<IOperationService, OperationService>();
+        services.AddTransient<IAirportConnectionService, AirportConnectionService>();
+        services.AddTransient<IAuditService, AuditService>();
+
         return services;
     }
 }
