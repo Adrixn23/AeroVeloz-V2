@@ -1,7 +1,6 @@
-using System;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
-namespace AeroVeloz.Desktop.Services.Implementations;
+namespace AeroVeloz.Desktop.Services.Implementations.Auth;
 
 public class SessionService : ISessionService
 {

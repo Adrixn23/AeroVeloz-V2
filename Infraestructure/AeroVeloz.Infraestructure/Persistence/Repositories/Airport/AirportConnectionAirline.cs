@@ -63,6 +63,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                                       on a.Id equals or.Id
                                        where c.codeAirportIcao  == codeAirportIcao
                                  select new AirlineConnectionByAirportModel(
+                                          c.Id,
                                           c.codeAirportIcao,
                                           c.codeAirlinesIcao,
                                          or.nameOrganization,

@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs.Airport;
 using AeroVeloz.Desktop.Models.DTOs.Result.ApiResponse;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.Services.Interfaces.Airport;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 using Microsoft.Extensions.Configuration;
 
-namespace AeroVeloz.Desktop.Services.Implementations;
+namespace AeroVeloz.Desktop.Services.Implementations.Airport;
 
 public class AirportService : IAirportService
 {

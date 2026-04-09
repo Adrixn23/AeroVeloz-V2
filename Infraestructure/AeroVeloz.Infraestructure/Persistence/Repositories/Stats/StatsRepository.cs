@@ -53,5 +53,66 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.StatusSystem
                 };
             }
         }
+
+        public async Task<AirportAdminStatsDto> GetAirportStatsAsync(int orgId)
+        {
+            try
+            {
+                // Get airport stats by organization ID
+                var airport = await _context.Airports.FirstOrDefaultAsync(a => a.Id == orgId);
+
+                if (airport == null)
+                {
+                    return new AirportAdminStatsDto
+                    {
+                        ContactedAirlines = 0,
+                        TotalOperators = 0,
+                        ActiveConnections = 0,
+                        PendingOperations = 0
+                    };
+                }
+
+                // Count contacted airlines (via connections)
+                var contactedAirlines = await _context.ConectionsAirlineAirports
+                    .Where(c => c.codeAirportIcao == airport.codeAirportIcao && c.isActive)
+                    .Select(c => c.codeAirlinesIcao)
+                    .Distinct()
+                    .CountAsync();
+
+                // Count total operators for this airport
+                var totalOperators = await _context.Users
+                    .Where(u => u.idOrganization == orgId)
+                    .CountAsync();
+
+                // Count active connections for this airport
+                var activeConnections = await _context.ConectionsAirlineAirports
+                    .Where(c => c.codeAirportIcao == airport.codeAirportIcao && c.isActive)
+                    .CountAsync();
+
+                // Count pending operations for this airport
+                var pendingOperations = await _context.OperationChanges
+                    .Where(o => o.codeAirportIcao == airport.codeAirportIcao && o.isActive)
+                    .CountAsync();
+
+                return new AirportAdminStatsDto
+                {
+                    ContactedAirlines = contactedAirlines,
+                    TotalOperators = totalOperators,
+                    ActiveConnections = activeConnections,
+                    PendingOperations = pendingOperations
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener las estadísticas del aeropuerto para la organización {OrgId}", orgId);
+                return new AirportAdminStatsDto
+                {
+                    ContactedAirlines = 0,
+                    TotalOperators = 0,
+                    ActiveConnections = 0,
+                    PendingOperations = 0
+                };
+            }
+        }
     }
 }

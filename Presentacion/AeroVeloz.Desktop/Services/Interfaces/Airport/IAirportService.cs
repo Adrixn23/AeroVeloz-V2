@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs.Airport;
 
-namespace AeroVeloz.Desktop.Services.Interfaces;
+namespace AeroVeloz.Desktop.Services.Interfaces.Airport;
 
 public interface IAirportService
 {

@@ -1,11 +1,10 @@
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs.StatusSystem;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.Services.Interfaces.AdminSystem;
 using Microsoft.Extensions.Configuration;
 
-namespace AeroVeloz.Desktop.Services.Implementations;
+namespace AeroVeloz.Desktop.Services.Implementations.AdminSystem;
 
 public class SuperAdminStatService : ISuperAdminStatService
 {
@@ -28,7 +27,6 @@ public class SuperAdminStatService : ISuperAdminStatService
         }
         catch(HttpRequestException)
         {
-            // Logging can be added here
             return null;
         }
     }

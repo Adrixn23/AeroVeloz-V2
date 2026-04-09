@@ -25,6 +25,7 @@ public static class PresentationViewModels
         services.AddTransient<OperationsListViewModel>();
         services.AddTransient<OperationDetailViewModel>();
         services.AddTransient<ConnectionListViewModel>();
+        services.AddTransient<ConnectionDetailViewModel>();
         services.AddTransient<AuditLogViewModel>();
 
         return services;

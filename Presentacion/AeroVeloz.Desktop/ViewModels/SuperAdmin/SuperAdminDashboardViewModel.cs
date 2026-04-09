@@ -1,11 +1,9 @@
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs.StatusSystem;
-using AeroVeloz.Desktop.Services.Interfaces;
 using AeroVeloz.Desktop.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using System;
+using AeroVeloz.Desktop.Services.Interfaces.AdminSystem;
 
 namespace AeroVeloz.Desktop.ViewModels.SuperAdmin;
 

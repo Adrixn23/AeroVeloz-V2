@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs;
-using AeroVeloz.Desktop.Services.Interfaces;
 using AeroVeloz.Desktop.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using AeroVeloz.Desktop.Views.SuperAdmin;
 using AeroVeloz.Desktop.Views.AirportAdmin;
 using Microsoft.Extensions.DependencyInjection;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
 namespace AeroVeloz.Desktop.ViewModels;
 

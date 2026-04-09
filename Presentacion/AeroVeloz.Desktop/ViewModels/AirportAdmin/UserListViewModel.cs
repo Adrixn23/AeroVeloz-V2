@@ -1,7 +1,138 @@
+using System.Collections.ObjectModel;
+using AeroVeloz.Desktop.Models.DTOs.User;
+using AeroVeloz.Desktop.Services.Dialog;
+using AeroVeloz.Desktop.Services.Interfaces.Users;
+using AeroVeloz.Desktop.ViewModels.Base;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
+
 namespace AeroVeloz.Desktop.ViewModels.AirportAdmin;
 
-public class UserListViewModel : AeroVeloz.Desktop.ViewModels.Base.BaseViewModel
+public partial class UserListViewModel : BaseViewModel
 {
-    public UserListViewModel() { }
+    private readonly IManagerUserService _managerUserService;
+    private readonly IDialogService _dialogService;
+    private readonly UserDetailViewModel _detailViewModel;
+
+    [ObservableProperty]
+    private ObservableCollection<UserDto> _users = new();
+
+    [ObservableProperty]
+    private UserDto? _selectedUser;
+
+    [ObservableProperty]
+    private string _searchText = string.Empty;
+
+    private ObservableCollection<UserDto> _allUsers = new();
+
+    public UserListViewModel(
+        IManagerUserService managerUserService,
+        IDialogService dialogService,
+        UserDetailViewModel detailViewModel)
+    {
+        _managerUserService = managerUserService;
+        _dialogService = dialogService;
+        _detailViewModel = detailViewModel;
+
+        _detailViewModel.OnSavedResultAction += async () => await LoadUsersAsync();
+    }
+
+    partial void OnSearchTextChanged(string? value)
+    {
+        FilterUsers();
+    }
+
+    private void FilterUsers()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            Users = new ObservableCollection<UserDto>(_allUsers);
+        }
+        else
+        {
+            var filtered = _allUsers
+                .Where(u => u.FullName?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true
+                         || u.Email?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true)
+                .ToList();
+            Users = new ObservableCollection<UserDto>(filtered);
+        }
+    }
+
+    [RelayCommand]
+    private async Task LoadUsersAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            var users = await _managerUserService.GetAirportUsersAsync();
+            _allUsers = new ObservableCollection<UserDto>(users);
+            FilterUsers();
+        }
+        catch
+        {
+            await _dialogService.ShowErrorAsync("Error", "No se pudieron cargar los operadores.");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task CreateUserAsync()
+    {
+        _detailViewModel.InitializeForCreate();
+        await DialogHost.Show(_detailViewModel, "RootDialog");
+    }
+
+    [RelayCommand]
+    private async Task EditUserAsync()
+    {
+        if (SelectedUser == null) return;
+
+        _detailViewModel.InitializeForEdit(SelectedUser);
+        await DialogHost.Show(_detailViewModel, "RootDialog");
+    }
+
+    [RelayCommand]
+    private async Task DeleteUserAsync()
+    {
+        if (SelectedUser == null) return;
+
+        var confirm = await _dialogService.ShowConfirmationAsync(
+            $"¿Desactivar a {SelectedUser.FullName}? Esta acción se registrará en auditoría.",
+            "Confirmar desactivación");
+
+        if (!confirm) return;
+
+        IsBusy = true;
+        try
+        {
+            if (Guid.TryParse(SelectedUser.Id, out var userId))
+            {
+                var result = await _managerUserService.DeleteUserAsync(userId);
+                if (result)
+                {
+                    await _dialogService.ShowInfoAsync("Operador desactivado exitosamente.");
+                    await LoadUsersAsync();
+                }
+                else
+                {
+                    await _dialogService.ShowErrorAsync("Error", "No se pudo desactivar el operador.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 }
+
+
 

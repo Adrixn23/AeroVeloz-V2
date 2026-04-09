@@ -90,7 +90,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
                      join o in _context.Organizations.AsNoTracking()
                      on  u.idOrganization equals o.Id
                      where u.idOrganization == orgId
-                     select  new UserDetailModel(u.Id, u.nameUser, o.nameOrganization, o.typeOrganization, u.isActive, u.lockedUntil.HasValue && u.lockedUntil.Value > DateTime.UtcNow, r.nameRol , u.createAt )
+                     select  new UserDetailModel(u.Id, u.nameUser, u.nameUser, o.nameOrganization, o.typeOrganization, u.isActive, u.lockedUntil.HasValue && u.lockedUntil.Value > DateTime.UtcNow, r.nameRol , u.createAt )
 
                     ).ToListAsync();
                 if (users.Any())
@@ -111,17 +111,53 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
             try
             {
                 var hasher = new PasswordHasher<Domain.Entities.Users.User.User>();
-                string hash = hasher.HashPassword(null!, entity.passwordHash!);
 
-                var result = await  _context.Users.Where(us => us.Id == entity.Id)
+                if (string.IsNullOrWhiteSpace(entity.passwordHash))
+                {
+                    var currentUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == entity.Id);
+                    if (currentUser != null)
+                    {
+                        entity = new Domain.Entities.Users.User.User
+                        {
+                            Id = entity.Id,
+                            nameUser = entity.nameUser,
+                            passwordHash = currentUser.passwordHash, 
+                            isActive = entity.isActive,
+                            idRol = entity.idRol,
+                            idOrganization = entity.idOrganization,
+                            createAt = currentUser.createAt,
+                            failedLoginAttempts = currentUser.failedLoginAttempts,
+                            lastLoginAt = currentUser.lastLoginAt,
+                            lockedUntil = currentUser.lockedUntil
+                        };
+                    }
+                }
+                else
+                {
+                    string hash = hasher.HashPassword(null!, entity.passwordHash);
+                    entity = new Domain.Entities.Users.User.User
+                    {
+                        Id = entity.Id,
+                        nameUser = entity.nameUser,
+                        passwordHash = hash,
+                        isActive = entity.isActive,
+                        idRol = entity.idRol,
+                        idOrganization = entity.idOrganization,
+                        createAt = (await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == entity.Id))?.createAt ?? DateTime.UtcNow,
+                        failedLoginAttempts = (await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == entity.Id))?.failedLoginAttempts,
+                        lastLoginAt = (await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == entity.Id))?.lastLoginAt,
+                        lockedUntil = (await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == entity.Id))?.lockedUntil
+                    };
+                }
+
+                var result = await _context.Users.Where(us => us.Id == entity.Id)
                     .ExecuteUpdateAsync(setters => setters
-                      .SetProperty(u => u.nameUser, entity.nameUser!)
+                      .SetProperty(u => u.nameUser, entity.nameUser)
                       .SetProperty(u => u.isActive, entity.isActive)
-                      .SetProperty(u => u.passwordHash, hash )
+                      .SetProperty(u => u.passwordHash, entity.passwordHash)
                       .SetProperty(u => u.idOrganization, entity.idOrganization)
-                      .SetProperty(u => u.idRol, entity.idRol)
+                      .SetProperty(u => u.idRol, entity.idRol));
 
-                    );
                 return result > 0;
             }
             catch (Exception ex)

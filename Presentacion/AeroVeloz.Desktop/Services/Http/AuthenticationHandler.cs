@@ -1,6 +1,6 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
 namespace AeroVeloz.Desktop.Services.Http;
 
@@ -18,16 +18,13 @@ public class AuthenticationHandler : DelegatingHandler
         HttpRequestMessage request, 
         CancellationToken cancellationToken)
     {
-        // Obtener el token de la sesión actual
+       
         var token = _sessionService.Token;
-
-        // Si existe un token válido, añadirlo al header Authorization
         if (!string.IsNullOrEmpty(token))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        // Continuar con el siguiente handler en la cadena
         return await base.SendAsync(request, cancellationToken);
     }
 }

@@ -7,5 +7,14 @@ namespace AeroVeloz.Desktop.Views.AirportAdmin
         {
             InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.AirportAdmin.AirportAdminDashboardViewModel vm)
+            {
+                vm.LoadStatsCommand.Execute(null);
+            }
+        }
     }
 }
+

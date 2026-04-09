@@ -1,20 +1,17 @@
-using System.Collections.Generic;
+
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
-using AeroVeloz.Desktop.Models.DTOs.Auth;
+
 using AeroVeloz.Desktop.Models.DTOs.User;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AuthUserDto = AeroVeloz.Desktop.Models.DTOs.Auth.UserDto;
 using Microsoft.Extensions.Configuration;
+using AeroVeloz.Desktop.Services.Interfaces.AdminSystem;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
-namespace AeroVeloz.Desktop.Services.Implementations;
+namespace AeroVeloz.Desktop.Services.Implementations.AdminSystem;
 
-/// <summary>
-/// Servicio para gestionar usuarios del sistema a nivel de presentación.
-/// Consume el endpoint ManagerUsers del API que usa los servicios de application correspondientes.
-/// Realiza operaciones CRUD: Create, Read, Update, Deactivate.
-/// </summary>
+
 public class AdminManagerService : IAdminManagerService
 {
     private readonly IHttpClientFactory _httpClientFactory;
@@ -31,40 +28,34 @@ public class AdminManagerService : IAdminManagerService
         _baseEndpoint = configuration["ApiEndpoints:ManagerUsers"] ?? "api/ManagerUsers";
     }
 
-    /// <summary>
-    /// Obtiene la lista de usuarios de la organización del sistema.
-    /// Mapea UserDetailModel (del API) a UserDto (presentación).
-    /// </summary>
-    public async Task<IEnumerable<UserDto>> GetAvailableAdminsAsync()
+   
+    public async Task<IEnumerable<AuthUserDto>> GetAvailableAdminsAsync()
     {
         try
         {
             var client = _httpClientFactory.CreateClient("AeroVelozApi");
 
-            // GET /api/ManagerUsers/organization/{orgId}?userId={userId}
             var endpoint = $"{_baseEndpoint}/organization/{_sessionService.OrgId}?userId={_sessionService.UserId}";
             var response = await client.GetAsync(endpoint);
 
             if (!response.IsSuccessStatusCode)
             {
-                return new List<UserDto>();
+                return new List<AuthUserDto>();
             }
 
             var content = await response.Content.ReadAsStringAsync();
             using var jsonDoc = JsonDocument.Parse(content);
             var root = jsonDoc.RootElement;
 
-            // La respuesta es OperationResult<IReadOnlyCollection<UserDetailModel>>
-            // Estructura: { "value": [...], "success": true, ... }
+          
             if (root.TryGetProperty("value", out var valueElement) && valueElement.ValueKind == JsonValueKind.Array)
             {
-                var users = new List<UserDto>();
+                var users = new List<AuthUserDto>();
 
                 foreach (var userElement in valueElement.EnumerateArray())
                 {
                     try
                     {
-                        // Mapear UserDetailModel ? UserDto
                         var idUser = userElement.TryGetProperty("idUser", out var idProp) 
                             ? idProp.GetString() ?? string.Empty 
                             : string.Empty;
@@ -78,7 +69,7 @@ public class AdminManagerService : IAdminManagerService
                         var isActive = userElement.TryGetProperty("isActive", out var isActiveProp) && isActiveProp.ValueKind == System.Text.Json.JsonValueKind.True;
                         var isBlocked = userElement.TryGetProperty("isBlocked", out var isBlockedProp) && isBlockedProp.ValueKind == System.Text.Json.JsonValueKind.True;
 
-                        users.Add(new UserDto
+                        users.Add(new AuthUserDto
                         {
                             Id = idUser,
                             FullName = userName,
@@ -90,7 +81,6 @@ public class AdminManagerService : IAdminManagerService
                     }
                     catch
                     {
-                        // Ignorar usuarios problemáticos
                         continue;
                     }
                 }
@@ -98,19 +88,16 @@ public class AdminManagerService : IAdminManagerService
                 return users;
             }
 
-            return new List<UserDto>();
+            return new List<AuthUserDto>();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error en GetAvailableAdminsAsync: {ex.Message}");
-            return new List<UserDto>();
+            return new List<AuthUserDto>();
         }
     }
 
-    /// <summary>
-    /// Crea un nuevo usuario en el sistema.
-    /// POST /api/ManagerUsers?userId={userId}&orgId={orgId}
-    /// </summary>
+
     public async Task<bool> CreateUserAsync(CreateUserDto dto)
     {
         try
@@ -119,7 +106,6 @@ public class AdminManagerService : IAdminManagerService
 
             var endpoint = $"{_baseEndpoint}?userId={_sessionService.UserId}&orgId={_sessionService.OrgId}";
 
-            // Convertir a formato esperado por el API (UserSaveDto)
             var requestDto = new
             {
                 userName = dto.UserName,
@@ -138,10 +124,7 @@ public class AdminManagerService : IAdminManagerService
         }
     }
 
-    /// <summary>
-    /// Edita un usuario existente.
-    /// PUT /api/ManagerUsers?userId={userId}&orgId={orgId}
-    /// </summary>
+    
     public async Task<bool> UpdateUserAsync(EditUserDto dto)
     {
         try
@@ -150,7 +133,6 @@ public class AdminManagerService : IAdminManagerService
 
             var endpoint = $"{_baseEndpoint}?userId={_sessionService.UserId}&orgId={_sessionService.OrgId}";
 
-            // Convertir a formato esperado por el API (UserUpdateDto)
             var requestDto = new
             {
                 idUser = dto.IdUser,
@@ -171,10 +153,7 @@ public class AdminManagerService : IAdminManagerService
         }
     }
 
-    /// <summary>
-    /// Desactiva un usuario del sistema.
-    /// DELETE /api/ManagerUsers/{userId}?userId={requestingUserId}&orgId={orgId}
-    /// </summary>
+   
     public async Task<bool> DeactivateUserAsync(Guid userId)
     {
         try

@@ -1,11 +1,10 @@
-using System.Threading.Tasks;
+using System.Windows;
 using AeroVeloz.Desktop.ViewModels.Base;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using AeroVeloz.Desktop.Views;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
 namespace AeroVeloz.Desktop.ViewModels.AirportAdmin;
 
@@ -20,6 +19,15 @@ public partial class AirportAdminMainViewModel : BaseViewModel
 
     [ObservableProperty]
     private BaseViewModel _currentViewModel = null!;
+
+    [ObservableProperty]
+    private string _userName = "Administrador de Aeropuerto";
+
+    [ObservableProperty]
+    private string _userRole = "Airport Admin";
+
+    [ObservableProperty]
+    private string _systemDate = System.DateTime.Now.ToString("dddd, dd MMMM yyyy");
 
     public AirportAdminMainViewModel(
         ISessionService sessionService,
@@ -63,14 +71,14 @@ public partial class AirportAdminMainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void Logout()
+    private void Logout(Window currentWindow)
     {
         _sessionService.ClearSession();
         var loginView = App.AppHost?.Services.GetRequiredService<LoginView>();
         if (loginView != null)
         {
             loginView.Show();
-            Application.Current.MainWindow?.Close();
+            currentWindow?.Close();
         }
     }
 }

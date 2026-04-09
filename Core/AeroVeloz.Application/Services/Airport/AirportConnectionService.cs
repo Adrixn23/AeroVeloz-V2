@@ -129,17 +129,28 @@ namespace AeroVeloz.Application.Handlers.Airport
             }
         }
 
-        public async Task<OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>> GetConnectionsAsync(
+        public async Task<OperationResult<IReadOnlyCollection<ConnectionAirlineByAirportResponseDto>>> GetConnectionsAsync(
             string codeAirportIcao, Guid userId, int orgId)
         {
             try
             {
                 var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
                 if (!authResult.IsValid)
-                    return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.FromValidation(authResult);
+                    return OperationResult<IReadOnlyCollection<ConnectionAirlineByAirportResponseDto>>.FromValidation(authResult);
 
                 var connections = await _repo.GetAirportConnectionById(codeAirportIcao);
-                return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.Ok(connections);
+
+                // Mapear de AirlineConnectionByAirportModel a ConnectionAirlineByAirportResponseDto
+                var responseList = connections.Select(c => new ConnectionAirlineByAirportResponseDto(
+                    c.connectionId,
+                    c.airportCode,
+                    c.airlineCode,
+                    c.airlineName,
+                    c.isActive,
+                    c.CreateAt
+                )).ToList();
+
+                return OperationResult<IReadOnlyCollection<ConnectionAirlineByAirportResponseDto>>.Ok(responseList);
             }
             catch (Exception ex)
             {
@@ -150,7 +161,7 @@ namespace AeroVeloz.Application.Handlers.Airport
                     Source = "AirportConnectionService.GetConnectionsAsync",
                     Message = $"Error inesperado al obtener conexiones: {codeAirportIcao}"
                 }, ex);
-                return OperationResult<IReadOnlyCollection<AirlineConnectionByAirportModel>>.Fail("CONN_ERROR", "Error inesperado al obtener conexiones");
+                return OperationResult<IReadOnlyCollection<ConnectionAirlineByAirportResponseDto>>.Fail("CONN_ERROR", "Error inesperado al obtener conexiones");
             }
         }
     }

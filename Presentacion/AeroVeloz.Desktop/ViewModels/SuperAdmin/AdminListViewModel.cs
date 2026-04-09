@@ -2,13 +2,14 @@ using System.Collections.ObjectModel;
 
 using AeroVeloz.Desktop.Models.DTOs.Audit;
 using AeroVeloz.Desktop.Models.DTOs.Auth;
-using AeroVeloz.Desktop.Models.DTOs.User;
+using AuthUserDto = AeroVeloz.Desktop.Models.DTOs.Auth.UserDto;
 using AeroVeloz.Desktop.Services.Dialog;
-using AeroVeloz.Desktop.Services.Interfaces;
 using AeroVeloz.Desktop.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using AeroVeloz.Desktop.Services.Interfaces.AdminSystem;
+using AeroVeloz.Desktop.Services.Interfaces.Audit;
 
 namespace AeroVeloz.Desktop.ViewModels.SuperAdmin;
 
@@ -20,12 +21,12 @@ public partial class AdminListViewModel : BaseViewModel
     private readonly AdminDetailViewModel _detailViewModel;
 
     [ObservableProperty]
-    private ObservableCollection<UserDto> _systemUsers = new();
+    private ObservableCollection<AuthUserDto> _systemUsers = new();
 
-    private ObservableCollection<UserDto> _allSystemUsers = new();
+    private ObservableCollection<AuthUserDto> _allSystemUsers = new();
 
     [ObservableProperty]
-    private UserDto? _selectedUser;
+    private AuthUserDto? _selectedUser;
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -41,7 +42,7 @@ public partial class AdminListViewModel : BaseViewModel
         FilterUsers();
     }
 
-    partial void OnSelectedUserChanged(UserDto? value)
+    partial void OnSelectedUserChanged(AuthUserDto? value)
     {
         if (value != null)
         {
@@ -133,7 +134,7 @@ public partial class AdminListViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task EditUserAsync(UserDto? user)
+    private async Task EditUserAsync(AuthUserDto? user)
     {
         var userToEdit = user ?? SelectedUser;
         if (userToEdit == null) return;
@@ -143,7 +144,7 @@ public partial class AdminListViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task DeactivateUserAsync(UserDto? user)
+    private async Task DeactivateUserAsync(AuthUserDto? user)
     {
         var userToDeactivate = user ?? SelectedUser;
         if (userToDeactivate == null) return;

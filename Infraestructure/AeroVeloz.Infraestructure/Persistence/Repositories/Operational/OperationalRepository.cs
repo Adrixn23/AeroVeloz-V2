@@ -59,16 +59,20 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
             {
                 var operationsByAirport = await (
                     from op in _context.OperationChanges.AsNoTracking()
-                    join or in _context.Organizations.AsNoTracking()
-                    on orgId equals or.Id
-                    join air in _context.Airports.AsNoTracking()
-                    on orgId equals air.Id
-                    join opt in _context.OperationalChangeTypes.AsNoTracking()
-                    on op.idOperationalType equals opt.Id
-                    where op.codeAirportIcao == air.codeAirportIcao
-                    select new OperationalDetailModel(op.idUser, op.Id, or.nameOrganization, opt.name, op.changeAt, op.cause )
+                    where op.isActive
+                    select new OperationalDetailModel(
+                        op.Id,
+                        op.idOperationalType,
+                        op.flightNumber,
+                        op.codeAirlinesIcao,
+                        op.codeAirportIcao,
+                        op.previosValue,
+                        op.newValue,
+                        op.changeAt,
+                        op.cause,
+                        op.isActive
+                    )).ToListAsync();
 
-                    ).ToListAsync();
                 if(operationsByAirport.Any()) 
                     return operationsByAirport;
 

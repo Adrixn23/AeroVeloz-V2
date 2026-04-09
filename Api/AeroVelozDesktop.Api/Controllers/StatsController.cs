@@ -1,6 +1,3 @@
-using AeroVeloz.Application.Contracts.Airport;
-using AeroVeloz.Application.Contracts.Users;
-using AeroVeloz.Application.DTOs.StatusSystem;
 using AeroVelozDesktop.Api.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +23,20 @@ namespace AeroVelozDesktop.Api.Controllers
             var orgId = this.GetOrganizationId();
 
             var result = await _statsService.GetGlobalStatsAsync(userId, orgId);
+            if (result.Success)
+            {
+                return Ok(result.Value);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("airport")]
+        public async Task<IActionResult> GetAirportStats()
+        {
+            var userId = this.GetUserId();
+            var orgId = this.GetOrganizationId();
+
+            var result = await _statsService.GetAirportStatsAsync(userId, orgId);
             if (result.Success)
             {
                 return Ok(result.Value);

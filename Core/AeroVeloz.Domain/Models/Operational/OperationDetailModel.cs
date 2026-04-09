@@ -2,12 +2,15 @@
 namespace AeroVeloz.Domain.Models.Operational
 {
     public sealed record OperationalDetailModel(
-        Guid userId,
-        Guid operationalId,
-        string? nameAirport,
-        string? Operational,
+        Guid id,
+        short idOperationalType,
+        short flightNumber,
+        string? codeAirlinesIcao,
+        string? codeAirportIcao,
+        string? previosValue,
+        string? newValue,
         DateTime changeAt,
-        string? cause
-
-        );
+        string? cause,
+        bool isActive
+    );
 }

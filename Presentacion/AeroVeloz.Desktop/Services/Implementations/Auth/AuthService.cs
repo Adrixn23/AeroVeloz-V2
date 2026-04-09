@@ -1,16 +1,14 @@
-using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs;
 using AeroVeloz.Desktop.Models.DTOs.Auth;
 using AeroVeloz.Desktop.Models.DTOs.Result;
 using AeroVeloz.Desktop.Models.DTOs.Result.ApiResponse;
-using AeroVeloz.Desktop.Services.Interfaces;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 using Microsoft.Extensions.Configuration;
 
-namespace AeroVeloz.Desktop.Services.Implementations;
+namespace AeroVeloz.Desktop.Services.Implementations.Auth;
 
 public class AuthService : IAuthService
 {

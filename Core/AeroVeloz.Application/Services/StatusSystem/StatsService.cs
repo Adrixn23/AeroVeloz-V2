@@ -48,5 +48,29 @@ namespace AeroVeloz.Application.Services.StatusSystem
                 return OperationResult<GlobalStatsDto>.Fail("STATS_ERROR", "Error inesperado al obtener estadísticas globales");
             }
         }
+
+        public async Task<OperationResult<AirportAdminStatsDto>> GetAirportStatsAsync(Guid userId, int orgId)
+        {
+            try
+            {
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<AirportAdminStatsDto>.FromValidation(authResult);
+
+                var stats = await _statsRepository.GetAirportStatsAsync(orgId);
+                return OperationResult<AirportAdminStatsDto>.Ok(stats);
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new Transversal.Monitoring.MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "StatsService.GetAirportStatsAsync",
+                    Message = "Error inesperado al obtener las estadísticas del aeropuerto"
+                }, ex);
+                return OperationResult<AirportAdminStatsDto>.Fail("AIRPORT_STATS_ERROR", "Error inesperado al obtener estadísticas del aeropuerto");
+            }
+        }
     }
 }

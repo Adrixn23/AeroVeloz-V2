@@ -1,9 +1,5 @@
 namespace AeroVeloz.Desktop.Models.DTOs.Audit;
 
-/// <summary>
-/// DTO que mapea los datos de auditoría desde el API para la capa de presentación.
-/// Contiene información sobre las acciones realizadas sobre usuarios.
-/// </summary>
 public class AuditDto
 {
     public Guid AuditId { get; set; }
