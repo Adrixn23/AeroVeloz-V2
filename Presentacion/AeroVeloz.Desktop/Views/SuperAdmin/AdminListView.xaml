@@ -51,6 +51,8 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Search Box -->
@@ -60,8 +62,19 @@
                              Margin="0,0,16,0"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                    <!-- Refresh Button -->
+                    <!-- General Audit Button -->
                     <Button Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedButton}" 
+                            Command="{Binding LoadGlobalAuditCommand}"
+                            Margin="0,0,8,0" Padding="16,8"
+                            ToolTip="Ver auditoría de toda la organización">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FormatListBulleted" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Auditoría General" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Refresh Button -->
+                    <Button Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedButton}" 
                             Command="{Binding LoadDataCommand}"
                             Margin="0,0,8,0" Padding="16,8"
                             ToolTip="Refrescar y recargar la tabla">
@@ -72,7 +85,7 @@
                     </Button>
 
                     <!-- Create Button -->
-                    <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    <Button Grid.Column="3" Style="{StaticResource MaterialDesignRaisedButton}" 
                             Command="{Binding CreateUserCommand}"
                             Margin="0,0,0,0" Padding="16,8"
                             ToolTip="Crear nuevo usuario">
@@ -154,7 +167,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Registro de auditoría de este usuario" 
+                        <TextBlock Grid.Row="0" Text="{Binding AuditTitle}" 
                                    Margin="24,16" FontSize="13" Foreground="Gray" FontWeight="Medium"/>
 
                         <DataGrid Grid.Row="1" ItemsSource="{Binding SelectedUserAudit}" 

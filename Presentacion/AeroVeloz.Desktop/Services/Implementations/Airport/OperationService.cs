@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 using Microsoft.Extensions.Configuration;
 
 namespace AeroVeloz.Desktop.Services.Implementations.Airport;
@@ -9,11 +10,13 @@ namespace AeroVeloz.Desktop.Services.Implementations.Airport;
 public class OperationService : IOperationService
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ISessionService _sessionService;
     private readonly string _endpoint;
 
-    public OperationService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public OperationService(IHttpClientFactory httpClientFactory, IConfiguration configuration, ISessionService sessionService)
     {
         _httpClientFactory = httpClientFactory;
+        _sessionService = sessionService;
         _endpoint = configuration["ApiEndpoints:Operations"] ?? "api/operations";
     }
 
@@ -68,12 +71,13 @@ public class OperationService : IOperationService
         var client = _httpClientFactory.CreateClient("AeroVelozApi");
         try
         {
+            var url = $"{_endpoint}/{operationId}";
             var jsonContent = new StringContent(
                 JsonSerializer.Serialize(operation),
                 System.Text.Encoding.UTF8,
                 "application/json");
 
-            var response = await client.PutAsync($"{_endpoint}/{operationId}", jsonContent);
+            var response = await client.PutAsync(url, jsonContent);
             return response.IsSuccessStatusCode;
         }
         catch
@@ -87,7 +91,7 @@ public class OperationService : IOperationService
         var client = _httpClientFactory.CreateClient("AeroVelozApi");
         try
         {
-            var dto = new { Id = operationId };
+            var dto = new { IdOperational = operationId };
             var request = new HttpRequestMessage(HttpMethod.Delete, _endpoint)
             {
                 Content = new StringContent(JsonSerializer.Serialize(dto), System.Text.Encoding.UTF8, "application/json")

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels"
+        xmlns:behaviors="clr-namespace:AeroVeloz.Desktop.Behaviors"
         mc:Ignorable="d"
         Title="AeroVeloz - Ingresar" Height="500" Width="400"
         WindowStartupLocation="CenterScreen"
@@ -51,13 +52,35 @@
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  Margin="0,0,0,16"/>
 
+        <!-- Password Field with Show/Hide Toggle -->
+        <Grid Grid.Row="4" Margin="0,0,0,32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="48"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="4" materialDesign:HintAssist.Hint="Contraseña" 
-                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                 Margin="0,0,0,32"
-                 FontFamily="Consolas" />
+            <!-- PasswordBox for secure password entry -->
+            <PasswordBox Grid.Column="0" x:Name="PasswordBox" 
+                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                        materialDesign:HintAssist.Hint="Contraseña"
+                        Visibility="{Binding IsNotPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Margin="0,8,0,0" Padding="0,16,0,8"
+                        behaviors:PasswordBoxBehavior.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <!-- TextBox for plain text password display -->
+            <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Contraseña" 
+                     Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                     Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     FontFamily="Consolas" />
+
+            <!-- Eye Icon Button to Toggle Visibility -->
+            <Button Grid.Column="1" Style="{StaticResource MaterialDesignIconButton}" 
+                    Command="{Binding TogglePasswordVisibilityCommand}"
+                    VerticalAlignment="Bottom" Padding="8">
+                <materialDesign:PackIcon Kind="{Binding PasswordIconKind}" Width="24" Height="24" />
+            </Button>
+        </Grid>
 
         <Grid Grid.Row="5" Margin="0,16,0,0">
             

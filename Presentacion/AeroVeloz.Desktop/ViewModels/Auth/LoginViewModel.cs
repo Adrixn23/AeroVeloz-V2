@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 
 using AeroVeloz.Desktop.Views.SuperAdmin;
 using AeroVeloz.Desktop.Views.AirportAdmin;
+using AeroVeloz.Desktop.Views.OperationalUser;
 using Microsoft.Extensions.DependencyInjection;
 using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
@@ -26,6 +27,15 @@ public partial class LoginViewModel : BaseViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
     private string _password = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotPasswordVisible))]
+    private bool _isPasswordVisible = false;
+
+    public bool IsNotPasswordVisible => !IsPasswordVisible;
+
+    [ObservableProperty]
+    private string _passwordIconKind = "Eye";
 
     [ObservableProperty]
     private string _errorMessage = string.Empty;
@@ -55,7 +65,7 @@ public partial class LoginViewModel : BaseViewModel
 
         if (response.Success)
         {
-            _sessionService.SetSession(response.UserId, response.OrganizationId, response.Token ?? string.Empty);
+            _sessionService.SetSession(response.UserId, response.OrganizationId, response.Token ?? string.Empty, this.NameUser);
 
             ErrorMessage = "¡Login exitoso! Redirigiendo...";
 
@@ -64,6 +74,10 @@ public partial class LoginViewModel : BaseViewModel
             if (response.RoleName?.ToUpper() == "AIRPORTADMIN")
             {
                 mainView = App.AppHost?.Services.GetRequiredService<AirportAdminMainView>();
+            }
+            else if (response.RoleName?.ToUpper() == "OPERATIONAIRPORT")
+            {
+                mainView = App.AppHost?.Services.GetRequiredService<OperationalUserMainView>();
             }
             else
             {
@@ -84,6 +98,13 @@ public partial class LoginViewModel : BaseViewModel
 
         IsBusy = false;
         LoginCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand]
+    private void TogglePasswordVisibility()
+    {
+        IsPasswordVisible = !IsPasswordVisible;
+        PasswordIconKind = IsPasswordVisible ? "EyeOff" : "Eye";
     }
 
     private bool CanLogin()

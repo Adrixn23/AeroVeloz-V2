@@ -1,8 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using AeroVeloz.Desktop.Views;
 using AeroVeloz.Desktop.Views.SuperAdmin;
+using AeroVeloz.Desktop.Views.OperationalUser;
 using AeroVeloz.Desktop.ViewModels.SuperAdmin;
 using AeroVeloz.Desktop.ViewModels.AirportAdmin;
+using AeroVeloz.Desktop.ViewModels.OperationalUser;
 using AeroVeloz.Desktop.Views.AirportAdmin;
 
 namespace AeroVeloz.Desktop.Dependencies;
@@ -104,6 +106,21 @@ public static class PresentationViews
             view.DataContext = provider.GetRequiredService<AuditLogViewModel>();
             return view;
         });
+
+        // OperationalUser Views
+        services.AddTransient<OperationalUserMainView>(provider =>
+        {
+            var view = new OperationalUserMainView();
+            view.DataContext = provider.GetRequiredService<OperationalUserMainViewModel>();
+            return view;
+        });
+        services.AddTransient<OperationalUserDashboardView>(provider =>
+        {
+            var view = new OperationalUserDashboardView();
+            view.DataContext = provider.GetRequiredService<OperationalUserDashboardViewModel>();
+            return view;
+        });
+
         return services;
     }
 }

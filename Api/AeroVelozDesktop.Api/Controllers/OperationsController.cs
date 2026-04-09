@@ -62,6 +62,19 @@ namespace AeroVelozDesktop.Api.Controllers
             return BadRequest(result);
         }
 
+        // PUT api/<OperationsController>/5
+        [HttpPut("{operationId}")]
+        public async Task<IActionResult> Put([FromRoute] Guid operationId, [FromBody] OperationalChangeUpdateDto dto)
+        {
+            var userId = this.GetUserId();
+            var orgId = this.GetOrganizationId();
+            var updateDto = new OperationalChangeUpdateDto(operationId, dto.IdOperationalType, dto.FlightNumber, 
+                dto.CodeAirline, dto.CodeAirport, dto.PreviousValue, dto.NewValue, dto.Cause);
+            var result = await _operationalService.UpdateAsync(updateDto, userId, orgId);
+            if (result.Success) return Ok(result);
+            return BadRequest(result);
+        }
+
         [HttpDelete]
         public async Task<IActionResult> Desactive([FromBody] OperationalChangeRemoveDto dto)
         {

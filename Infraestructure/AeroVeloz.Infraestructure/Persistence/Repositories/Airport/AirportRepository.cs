@@ -149,9 +149,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
             return null!;
         }
 
-        //obtener todos los aeropuertos del sistema
-        //tomando en cuenta que este metodo opera bajo el elemento de authorization para validar si el usuario es del tipo SYSTEM_ADMIN
-        //sino lo es ni podra realizar esta operacion 
+       
 
         public async Task<IReadOnlyCollection<AirportModel>> GetAllAirport()
         {
@@ -176,8 +174,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
             return airports;
         }
 
-        //modificacion total de los diversos campos previamente registrados de un aeropuerto
-        //tanto  en su tabla de aeropuerto como en organization 
+       
 
         public async Task<bool> UpdateEntity(Domain.Entities.Organization.Airports.Airport entity)
         {
@@ -202,7 +199,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                         .SetProperty(a => a.codeAirportIcao, entity.codeAirportIcao )
                         .SetProperty(a => a.codeAirportIata, entity.codeAirportIata )
                         .SetProperty(a => a.city, entity.city)
-                        .SetProperty(a => a.apiKeyMaster, entity.apiKeyMaster)
                         .SetProperty(a => a.country, entity.country)
                         .SetProperty(a => a.timeOffset, entity.timeOffset)
                         );

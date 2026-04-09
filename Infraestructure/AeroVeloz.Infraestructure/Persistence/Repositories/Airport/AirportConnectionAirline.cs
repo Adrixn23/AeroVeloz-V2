@@ -58,18 +58,16 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
                 var conections = await(
                     from c in _context.ConectionsAirlineAirports.AsNoTracking()
                                  join a in _context.Airlines.AsNoTracking()
-                                     on c.codeAirlinesIcao equals a.codeAirlinesIcao
-                                 join or in _context.Organizations.AsNoTracking()
-                                      on a.Id equals or.Id
-                                       where c.codeAirportIcao  == codeAirportIcao
+                                     on c.codeAirlinesIcao equals a.codeAirlinesIcao into aGroup
+                                 from a in aGroup.DefaultIfEmpty()
+                                 where c.codeAirportIcao  == codeAirportIcao
                                  select new AirlineConnectionByAirportModel(
                                           c.Id,
                                           c.codeAirportIcao,
                                           c.codeAirlinesIcao,
-                                         or.nameOrganization,
-                                         c.isActive,
-                                         c.createAt
-
+                                          a != null ? a.nameOrganization : "Desconocida",
+                                          c.isActive,
+                                          c.createAt
                                      )).ToListAsync();
 
                 if(conections.Any())
@@ -101,6 +99,21 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airport
             {
                 _logger.LogError(ex, "Error al actualizar la conexión aerolínea-aeropuerto {Id}", entity.Id);
                 throw new DatabaseOperationException($"Error actualizando la conexión aerolínea-aeropuerto con Id: {entity.Id}", ex);
+            }
+        }
+
+        public async Task<ConectionsAirlineAirport?> GetConnectionByIdAsync(Guid connectionId)
+        {
+            try
+            {
+                return await _context.ConectionsAirlineAirports
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.Id == connectionId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error consultando conexión por Id {Id}", connectionId);
+                throw new DatabaseOperationException($"Error consultando conexión con Id: {connectionId}", ex);
             }
         }
     }

@@ -6,23 +6,19 @@ using AeroVeloz.Domain.Common.CodeErrors.CodeErrors.Aiport;
 
 namespace AeroVeloz.Domain.Validators.Orquestador.Airport
 {
-    /// <summary>
-    /// Implementación del validador de conexiones entre aeropuertos y aerolíneas.
-    /// Verifica que los códigos obligatorios estén presentes y que no exista
-    /// una conexión duplicada entre el aeropuerto y la aerolínea.
-    /// </summary>
+  
     public class ConnectionAiportAirline : IConnectionAiportAirline
     {
 
         private readonly IDomainServiceAirport _domainServiceAirport;
 
-      
+
         public ConnectionAiportAirline(IDomainServiceAirport domainServiceAirport)
         {
             _domainServiceAirport = domainServiceAirport;
         }
 
-        
+
         public async Task<ValidationResult> ValidationForCreateConnectionAirlineByAirport(ConectionsAirlineAirport contections)
         {
             var errors = new List<ErrosValidationResults>();
@@ -42,10 +38,40 @@ namespace AeroVeloz.Domain.Validators.Orquestador.Airport
             if (errors.Any())
                 return new ValidationResult().Failur(errors);
 
-            // Verificar que no exista una conexión duplicada entre el aeropuerto y la aerolínea
             var exists = await _domainServiceAirport.AirportHasAirlineConnectionAsync(contections.codeAirportIcao!, contections.codeAirlinesIcao!);
             if (exists)
                 errors.Add(ConnectionAirportErrors.ConnectionAlreadyExists);
+
+            var result = new ValidationResult();
+            return errors.Any() ? result.Failur(errors) : result.Success();
+        }
+
+        public async Task<ValidationResult> ValidationForUpdateConnectionAirlineByAirport(ConectionsAirlineAirport contections)
+        {
+            var errors = new List<ErrosValidationResults>();
+
+            if (contections == null)
+            {
+                errors.Add(ConnectionAirportErrors.ConnectionInvalidObject);
+                return new ValidationResult().Failur(errors);
+            }
+
+            if (string.IsNullOrWhiteSpace(contections.codeAirlinesIcao))
+                errors.Add(ConnectionAirportErrors.ConnectionMissingAirlineCode);
+
+            if (string.IsNullOrWhiteSpace(contections.codeAirportIcao))
+                errors.Add(ConnectionAirportErrors.ConnectionMissingAirportCode);
+
+            if (errors.Any())
+                return new ValidationResult().Failur(errors);
+
+           
+            var exists = await _domainServiceAirport.AirportHasAirlineConnectionAsync(contections.codeAirportIcao!, contections.codeAirlinesIcao!);
+            if (exists && contections.Id == Guid.Empty)
+            {
+                
+                errors.Add(ConnectionAirportErrors.ConnectionAlreadyExists);
+            }
 
             var result = new ValidationResult();
             return errors.Any() ? result.Failur(errors) : result.Success();

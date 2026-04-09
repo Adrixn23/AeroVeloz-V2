@@ -6,5 +6,6 @@ namespace AeroVeloz.Domain.Validators.interfaces.Airport
     public interface IConnectionAiportAirline
     {
         Task<ValidationResult> ValidationForCreateConnectionAirlineByAirport(ConectionsAirlineAirport contections);
+        Task<ValidationResult> ValidationForUpdateConnectionAirlineByAirport(ConectionsAirlineAirport contections);
     }
 }

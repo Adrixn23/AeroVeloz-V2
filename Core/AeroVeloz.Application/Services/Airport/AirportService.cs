@@ -316,7 +316,7 @@ namespace AeroVeloz.Application.Handlers.Airport
         {
             try
             {
-                var authResult = await _auth.CanModifyOrganizations(userId, orgId);
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
                 if (!authResult.IsValid)
                     return OperationResult<IReadOnlyCollection<AirportModel>>.FromValidation(authResult);
 

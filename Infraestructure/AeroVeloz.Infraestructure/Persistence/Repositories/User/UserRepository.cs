@@ -59,7 +59,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.User
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.nameUser == nameUser && u.idOrganization == orgId );
-                Console.WriteLine(user!.nameUser);
+
                 if (user != null)
                 {
                    return new UserSystemModel(

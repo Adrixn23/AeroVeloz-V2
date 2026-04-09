@@ -13,6 +13,7 @@ public partial class OperationDetailViewModel : BaseViewModel
 {
     private readonly IOperationService _operationService;
     private readonly IDialogService _dialogService;
+    private readonly IAirportService _airportService;
     private bool _isEditMode;
     private Guid _currentOperationId;
 
@@ -40,17 +41,22 @@ public partial class OperationDetailViewModel : BaseViewModel
     [ObservableProperty]
     private string cause = string.Empty;
 
+    [ObservableProperty]
+    private bool isAirportIcaoEditable = true;
+
     public Action? OnSavedResultAction { get; set; }
 
     public OperationDetailViewModel(
         IOperationService operationService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IAirportService airportService)
     {
         _operationService = operationService;
         _dialogService = dialogService;
+        _airportService = airportService;
     }
 
-    public void InitializeForCreate()
+    public async void InitializeForCreate()
     {
         _isEditMode = false;
         Title = "Crear Cambio Operacional";
@@ -61,6 +67,21 @@ public partial class OperationDetailViewModel : BaseViewModel
         PreviousValue = string.Empty;
         NewValue = string.Empty;
         Cause = string.Empty;
+        IsAirportIcaoEditable = true;
+
+        // Llenar automáticamente el código del aeropuerto del usuario
+        try
+        {
+            var airport = await _airportService.GetByIdAsync(-1); // -1 = orgId del usuario en sesión
+            if (airport != null)
+            {
+                CodeAirport = airport.CodeAirportIcao ?? string.Empty;
+            }
+        }
+        catch
+        {
+            // Si hay error, dejar vacío
+        }
     }
 
     public void InitializeForEdit(OperationDto operation)
@@ -78,6 +99,7 @@ public partial class OperationDetailViewModel : BaseViewModel
         PreviousValue = operation.PreviousValue ?? string.Empty;
         NewValue = operation.NewValue ?? string.Empty;
         Cause = operation.Cause ?? string.Empty;
+        IsAirportIcaoEditable = false;
     }
 
     [RelayCommand]

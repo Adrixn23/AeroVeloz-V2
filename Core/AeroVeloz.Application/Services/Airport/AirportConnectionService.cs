@@ -10,7 +10,6 @@ using AeroVeloz.Domain.Validators.interfaces.Airport;
 using AeroVeloz.Transversal.Contracts.Monitoring;
 using AeroVeloz.Transversal.Monitoring;
 using MediatR;
-using System.Text.Json;
 
 namespace AeroVeloz.Application.Handlers.Airport
 {
@@ -21,19 +20,22 @@ namespace AeroVeloz.Application.Handlers.Airport
         private readonly IUserRepositoryAuthorization _auth;
         private readonly IOrganizationMonitoringLogger _monitoringLogger;
         private readonly IMediator _mediator;
+        private readonly IAirportRepository _airportRepo;
 
         public AirportConnectionService(
             IAirportConnectionAirline repo,
             IConnectionAiportAirline validator,
             IUserRepositoryAuthorization auth,
             IOrganizationMonitoringLogger monitoringLogger,
-            IMediator mediator)
+            IMediator mediator,
+            IAirportRepository airportRepo)
         {
             _repo = repo;
             _validator = validator;
             _auth = auth;
             _monitoringLogger = monitoringLogger;
             _mediator = mediator;
+            _airportRepo = airportRepo;
         }
 
         public async Task<OperationResult<bool>> CreateConnectionAsync(ConnectionAirlineByAirportSaveDto dto, Guid userId, int orgId)
@@ -83,6 +85,51 @@ namespace AeroVeloz.Application.Handlers.Airport
                     Message = "Error inesperado al crear conexión aeropuerto-aerolínea"
                 }, ex);
                 return OperationResult<bool>.Fail("CONN_ERROR", "Error inesperado al crear la conexión");
+            }
+        }
+
+        public async Task<OperationResult<bool>> UpdateConnectionAsync(ConnectionAirlineByAirportUpdateDto dto, Guid userId, int orgId)
+        {
+            try
+            {
+                var authResult = await _auth.AuthorizeOrganizationAccessAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
+
+                var airport = await _airportRepo.GetAirportByCode(dto.codeAirportIcao);
+                if (airport == null)
+                    return OperationResult<bool>.Fail("AIRPORT_NOT_FOUND", "El aeropuerto especificado no existe");
+
+                var connection = new ConectionsAirlineAirport
+                {
+                    Id = dto.Id,
+                    codeAirlinesIcao = dto.codeAirlinesIcao,
+                    codeAirportIcao = dto.codeAirportIcao,
+                    isActive = dto.isActive,
+                    createAt = DateTime.UtcNow
+                };
+
+                var validation = await _validator.ValidationForUpdateConnectionAirlineByAirport(connection);
+                if (!validation.IsValid)
+                    return OperationResult<bool>.FromValidation(validation);
+
+                var updated = await _repo.UpdateEntity(connection);
+                if (!updated)
+                    return OperationResult<bool>.Fail("CONN_UPDATE", "No se pudo actualizar la conexión");
+
+                var result = OperationResult<bool>.Ok(true, "Conexión actualizada exitosamente");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "AirportConnectionService.UpdateConnectionAsync",
+                    Message = "Error inesperado al actualizar conexión aeropuerto-aerolínea"
+                }, ex);
+                return OperationResult<bool>.Fail("CONN_ERROR", "Error inesperado al actualizar la conexión");
             }
         }
 
@@ -140,7 +187,6 @@ namespace AeroVeloz.Application.Handlers.Airport
 
                 var connections = await _repo.GetAirportConnectionById(codeAirportIcao);
 
-                // Mapear de AirlineConnectionByAirportModel a ConnectionAirlineByAirportResponseDto
                 var responseList = connections.Select(c => new ConnectionAirlineByAirportResponseDto(
                     c.connectionId,
                     c.airportCode,

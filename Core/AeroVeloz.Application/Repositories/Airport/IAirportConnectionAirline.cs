@@ -7,6 +7,6 @@ namespace AeroVeloz.Application.Repositories.Airport
     public interface IAirportConnectionAirline : IBRepository<ConectionsAirlineAirport>
     {
         Task<IReadOnlyCollection<AirlineConnectionByAirportModel>> GetAirportConnectionById(string? codeAirportIcao);
-        
+        Task<ConectionsAirlineAirport?> GetConnectionByIdAsync(Guid connectionId);
     }
 }

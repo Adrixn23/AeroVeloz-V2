@@ -26,6 +26,7 @@
 
             <TextBlock Text="Código ICAO Aeropuerto" FontSize="12" Foreground="Gray" Margin="0,0,0,4"/>
             <TextBox Text="{Binding CodeAirport, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding IsAirportIcaoEditable}"
                      materialDesign:HintAssist.Hint="Ej: JFK, LAX"
                      Padding="12,8" Height="40" Margin="0,0,0,16"/>
 

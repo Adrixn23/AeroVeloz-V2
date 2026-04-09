@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels.SuperAdmin"
+             xmlns:behaviors="clr-namespace:AeroVeloz.Desktop.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -50,9 +51,9 @@
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
             <!-- Password -->
-            <TextBox Grid.Row="2" materialDesign:HintAssist.Hint="Contraseña *" 
-                     Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" 
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <PasswordBox Grid.Row="2" materialDesign:HintAssist.Hint="Contraseña *" x:Name="PasswordBoxControl"
+                         Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                         PasswordChanged="PasswordBox_PasswordChanged" />
 
             <!-- Role (ID) -->
             <TextBox Grid.Row="4" materialDesign:HintAssist.Hint="ID Rol (1 = SuperAdmin) *" 
@@ -60,22 +61,10 @@
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
             <!-- Active Toggle -->
-            <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0,16,0,0">
-                <StackPanel.Style>
-                    <Style TargetType="StackPanel">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEditMode}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
-                <TextBlock Text="Estado activo:" VerticalAlignment="Center" Margin="0,0,16,0" Foreground="{DynamicResource MaterialDesignBody}"/>
-                <ToggleButton IsChecked="{Binding IsActive, Mode=TwoWay}" 
-                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                              ToolTip="Indica si el usuario está activo"/>
-            </StackPanel>
+            <CheckBox Grid.Row="6" Content="Activo" 
+                      IsChecked="{Binding IsActive}"
+                      Margin="0,0,0,16"
+                      Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
 
         <!-- Loading -->

@@ -27,6 +27,9 @@ public partial class ConnectionDetailViewModel : BaseViewModel
     [ObservableProperty]
     private bool isActive = true;
 
+    [ObservableProperty]
+    private bool isAirportIcaoEditable = true;
+
     public Action? OnSavedResultAction { get; set; }
 
     public ConnectionDetailViewModel(
@@ -44,6 +47,7 @@ public partial class ConnectionDetailViewModel : BaseViewModel
         CodeAirlinesIcao = string.Empty;
         CodeAirportIcao = string.Empty;
         IsActive = true;
+        IsAirportIcaoEditable = true;
     }
 
     public void InitializeForEdit(ConnectionDto connection)
@@ -57,6 +61,7 @@ public partial class ConnectionDetailViewModel : BaseViewModel
         CodeAirlinesIcao = connection.CodeAirlinesIcao ?? string.Empty;
         CodeAirportIcao = connection.CodeAirportIcao ?? string.Empty;
         IsActive = connection.IsActive;
+        IsAirportIcaoEditable = false;
     }
 
     [RelayCommand]

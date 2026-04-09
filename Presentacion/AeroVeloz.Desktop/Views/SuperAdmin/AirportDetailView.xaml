@@ -88,23 +88,9 @@
             </ComboBox>
 
             <!-- Active Toggle -->
-            <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7" Orientation="Horizontal" Margin="0,16,0,0">
-                <!-- Using a specific visibility trigger to show only when editing: -->
-                <StackPanel.Style>
-                    <Style TargetType="StackPanel">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEditMode}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
-                <TextBlock Text="Estado activo:" VerticalAlignment="Center" Margin="0,0,16,0" Foreground="{DynamicResource MaterialDesignBody}"/>
-                <ToggleButton IsChecked="{Binding IsActived, Mode=TwoWay}" 
-                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                              ToolTip="Indica si la organización está activa"/>
-            </StackPanel>
+            <CheckBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="8" Content="Activo" 
+                      IsChecked="{Binding IsActived, UpdateSourceTrigger=PropertyChanged}"
+                      Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
 
         <!-- Loading -->

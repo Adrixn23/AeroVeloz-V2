@@ -1,21 +1,19 @@
 using System.Windows;
+using AeroVeloz.Desktop.Services.Interfaces.Auth;
 using AeroVeloz.Desktop.ViewModels.Base;
+using AeroVeloz.Desktop.ViewModels.AirportAdmin;
 using AeroVeloz.Desktop.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using AeroVeloz.Desktop.Services.Interfaces.Auth;
 
-namespace AeroVeloz.Desktop.ViewModels.AirportAdmin;
+namespace AeroVeloz.Desktop.ViewModels.OperationalUser;
 
-public partial class AirportAdminMainViewModel : BaseViewModel
+public partial class OperationalUserMainViewModel : BaseViewModel
 {
     private readonly ISessionService _sessionService;
-    private readonly AirportAdminDashboardViewModel _dashboardViewModel;
-    private readonly UserListViewModel _userListViewModel;
+    private readonly OperationalUserDashboardViewModel _dashboardViewModel;
     private readonly OperationsListViewModel _operationsListViewModel;
-    private readonly ConnectionListViewModel _connectionListViewModel;
-    private readonly AuditLogViewModel _auditLogViewModel;
 
     [ObservableProperty]
     private BaseViewModel _currentViewModel = null!;
@@ -24,50 +22,34 @@ public partial class AirportAdminMainViewModel : BaseViewModel
     private string _userName = string.Empty;
 
     [ObservableProperty]
-    private string _userRole = "Airport Admin";
+    private string _userRole = "Operador de Aeropuerto";
 
     [ObservableProperty]
     private string _systemDate = System.DateTime.Now.ToString("dddd, dd MMMM yyyy");
 
-    public AirportAdminMainViewModel(
+    public OperationalUserMainViewModel(
         ISessionService sessionService,
-        AirportAdminDashboardViewModel dashboardViewModel,
-        UserListViewModel userListViewModel,
-        OperationsListViewModel operationsListViewModel,
-        ConnectionListViewModel connectionListViewModel,
-        AuditLogViewModel auditLogViewModel)
+        OperationalUserDashboardViewModel dashboardViewModel,
+        OperationsListViewModel operationsListViewModel)
     {
         _sessionService = sessionService;
         _dashboardViewModel = dashboardViewModel;
-        _userListViewModel = userListViewModel;
         _operationsListViewModel = operationsListViewModel;
-        _connectionListViewModel = connectionListViewModel;
-        _auditLogViewModel = auditLogViewModel;
 
+        UserName = _sessionService.UserName ?? "Operador";
         CurrentViewModel = _dashboardViewModel;
-
-        UserName = _sessionService.UserName ?? "Administrador de Aeropuerto";
     }
 
     [RelayCommand]
-    private void Navigate(string viewName)
+    private void NavigateTo(string viewName)
     {
         switch (viewName)
         {
             case "Dashboard":
                 CurrentViewModel = _dashboardViewModel;
                 break;
-            case "Operators":
-                CurrentViewModel = _userListViewModel;
-                break;
             case "Operations":
                 CurrentViewModel = _operationsListViewModel;
-                break;
-            case "Connections":
-                CurrentViewModel = _connectionListViewModel;
-                break;
-            case "Audit":
-                CurrentViewModel = _auditLogViewModel;
                 break;
         }
     }

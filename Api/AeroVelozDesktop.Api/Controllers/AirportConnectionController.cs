@@ -41,6 +41,16 @@ namespace AeroVelozDesktop.Api.Controllers
 
 
 
+        // PUT api/<AirportConnectionController>/5
+        [HttpPut("{connectionId}")]
+        public async Task<IActionResult> Put([FromRoute] Guid connectionId, [FromBody] ConnectionAirlineByAirportUpdateDto dto, [FromQuery] Guid userId, [FromQuery] int orgId)
+        {
+            var updateDto = new ConnectionAirlineByAirportUpdateDto(connectionId, dto.codeAirlinesIcao, dto.codeAirportIcao, dto.isActive);
+            var result = await _airportConnectionService.UpdateConnectionAsync(updateDto, userId, orgId);
+            if (result.Success) return Ok(result);
+            return BadRequest(result);
+        }
+
         // DELETE api/<AirportConnectionController>/5
         [HttpDelete("{connectionId}")]
         public async Task<IActionResult>  Desactive([FromRoute] Guid connectionId, [FromQuery] string airportIcao, [FromQuery] Guid userId, [FromQuery] int orgId)

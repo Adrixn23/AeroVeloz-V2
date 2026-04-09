@@ -18,6 +18,7 @@ public partial class AdminListViewModel : BaseViewModel
     private readonly IAdminManagerService _adminManagerService;
     private readonly IAuditService _auditService;
     private readonly IDialogService _dialogService;
+    private readonly AeroVeloz.Desktop.Services.Interfaces.Auth.ISessionService _sessionService;
     private readonly AdminDetailViewModel _detailViewModel;
 
     [ObservableProperty]
@@ -33,6 +34,9 @@ public partial class AdminListViewModel : BaseViewModel
 
     [ObservableProperty]
     private ObservableCollection<AuditDto> _selectedUserAudit = new();
+
+    [ObservableProperty]
+    private string _auditTitle = "Registro de auditoría";
 
     [ObservableProperty]
     private bool _isAuditVisible = false;
@@ -59,11 +63,13 @@ public partial class AdminListViewModel : BaseViewModel
         IAdminManagerService adminManagerService,
         IAuditService auditService,
         IDialogService dialogService,
+        AeroVeloz.Desktop.Services.Interfaces.Auth.ISessionService sessionService,
         AdminDetailViewModel detailViewModel)
     {
         _adminManagerService = adminManagerService;
         _auditService = auditService;
         _dialogService = dialogService;
+        _sessionService = sessionService;
         _detailViewModel = detailViewModel;
 
         _detailViewModel.OnSavedResultAction = async () => await LoadDataAsync();
@@ -106,6 +112,8 @@ public partial class AdminListViewModel : BaseViewModel
     {
         if (SelectedUser == null) return;
 
+        AuditTitle = $"Registro de auditoría del usuario: {SelectedUser.FullName}";
+
         IsBusy = true;
 
         if (!Guid.TryParse(SelectedUser.Id, out var userId))
@@ -115,6 +123,26 @@ public partial class AdminListViewModel : BaseViewModel
         }
 
         var audits = await _auditService.GetUserAuditAsync(userId);
+
+        SelectedUserAudit.Clear();
+        foreach (var audit in audits.OrderByDescending(a => a.OccurredAt))
+        {
+            SelectedUserAudit.Add(audit);
+        }
+
+        IsAuditVisible = SelectedUserAudit.Count > 0;
+        IsBusy = false;
+    }
+
+    [RelayCommand]
+    private async Task LoadGlobalAuditAsync()
+    {
+        IsBusy = true;
+        SelectedUser = null;
+        AuditTitle = "Registro de auditoría general";
+
+        var orgId = _sessionService.OrgId > 0 ? _sessionService.OrgId : 1;
+        var audits = await _auditService.GetGlobalAuditAsync(orgId);
 
         SelectedUserAudit.Clear();
         foreach (var audit in audits.OrderByDescending(a => a.OccurredAt))

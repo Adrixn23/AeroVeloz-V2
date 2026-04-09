@@ -51,12 +51,8 @@ public class AirportService : IAirportService
     {
         try
         {
-            var client = _httpClientFactory.CreateClient("AeroVelozApi");
-            var url = BuildQueryUrl($"{_endpoint}/{id}");
-
-            var response = await client.GetFromJsonAsync<ApiResponse<AirportDto>>(url);
-
-            return response?.Success == true ? response.Value : null;
+            var allAirports = await GetAllAsync();
+            return allAirports?.FirstOrDefault(a => a.Id == id);
         }
         catch (Exception ex)
         {

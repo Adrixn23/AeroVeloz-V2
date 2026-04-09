@@ -88,12 +88,13 @@ public class AirportConnectionService : IAirportConnectionService
         var client = _httpClientFactory.CreateClient("AeroVelozApi");
         try
         {
+            var url = $"{_endpoint}/{connectionId}?userId={_sessionService.UserId}&orgId={_sessionService.OrgId}";
             var jsonContent = new StringContent(
                 JsonSerializer.Serialize(connection),
                 System.Text.Encoding.UTF8,
                 "application/json");
 
-            var response = await client.PutAsync($"{_endpoint}/{connectionId}", jsonContent);
+            var response = await client.PutAsync(url, jsonContent);
             return response.IsSuccessStatusCode;
         }
         catch

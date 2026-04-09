@@ -127,6 +127,75 @@ namespace AeroVeloz.Application.Handlers.Operations
             }
         }
 
+        public async Task<OperationResult<bool>> UpdateAsync(OperationalChangeUpdateDto dto, Guid userId, int orgId)
+        {
+            try
+            {
+                var authResult = await _auth.CanModifyOperationsAsync(userId, orgId);
+                if (!authResult.IsValid)
+                    return OperationResult<bool>.FromValidation(authResult);
+
+                var operation = new OperationChange
+                {
+                    Id = dto.Id,
+                    idUser = userId,
+                    idOperationalType = dto.IdOperationalType,
+                    flightNumber = dto.FlightNumber,
+                    codeAirlinesIcao = dto.CodeAirline,
+                    codeAirportIcao = dto.CodeAirport,
+                    previosValue = dto.PreviousValue,
+                    newValue = dto.NewValue,
+                    cause = dto.Cause,
+                    changeAt = DateTime.UtcNow,
+                    isActive = true
+                };
+
+                var validation = await _validator.ValidateForCreateOperational(operation);
+                if (!validation.IsValid)
+                    return OperationResult<bool>.FromValidation(validation);
+
+                var updated = await _repo.UpdateEntity(operation);
+                if (!updated)
+                    return OperationResult<bool>.Fail("OP_UPDATE", "No se pudo actualizar el cambio operacional");
+
+                var values = JsonSerializer.Serialize(operation);
+                await _auditRepo.CreateAsync(new Domain.Entities.Audit.Audit
+                {
+                    Id = Guid.NewGuid(),
+                    IdAuditType = 2,
+                    idUser = userId,
+                    nameEntity = "OperationChange",
+                    ocurrentAt = DateTime.UtcNow,
+                    newValuesData = values
+                });
+
+                var result = OperationResult<bool>.Ok(true, "Cambio operacional actualizado");
+                return result;
+            }
+            catch (DatabaseOperationException ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.UpdateAsync",
+                    Message = "Error de base de datos al actualizar cambio operacional"
+                }, ex);
+                return OperationResult<bool>.Fail(SystemErrors.DatabaseFailure);
+            }
+            catch (Exception ex)
+            {
+                await _monitoringLogger.LogSystemFaultAsync(new MonitoringLogEntry
+                {
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    Source = "OperationalService.UpdateAsync",
+                    Message = "Error inesperado al actualizar cambio operacional"
+                }, ex);
+                return OperationResult<bool>.Fail("OP_ERROR", "Error inesperado al actualizar el cambio operacional");
+            }
+        }
+
         public async Task<OperationResult<OperationalModel>> GetByIdAsync(Guid operationId, Guid userId, int orgId)
         {
             try
@@ -174,7 +243,7 @@ namespace AeroVeloz.Application.Handlers.Operations
                 if (!authResult.IsValid)
                     return OperationResult<bool>.FromValidation(authResult);
 
-                var operation = _repo.GetByOperationAsync(dto.IdOperational);
+                var operation = await _repo.GetByOperationAsync(dto.IdOperational);
 
                 if(operation == null)
                 {
