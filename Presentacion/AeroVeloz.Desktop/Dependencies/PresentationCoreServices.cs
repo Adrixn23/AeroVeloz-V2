@@ -3,6 +3,7 @@ using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Implementations.Airport;
 using AeroVeloz.Desktop.Services.Implementations.Audit;
 using AeroVeloz.Desktop.Services.Implementations.Auth;
+using AeroVeloz.Desktop.Services.Implementations.Notifications;
 using AeroVeloz.Desktop.Services.Implementations.Users;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
 using AeroVeloz.Desktop.Services.Interfaces.Auth;
@@ -18,6 +19,7 @@ public static class PresentationCoreServices
         services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<ISessionService, SessionService>();
+        services.AddSingleton<NotificationService>();
 
         services.AddTransient<IAirportAdminStatService, AirportAdminStatService>();
         services.AddTransient<IManagerUserService, ManagerUserService>();

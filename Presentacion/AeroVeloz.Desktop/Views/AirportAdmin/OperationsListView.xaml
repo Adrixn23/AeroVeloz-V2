@@ -23,6 +23,8 @@
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Nueva Operación" 
                     Command="{Binding CreateOperationCommand}" Margin="16,0,0,0" Padding="16,8"/>
+            <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Operar Vuelo Seleccionado" 
+                    Command="{Binding OperarVueloCommand}" Margin="8,0,0,0" Padding="16,8"/>
             <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Refrescar" 
                     Command="{Binding LoadOperationsCommand}" Margin="8,0,0,0" Padding="16,8"
                     Foreground="{DynamicResource PrimaryHueMidBrush}" Loaded="RefreshButton_Loaded"/>
@@ -30,8 +32,22 @@
 
         <!-- Operations DataGrid -->
         <DataGrid Grid.Row="2" ItemsSource="{Binding Operations}" SelectedItem="{Binding SelectedOperation}"
-                  AutoGenerateColumns="False" CanUserAddRows="False" Background="White"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Background="White" IsReadOnly="True"
                   materialDesign:DataGridAssist.CellPadding="4" materialDesign:DataGridAssist.ColumnHeaderPadding="4">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Editar Operación" Command="{Binding EditOperationCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Pencil" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Eliminar Operación" Command="{Binding DeleteOperationCommand}" Foreground="#D32F2F">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Delete" Foreground="#D32F2F" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="120"/>
                 <DataGridTextColumn Header="Tipo de Cambio" Binding="{Binding IdOperationalType}" Width="100"/>

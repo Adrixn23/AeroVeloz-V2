@@ -1,4 +1,6 @@
 
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using AeroVeloz.Desktop.Models.DTOs.Operation;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
@@ -9,6 +11,12 @@ using MaterialDesignThemes.Wpf;
 
 namespace AeroVeloz.Desktop.ViewModels.AirportAdmin;
 
+public class ChangeTypeModel
+{
+    public short Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+}
+
 public partial class OperationDetailViewModel : BaseViewModel
 {
     private readonly IOperationService _operationService;
@@ -17,29 +25,83 @@ public partial class OperationDetailViewModel : BaseViewModel
     private bool _isEditMode;
     private Guid _currentOperationId;
 
+    public ObservableCollection<ChangeTypeModel> OperationalTypes { get; } = new ObservableCollection<ChangeTypeModel>
+    {
+        new ChangeTypeModel { Id = 1, Name = "Cambio de Puerta (GATE_CHANGE)" },
+        new ChangeTypeModel { Id = 2, Name = "Retraso de Vuelo (FLIGHT_DELAY)" },
+        new ChangeTypeModel { Id = 3, Name = "Cancelación de Vuelo (FLIGHT_CANCELLATION)" }
+    };
+
+    public ObservableCollection<string> CausesList { get; } = new ObservableCollection<string>
+    {
+        "Condiciones climáticas",
+        "Problemas técnicos",
+        "Tráfico aéreo",
+        "Razones operativas",
+        "Mantenimiento no programado",
+        "Huelga",
+        "Otros"
+    };
+
     [ObservableProperty]
     private string title = "Crear Cambio Operacional";
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [Range(1, short.MaxValue, ErrorMessage = "Debe ser mayor a 0.")]
     private short idOperationalType;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [Range(1, short.MaxValue, ErrorMessage = "Vuelo inválido.")]
     private short flightNumber;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [StringLength(3, MinimumLength = 3, ErrorMessage = "Debe tener 3 cc.")]
     private string codeAirline = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [StringLength(4, MinimumLength = 4, ErrorMessage = "Debe tener 4 cc.")]
     private string codeAirport = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [MaxLength(25, ErrorMessage = "Máx 25 caracteres.")]
     private string previousValue = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [MaxLength(25, ErrorMessage = "Máx 25 caracteres.")]
     private string newValue = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [MaxLength(250, ErrorMessage = "Máx 250 caracteres.")]
     private string cause = string.Empty;
+
+    [ObservableProperty]
+    private bool isCustomCause = false;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [MaxLength(250, ErrorMessage = "Máx 250 caracteres.")]
+    private string customCause = string.Empty;
+
+    partial void OnCauseChanged(string? value)
+    {
+        IsCustomCause = value == "Otros";
+        if (!IsCustomCause)
+        {
+            CustomCause = string.Empty;
+        }
+    }
 
     [ObservableProperty]
     private bool isAirportIcaoEditable = true;
@@ -69,10 +131,10 @@ public partial class OperationDetailViewModel : BaseViewModel
         Cause = string.Empty;
         IsAirportIcaoEditable = true;
 
-        // Llenar automáticamente el código del aeropuerto del usuario
+      
         try
         {
-            var airport = await _airportService.GetByIdAsync(-1); // -1 = orgId del usuario en sesión
+            var airport = await _airportService.GetByIdAsync(-1);
             if (airport != null)
             {
                 CodeAirport = airport.CodeAirportIcao ?? string.Empty;
@@ -80,7 +142,6 @@ public partial class OperationDetailViewModel : BaseViewModel
         }
         catch
         {
-            // Si hay error, dejar vacío
         }
     }
 
@@ -105,15 +166,18 @@ public partial class OperationDetailViewModel : BaseViewModel
     [RelayCommand]
     private async Task SaveAsync()
     {
-        if (FlightNumber <= 0)
+        ValidateAllProperties();
+        if (HasErrors)
         {
-            await _dialogService.ShowInfoAsync("Debe ingresar un número de vuelo válido.", "Validación");
+            var firstError = string.Join("\n", GetErrors().Select(e => e.ErrorMessage));
+            await _dialogService.ShowInfoAsync($"Por favor corrija los siguientes errores:\n{firstError}", "Validación");
             return;
         }
 
-        if (IdOperationalType <= 0)
+        string finalCause = IsCustomCause ? CustomCause : Cause;
+        if (string.IsNullOrWhiteSpace(finalCause))
         {
-            await _dialogService.ShowInfoAsync("Debe seleccionar un tipo de cambio operacional.", "Validación");
+            await _dialogService.ShowInfoAsync("Debe indicar una causa válida.", "Validación");
             return;
         }
 
@@ -130,7 +194,7 @@ public partial class OperationDetailViewModel : BaseViewModel
                 CodeAirport,
                 PreviousValue,
                 NewValue,
-                Cause
+                Cause = finalCause
             };
 
             if (_isEditMode)

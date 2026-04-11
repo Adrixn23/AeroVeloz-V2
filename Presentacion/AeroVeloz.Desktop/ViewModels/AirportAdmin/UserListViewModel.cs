@@ -14,6 +14,7 @@ public partial class UserListViewModel : BaseViewModel
     private readonly IManagerUserService _managerUserService;
     private readonly IDialogService _dialogService;
     private readonly UserDetailViewModel _detailViewModel;
+    private readonly AuditLogViewModel _auditViewModel;
 
     [ObservableProperty]
     private ObservableCollection<UserDto> _users = new();
@@ -29,11 +30,13 @@ public partial class UserListViewModel : BaseViewModel
     public UserListViewModel(
         IManagerUserService managerUserService,
         IDialogService dialogService,
-        UserDetailViewModel detailViewModel)
+        UserDetailViewModel detailViewModel,
+        AuditLogViewModel auditViewModel)
     {
         _managerUserService = managerUserService;
         _dialogService = dialogService;
         _detailViewModel = detailViewModel;
+        _auditViewModel = auditViewModel;
 
         _detailViewModel.OnSavedResultAction += async () => await LoadUsersAsync();
     }
@@ -131,6 +134,23 @@ public partial class UserListViewModel : BaseViewModel
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task ViewUserAuditAsync()
+    {
+        if (SelectedUser == null) return;
+
+        if (Guid.TryParse(SelectedUser.Id, out var parsedId))
+        {
+            _auditViewModel.TargetUserId = parsedId;
+        }
+        _auditViewModel.AuditMode = "User Specific";
+
+        // Initialize and show modal
+        var auditView = new Views.AirportAdmin.AuditLogView { DataContext = _auditViewModel };
+        _auditViewModel.LoadAuditLogsCommand.Execute(null);
+        await DialogHost.Show(auditView, "RootDialog");
     }
 }
 

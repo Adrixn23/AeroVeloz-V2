@@ -5,12 +5,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using AeroVeloz.Desktop.Services.Interfaces.Auth;
+using System.Collections.ObjectModel;
+using AeroVeloz.Desktop.Services.Implementations.Notifications;
 
 namespace AeroVeloz.Desktop.ViewModels.AirportAdmin;
 
 public partial class AirportAdminMainViewModel : BaseViewModel
 {
     private readonly ISessionService _sessionService;
+    private readonly NotificationService _notificationService;
     private readonly AirportAdminDashboardViewModel _dashboardViewModel;
     private readonly UserListViewModel _userListViewModel;
     private readonly OperationsListViewModel _operationsListViewModel;
@@ -29,8 +32,14 @@ public partial class AirportAdminMainViewModel : BaseViewModel
     [ObservableProperty]
     private string _systemDate = System.DateTime.Now.ToString("dddd, dd MMMM yyyy");
 
+    [ObservableProperty]
+    private int _notificationCount = 0;
+
+    public ObservableCollection<string> Notifications { get; } = new();
+
     public AirportAdminMainViewModel(
         ISessionService sessionService,
+        NotificationService notificationService,
         AirportAdminDashboardViewModel dashboardViewModel,
         UserListViewModel userListViewModel,
         OperationsListViewModel operationsListViewModel,
@@ -38,6 +47,7 @@ public partial class AirportAdminMainViewModel : BaseViewModel
         AuditLogViewModel auditLogViewModel)
     {
         _sessionService = sessionService;
+        _notificationService = notificationService;
         _dashboardViewModel = dashboardViewModel;
         _userListViewModel = userListViewModel;
         _operationsListViewModel = operationsListViewModel;
@@ -47,6 +57,17 @@ public partial class AirportAdminMainViewModel : BaseViewModel
         CurrentViewModel = _dashboardViewModel;
 
         UserName = _sessionService.UserName ?? "Administrador de Aeropuerto";
+
+        _notificationService.OnNotificationReceived = (title, message) =>
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Notifications.Insert(0, $"{title}: {message}");
+                NotificationCount++;
+            });
+        };
+
+        _ = _notificationService.StartAsync();
     }
 
     [RelayCommand]
@@ -73,8 +94,9 @@ public partial class AirportAdminMainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void Logout(Window currentWindow)
+    private async void Logout(Window currentWindow)
     {
+        await _notificationService.StopAsync();
         _sessionService.ClearSession();
         var loginView = App.AppHost?.Services.GetRequiredService<LoginView>();
         if (loginView != null)

@@ -99,6 +99,13 @@ public partial class OperationsListViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task OperarVueloAsync()
+    {
+        // En una futura versión esto abrirá la lista real de vuelos disponibles en el aeropuerto
+        await _dialogService.ShowInfoAsync("La selección y gestión directa de vuelos a tiempo real estará disponible tras implementar el catálogo en los servicios del aeropuerto.", "Vuelos");
+    }
+
+    [RelayCommand]
     private async Task DeleteOperationAsync()
     {
         if (SelectedOperation == null) return;

@@ -15,6 +15,8 @@ public partial class AuditLogViewModel : BaseViewModel
     private readonly IDialogService _dialogService;
     private readonly ISessionService _sessionService;
 
+    public Guid? TargetUserId { get; set; } = null;
+
     [ObservableProperty]
     private ObservableCollection<AuditDto> auditLogs = new();
 
@@ -79,7 +81,7 @@ public partial class AuditLogViewModel : BaseViewModel
             }
             else
             {
-                var userId = _sessionService.UserId;
+                var userId = TargetUserId ?? _sessionService.UserId;
                 var logs = await _auditService.GetUserAuditAsync(userId);
                 _allAuditLogs = new ObservableCollection<AuditDto>(logs);
             }

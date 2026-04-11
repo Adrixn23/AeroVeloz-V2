@@ -18,5 +18,10 @@
     <ProjectReference Include="..\..\Infraestructure\AeroVeloz.Infraestructure\AeroVeloz.Infraestructure.csproj" />
     <ProjectReference Include="..\..\Transversal\AeroVeloz.Transversal\AeroVeloz.Transversal.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
+  </ItemGroup>
 
 </Project>

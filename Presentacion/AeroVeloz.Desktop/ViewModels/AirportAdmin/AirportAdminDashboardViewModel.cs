@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using AeroVeloz.Desktop.Models.DTOs.StatusSystem;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
 using AeroVeloz.Desktop.ViewModels.Base;

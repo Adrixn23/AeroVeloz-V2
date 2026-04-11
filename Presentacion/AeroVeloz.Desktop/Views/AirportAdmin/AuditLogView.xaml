@@ -2,23 +2,24 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             Background="Transparent">
+             Width="850" MaxHeight="650" Background="Transparent">
 
-    <Grid Margin="16">
+    <Grid Margin="16" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,24">
-            <TextBlock Text="Registro de Auditoría" FontSize="26" FontWeight="SemiBold" Foreground="#333333"/>
-            <TextBlock Text="Consulta el historial de actividades en tu aeropuerto." FontSize="14" Foreground="Gray"/>
+        <StackPanel Grid.Row="0" Margin="16,16,16,16">
+            <TextBlock Text="Registro de Auditoría" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+            <TextBlock Text="Consulta el historial de actividades en el sistema." FontSize="14" Foreground="Gray"/>
         </StackPanel>
 
         <!-- Toolbar -->
-        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,16">
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="16,0,16,16">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                 <TextBox Width="300" Padding="12,8" materialDesign:HintAssist.Hint="Buscar en auditoría..." 
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
@@ -28,21 +29,36 @@
                 <Button Style="{StaticResource MaterialDesignOutlinedButton}" Content="Exportar" 
                         Command="{Binding ExportLogsCommand}" Margin="8,0,0,0" Padding="16,8"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Desde:" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                <DatePicker SelectedDate="{Binding FilterStartDate}" Width="150"/>
+                <DatePicker SelectedDate="{Binding FilterStartDate}" Width="120" materialDesign:HintAssist.Hint="Fecha Inicio"/>
                 <TextBlock Text="Hasta:" VerticalAlignment="Center" Margin="16,0,8,0"/>
-                <DatePicker SelectedDate="{Binding FilterEndDate}" Width="150"/>
-                <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Filtrar" 
+                <DatePicker SelectedDate="{Binding FilterEndDate}" Width="120" materialDesign:HintAssist.Hint="Fecha Fin"/>
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Aplicar Filtro" 
                         Command="{Binding ApplyFiltersCommand}" Margin="16,0,0,0" Padding="16,8"
                         Foreground="{DynamicResource PrimaryHueMidBrush}"/>
             </StackPanel>
         </StackPanel>
 
-        <!-- Audit DataGrid -->
-        <DataGrid Grid.Row="2" ItemsSource="{Binding AuditLogs}" SelectedItem="{Binding SelectedAudit}"
-                  AutoGenerateColumns="True" CanUserAddRows="False" Background="White"
-                  materialDesign:DataGridAssist.CellPadding="4" materialDesign:DataGridAssist.ColumnHeaderPadding="4"/>
+        <!-- Audit DataGrid Scrollable -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="16,0,16,16">
+            <DataGrid ItemsSource="{Binding AuditLogs}" SelectedItem="{Binding SelectedAudit}"
+                      AutoGenerateColumns="False" CanUserAddRows="False" Background="White" IsReadOnly="True"
+                      materialDesign:DataGridAssist.CellPadding="4" materialDesign:DataGridAssist.ColumnHeaderPadding="4">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Fecha" Binding="{Binding OccurredAt, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="130"/>
+                    <DataGridTextColumn Header="Actión" Binding="{Binding AuditTypeName}" Width="150"/>
+                    <DataGridTextColumn Header="Detalle Entidad" Binding="{Binding NameEntity}" Width="180"/>
+                    <DataGridTextColumn Header="Usuario" Binding="{Binding NameUser}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+
+        <!-- Cerrar -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="16,0,16,16">
+            <Button Style="{StaticResource MaterialDesignRaisedButton}" Content="Cerrar" 
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Padding="24,8"/>
+        </StackPanel>
 
         <!-- Loading Indicator -->
         <ProgressBar Grid.Row="2" Style="{StaticResource MaterialDesignCircularProgressBar}" 

@@ -54,30 +54,35 @@
 
             <!-- ICAO / IATA -->
             <TextBox Grid.Column="0" Grid.Row="2" materialDesign:HintAssist.Hint="Código ICAO" 
-                     Text="{Binding CodeAirportIcao, UpdateSourceTrigger=PropertyChanged}" 
+                     Text="{Binding CodeAirportIcao, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                     MaxLength="4"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                     
+
             <TextBox Grid.Column="2" Grid.Row="2" materialDesign:HintAssist.Hint="Código IATA *" 
-                     Text="{Binding CodeAirportIata, UpdateSourceTrigger=PropertyChanged}" 
+                     Text="{Binding CodeAirportIata, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                     MaxLength="3"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
             <!-- Country / City -->
-            <TextBox Grid.Column="0" Grid.Row="4" materialDesign:HintAssist.Hint="País *" 
-                     Text="{Binding Country, UpdateSourceTrigger=PropertyChanged}" 
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                     
-            <TextBox Grid.Column="2" Grid.Row="4" materialDesign:HintAssist.Hint="Ciudad *" 
-                     Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" 
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+            <ComboBox Grid.Column="0" Grid.Row="4" materialDesign:HintAssist.Hint="País *" 
+                      ItemsSource="{Binding Countries}"
+                      SelectedItem="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
+            <ComboBox Grid.Column="2" Grid.Row="4" materialDesign:HintAssist.Hint="Ciudad *" 
+                      ItemsSource="{Binding Cities}"
+                      SelectedItem="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
             <!-- Email / TimeOffset -->
             <TextBox Grid.Column="0" Grid.Row="6" materialDesign:HintAssist.Hint="Correo Organizacional" 
-                     Text="{Binding EmailOrganization, UpdateSourceTrigger=PropertyChanged}" 
+                     Text="{Binding EmailOrganization, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
             <ComboBox Grid.Column="2" Grid.Row="6" 
                       ItemsSource="{Binding AvailableTimeZones}" 
-                      SelectedItem="{Binding SelectedTimeZone, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedTimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      IsEnabled="False"
                       materialDesign:HintAssist.Hint="Zona Horaria *"
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                 <ComboBox.ItemTemplate>

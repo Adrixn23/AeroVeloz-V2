@@ -5,6 +5,7 @@ using AeroVeloz.IOC.Dependencies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AeroVeloz.Infraestructure.Integrations.Notifications.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,5 +67,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 app.Run();

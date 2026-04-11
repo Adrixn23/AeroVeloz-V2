@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 using AeroVeloz.Desktop.Models.DTOs.Airport;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
@@ -27,27 +29,92 @@ public partial class AirportDetailViewModel : BaseViewModel
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [MaxLength(50, ErrorMessage = "Máx 50 caracteres.")]
     private string _nameOrganization = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyDataErrorInfo]
+    [EmailAddress(ErrorMessage = "Correo inválido.")]
+    [MaxLength(200, ErrorMessage = "Máx 200 caracteres.")]
     private string _emailOrganization = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [StringLength(4, MinimumLength = 4, ErrorMessage = "Debe tener 4 cc.")]
     private string _codeAirportIcao = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
+    [StringLength(3, MinimumLength = 3, ErrorMessage = "Debe tener 3 cc.")]
     private string _codeAirportIata = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
     private string _country = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Requerido.")]
     private string _city = string.Empty;
+
+    public ObservableCollection<string> Countries { get; } = new ObservableCollection<string>
+    {
+        "República Dominicana",
+        "Estados Unidos",
+        "España",
+        "Colombia",
+        "México"
+    };
+
+    [ObservableProperty]
+    private ObservableCollection<string> _cities = new();
+
+    partial void OnCountryChanged(string? value)
+    {
+        Cities.Clear();
+        City = string.Empty;
+
+        switch (value)
+        {
+            case "República Dominicana":
+                Cities.Add("Santo Domingo");
+                Cities.Add("Punta Cana");
+                Cities.Add("Santiago");
+                SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "-04:00");
+                break;
+            case "Estados Unidos":
+                Cities.Add("New York");
+                Cities.Add("Miami");
+                Cities.Add("Los Angeles");
+                SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "-05:00"); // Standard EST example
+                break;
+            case "España":
+                Cities.Add("Madrid");
+                Cities.Add("Barcelona");
+                SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "+01:00");
+                break;
+            case "Colombia":
+                Cities.Add("Bogotá");
+                Cities.Add("Medellín");
+                SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "-05:00");
+                break;
+            case "México":
+                Cities.Add("Ciudad de México");
+                Cities.Add("Cancún");
+                SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Offset == "-06:00");
+                break;
+        }
+    }
 
     [ObservableProperty]
     private TimeZoneModel? _selectedTimeZone;
@@ -111,6 +178,14 @@ public partial class AirportDetailViewModel : BaseViewModel
     [RelayCommand(CanExecute = nameof(CanSave))]
     private async Task SaveAsync()
     {
+        ValidateAllProperties();
+        if (HasErrors)
+        {
+            var errors = string.Join("\n", GetErrors().Select(e => e.ErrorMessage));
+            await _dialogService.ShowInfoAsync($"Por favor corrija los siguientes errores:\n{errors}", "Validación");
+            return;
+        }
+
         if (SelectedTimeZone == null)
         {
             await _dialogService.ShowWarningAsync("Por favor selecciona una zona horaria válida.");

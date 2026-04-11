@@ -5,12 +5,15 @@ using AeroVeloz.Desktop.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
+using AeroVeloz.Desktop.Services.Implementations.Notifications;
 
 namespace AeroVeloz.Desktop.ViewModels.SuperAdmin;
 
 public partial class SuperAdminMainViewModel : BaseViewModel
 {
     private readonly ISessionService _sessionService;
+    private readonly NotificationService _notificationService;
 
     [ObservableProperty]
     private BaseViewModel _currentViewModel;
@@ -24,6 +27,11 @@ public partial class SuperAdminMainViewModel : BaseViewModel
     [ObservableProperty]
     private string _systemDate = System.DateTime.Now.ToString("dddd, dd MMMM yyyy");
 
+    [ObservableProperty]
+    private int _notificationCount = 0;
+
+    public ObservableCollection<string> Notifications { get; } = new();
+
     private readonly SuperAdminDashboardViewModel _dashboardViewModel;
     private readonly AirportListViewModel _airportsViewModel;
 
@@ -31,17 +39,30 @@ public partial class SuperAdminMainViewModel : BaseViewModel
 
     public SuperAdminMainViewModel(
         ISessionService sessionService,
+        NotificationService notificationService,
         SuperAdminDashboardViewModel dashboardViewModel,
         AirportListViewModel airportsViewModel,
         AdminListViewModel adminsViewModel)
     {
         _sessionService = sessionService;
+        _notificationService = notificationService;
         _dashboardViewModel = dashboardViewModel;
         _airportsViewModel = airportsViewModel;
         _adminsViewModel = adminsViewModel;
         _currentViewModel = _dashboardViewModel;
 
         UserName = _sessionService.UserName ?? "Super Admin";
+
+        _notificationService.OnNotificationReceived = (title, message) =>
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Notifications.Insert(0, $"{title}: {message}");
+                NotificationCount++;
+            });
+        };
+
+        _ = _notificationService.StartAsync();
     }
 
     [RelayCommand]
@@ -66,11 +87,11 @@ public partial class SuperAdminMainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void Logout(Window currentWindow)
+    private async void Logout(Window currentWindow)
     {
+        await _notificationService.StopAsync();
         _sessionService.ClearSession();
         var loginView = App.AppHost?.Services.GetRequiredService<LoginView>();
-
         if (loginView != null)
         {
             loginView.Show();
