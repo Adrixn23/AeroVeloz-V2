@@ -34,18 +34,30 @@
                     <div class="mb-4">
                         <label class="form-label fw-bold">Seleccione el Nuevo Estado</label>
                         <select asp-for="Input.FlightStateId" class="form-select form-select-lg">
-                            <option value="2">2 - Boarding (Abordando)</option>
-                            <option value="3">3 - Delayed (Retrasado)</option>
-                            <option value="4">4 - In Flight (En Vuelo)</option>
-                            <option value="5">5 - Landed (Aterrizado)</option>
-                            <option value="6">6 - Completed (Completado)</option>
-                            <option value="7">7 - Cancelled (Cancelado)</option>
+                            <option value="2">2 - Abordaje Iniciado</option>
+                            <option value="3">3 - Retrasado (Delayed)</option>
+                            <option value="4">4 - En Vuelo (Despegue)</option>
+                            <option value="5">5 - Aterrizado (Landed)</option>
+                            <option value="6">6 - Completado (Fin de proceso)</option>
+                            <option value="7">7 - Cancelado</option>
                         </select>
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="Input.Reason" class="form-label fw-bold">Razón o Motivo del Cambio</label>
-                        <textarea asp-for="Input.Reason" class="form-control" rows="3" placeholder="Ej. Puerta lista para abordaje, Retraso por clima..." required></textarea>
+                        <label class="form-label fw-bold">Motivo del Cambio</label>
+                        <select id="reasonSelect" class="form-select mb-2">
+                            <option value="Operación normal, transición a tiempo">Operación normal, transición a tiempo</option>
+                            <option value="Retraso por condiciones climáticas adversas">Retraso por condiciones climáticas adversas</option>
+                            <option value="Retraso por mantenimiento técnico de la aeronave">Retraso por mantenimiento técnico de la aeronave</option>
+                            <option value="Problemas con la documentación de pasajeros">Problemas con la documentación de pasajeros</option>
+                            <option value="OTRO">Otro (Especificar)</option>
+                        </select>
+                        
+                        <div id="customReasonContainer" class="d-none position-relative">
+                            <input asp-for="Input.Reason" type="text" id="reasonInput" class="form-control pe-5" placeholder="Especifique el motivo (Mínimo 10, Máximo 50)..." maxlength="50" />
+                            <div class="position-absolute top-50 end-0 translate-middle-y pe-2 text-muted small fw-medium" id="charCount">0/50</div>
+                        </div>
+                        <span asp-validation-for="Input.Reason" class="text-danger small"></span>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg w-100" id="btnUpdate">
@@ -59,11 +71,50 @@
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
+        $(document).ready(function() {
+            // Inicializar el valor oculto con la primera opción por defecto
+            $('#reasonInput').val($('#reasonSelect').val());
+
+            $('#reasonSelect').change(function() {
+                if ($(this).val() === 'OTRO') {
+                    $('#reasonInput').val('');
+                    $('#charCount').text('0/50');
+                    $('#customReasonContainer').removeClass('d-none');
+                    $('#reasonInput').focus();
+                } else {
+                    $('#customReasonContainer').addClass('d-none');
+                    $('#reasonInput').val($(this).val());
+                }
+            });
+
+            // Restricción dura y contador de caracteres (Heurística de Prevención de Errores)
+            $('#reasonInput').on('input', function() {
+                var currentLength = $(this).val().length;
+                var maxLength = 50;
+                
+                // Si por alguna razón pega texto más largo, lo cortamos con machete
+                if (currentLength > maxLength) {
+                    $(this).val($(this).val().substring(0, maxLength));
+                    currentLength = maxLength;
+                }
+                
+                $('#charCount').text(currentLength + '/' + maxLength);
+
+                // Cambiar el color del contador si se acerca al límite
+                if(currentLength >= 45) {
+                    $('#charCount').removeClass('text-muted').addClass('text-danger');
+                } else {
+                    $('#charCount').removeClass('text-danger').addClass('text-muted');
+                }
+            });
+        });
+
         // Interacción UX (Heurística de Visibilidad del Sistema)
         $('#updateStateForm').on('submit', function (e) {
-            // Verificar si el form es válido (nativo o jquery.validate)
-            if ($(this).valid ? $(this).valid() : this.checkValidity()) {
+            // Verificar si el form es válido
+            if ($(this).valid()) {
                 $('#spinnerUpdate').removeClass('d-none');
                 $('#btnUpdate').prop('disabled', true);
             }

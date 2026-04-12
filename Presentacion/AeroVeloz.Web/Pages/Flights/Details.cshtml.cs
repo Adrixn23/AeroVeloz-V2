@@ -64,7 +64,7 @@ namespace AeroVeloz.Web.Pages.Flights
             {
                 TempData["ErrorMessage"] = ex.Message;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TempData["ErrorMessage"] = "Ocurrió un error inesperado al procesar la suscripción.";
             }

@@ -37,6 +37,7 @@ namespace AeroVeloz.Web.Models.Airlines
         public string CodeIata { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El nombre de la organización es obligatorio.")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "El nombre de la organización debe tener entre 3 y 100 caracteres.")]
         [JsonPropertyName("nameOrganization")]
         public string NameOrganization { get; set; } = string.Empty;
     }

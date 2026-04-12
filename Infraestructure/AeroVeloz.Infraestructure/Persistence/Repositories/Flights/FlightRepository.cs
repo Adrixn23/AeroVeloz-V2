@@ -53,7 +53,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
                 join s in _context.FlightStates.AsNoTracking() on f.flightStatesId equals s.Id
                 where f.codeAirlinesIcao == codeAirlines
                       && f.flightStatesId != 6 && f.flightStatesId != 7
-                orderby f.ScheduledDeparture
+                orderby f.ScheduledDeparture descending
                 select new FlightReadDto(
                     f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,
@@ -69,7 +69,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
                 join s in _context.FlightStates.AsNoTracking() on f.flightStatesId equals s.Id
                 where f.ScheduledDeparture >= cutoff
                       && f.flightStatesId != 6 && f.flightStatesId != 7
-                orderby f.ScheduledDeparture
+                orderby f.ScheduledDeparture descending
                 select new FlightReadDto(
                     f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,
@@ -86,7 +86,7 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Flights
                 where (f.OriginAirport == airportCode || f.DestinationAirport == airportCode)
                       && f.ScheduledDeparture >= cutoff
                       && f.flightStatesId != 6 && f.flightStatesId != 7
-                orderby f.ScheduledDeparture
+                orderby f.ScheduledDeparture descending
                 select new FlightReadDto(
                     f.Id, f.codeAirlinesIcao, f.OriginAirport, f.DestinationAirport,
                     f.ScheduledDeparture, f.BordingGate, f.BoardingGateArrived,

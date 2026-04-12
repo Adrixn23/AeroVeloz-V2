@@ -26,38 +26,64 @@
     </div>
 }
 
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm border-0 border-top border-4 border-dark">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <h5 class="card-title mb-0">Eventos del Sistema</h5>
+    </div>
     <div class="card-body p-0">
         @if (Model.Audits != null && Model.Audits.Any())
         {
-            <div class="table-responsive">
-                <table class="table table-hover table-striped align-middle mb-0">
+            <div class="table-responsive p-3">
+                <table class="table table-hover table-striped align-middle mb-0 datatable" id="auditTable">
                     <thead class="table-dark">
                         <tr>
-                            <th>Fecha</th>
-                            <th>Acción</th>
-                            <th>Usuario</th>
-                            <th>Entidad</th>
+                            <th>Fecha y Hora Exacta</th>
+                            <th>Tipo de Operación</th>
+                            <th>Usuario Responsable</th>
+                            <th>Entidad Afectada</th>
                             <th>Detalle de Datos</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var audit in Model.Audits)
                         {
-                            <tr>
-                                <td><small>@audit.OccurredAt.ToString("g")</small></td>
-                                <td><span class="badge bg-info">@audit.AuditTypeName</span></td>
+                            <tr class="audit-row">
                                 <td>
-                                    <a asp-page="/SuperAdmin/Audit" asp-route-userIdFilter="@audit.IdUser">@audit.NameUser</a>
-                                    <br/><small class="text-muted">@audit.NameOrganization</small>
+                                    <div class="fw-bold">@audit.OccurredAt.ToString("dd/MM/yyyy")</div>
+                                    <div class="text-muted small"><i class="bi bi-clock me-1"></i>@audit.OccurredAt.ToString("HH:mm:ss")</div>
                                 </td>
-                                <td>@audit.NameEntity</td>
                                 <td>
-                                    <button class="btn btn-sm btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#audit-@audit.AuditId.ToString().Substring(0,8)">
-                                        Ver JSON
+                                    @{
+                                        var actionColor = (audit.AuditTypeName ?? "").ToLower().Contains("update") ? "bg-warning text-dark" : 
+                                                          (audit.AuditTypeName ?? "").ToLower().Contains("delete") ? "bg-danger" : "bg-success";
+                                        
+                                        var translatedAction = (audit.AuditTypeName ?? "")
+                                            .Replace("Create", "Creación")
+                                            .Replace("Update", "Modificación")
+                                            .Replace("Delete", "Eliminación");
+                                    }
+                                    <span class="badge @actionColor">@translatedAction.ToUpper()</span>
+                                </td>
+                                <td>
+                                    <a asp-page="/SuperAdmin/Audit" asp-route-userIdFilter="@audit.IdUser" class="fw-medium text-decoration-none">@audit.NameUser</a>
+                                    <br/><small class="text-muted"><i class="bi bi-building me-1"></i>@audit.NameOrganization</small>
+                                </td>
+                                <td>
+                                    @{
+                                        var translatedEntity = (audit.NameEntity ?? "")
+                                            .Replace("Flight", "Itinerario de Vuelo")
+                                            .Replace("User", "Cuenta de Usuario")
+                                            .Replace("Airline", "Aerolínea")
+                                            .Replace("Subscription", "Suscripción");
+                                    }
+                                    <span class="fw-medium">@translatedEntity</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#audit-@audit.AuditId.ToString().Substring(0,8)">
+                                        <i class="bi bi-code-slash"></i> Ver Data JSON
                                     </button>
-                                    <div class="collapse" id="audit-@audit.AuditId.ToString().Substring(0,8)">
-                                        <pre class="bg-light p-2 mt-2" style="font-size: 0.75rem; max-width: 300px; overflow-x: auto;">@audit.DataNew</pre>
+                                    <div class="collapse mt-2" id="audit-@audit.AuditId.ToString().Substring(0,8)">
+                                        <pre class="bg-dark text-success p-3 rounded-3" style="font-size: 0.75rem; max-width: 350px; overflow-x: auto;">@audit.DataNew</pre>
                                     </div>
                                 </td>
                             </tr>
@@ -68,9 +94,14 @@
         }
         else
         {
-            <div class="p-5 text-center text-muted">
+            <div class="p-5 text-center text-muted" id="emptyRow">
+                <i class="bi bi-shield-check display-4 mb-3 d-block"></i>
                 <p>No hay registros de auditoría disponibles.</p>
             </div>
         }
     </div>
 </div>
+
+@section Scripts {
+    <!-- DataTables JS y configuraciones globales se cargan en el Layout -->
+}

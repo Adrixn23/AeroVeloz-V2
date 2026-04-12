@@ -16,13 +16,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Subscription
             _context = context;
         }
 
-        public async Task<ValidationResult> ValidateSubscriptionAsync(
+        public Task<ValidationResult> ValidateSubscriptionAsync(
             short flightNumber, string codeAirlines, SubscriptionChannel channel, string contactValue)
         {
             if (string.IsNullOrWhiteSpace(contactValue))
-                return new ValidationResult().Failur(
-                    ErrosValidationResults.Create("SUB_CONTACT", "El valor de contacto es requerido"));
-            return new ValidationResult().Success();
+                return Task.FromResult(new ValidationResult().Failur(
+                    ErrosValidationResults.Create("SUB_CONTACT", "El valor de contacto es requerido")));
+            return Task.FromResult(new ValidationResult().Success());
         }
 
         public async Task<ValidationResult> ValidateCancellationAsync(Guid subscriptionId)

@@ -12,7 +12,7 @@
 </div>
 
 <div class="card shadow-sm border-0 border-top border-4 border-info">
-    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-3">
         <h5 class="card-title mb-0 text-info">Llegadas y Salidas</h5>
         <button class="btn btn-sm btn-outline-info" onclick="location.reload();">Actualizar Pantalla</button>
     </div>
@@ -26,8 +26,8 @@
 
         @if (Model.Flights != null && Model.Flights.Any())
         {
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive p-3">
+                <table class="table table-hover align-middle mb-0 datatable" id="flightsTable">
                     <thead class="table-light">
                         <tr>
                             <th>Vuelo</th>
@@ -50,3 +50,7 @@
         }
     </div>
 </div>
+
+@section Scripts {
+    <!-- DataTables JS y configuraciones globales se cargan en el Layout -->
+}

@@ -22,16 +22,18 @@
 </div>
 
 <div class="card shadow-lg border-0 overflow-hidden mb-5">
-    <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
             <h4 class="fw-bold mb-0">Itinerarios Activos</h4>
             <span class="text-muted small">Actualizado en tiempo real desde la API</span>
         </div>
-        <a asp-page="/SuperAdmin/BatchUpload" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle me-1"></i> Nueva Carga
-        </a>
+        <div class="d-flex align-items-center gap-3">
+            <a asp-page="/SuperAdmin/BatchUpload" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i> Nueva Carga Masiva
+            </a>
+        </div>
     </div>
-    
+
     <div class="card-body p-0">
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
@@ -41,16 +43,14 @@
         }
 
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+            <table class="table table-hover align-middle mb-0 datatable" id="flightsTable">
+                <thead class="bg-light">
                     <tr>
-                        <th>Vuelo</th>
-                        <th>Aerolínea</th>
-                        <th>Origen</th>
-                        <th>Destino</th>
-                        <th>Salida Programada</th>
+                        <th class="ps-4">Vuelo / Aerolínea</th>
+                        <th>Ruta</th>
+                        <th>Salida</th>
                         <th>Estado</th>
-                        <th>Acciones</th>
+                        <th class="pe-4 text-end">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="border-top-0">
@@ -60,15 +60,6 @@
                         {
                             <partial name="_FlightTableRowPartial" model="flight" />
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="5" class="py-5 text-center text-muted">
-                                <i class="bi bi-cloud-slash display-4 mb-3 d-block"></i>
-                                No hay vuelos activos para mostrar.
-                            </td>
-                        </tr>
                     }
                 </tbody>
             </table>

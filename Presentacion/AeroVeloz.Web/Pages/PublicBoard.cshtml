@@ -47,14 +47,30 @@
                             <td>
                                 @{
                                     var badgeClass = flight.FlightStateId switch {
+                                        1 => "text-secondary", // Scheduled
                                         2 => "text-warning", // Boarding
                                         3 => "text-danger",  // Delayed
                                         4 => "text-info",    // In Flight
                                         5 => "text-success", // Landed
+                                        6 => "text-primary", // Completed
+                                        7 => "text-dark",    // Cancelled
+                                        8 => "text-danger",  // Diverted
                                         _ => "text-white"
                                     };
+
+                                    var stateNameEs = flight.FlightStateId switch {
+                                        1 => "PROGRAMADO",
+                                        2 => "ABORDAJE",
+                                        3 => "RETRASADO",
+                                        4 => "EN VUELO",
+                                        5 => "ATERRIZADO",
+                                        6 => "COMPLETADO",
+                                        7 => "CANCELADO",
+                                        8 => "DESVIADO",
+                                        _ => flight.FlightStateName.ToUpper()
+                                    };
                                 }
-                                <span class="@badgeClass fw-bold">@flight.FlightStateName.ToUpper()</span>
+                                <span class="@badgeClass fw-bold"><i class="bi bi-circle-fill me-2" style="font-size: 0.5rem; vertical-align: middle;"></i>@stateNameEs</span>
                             </td>
                         </tr>
                     }
@@ -83,5 +99,11 @@
         setTimeout(function(){
            location.reload();
         }, 30000);
+
+        // Inicializar Tooltips de Bootstrap globales
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
     </script>
 }
