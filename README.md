@@ -17,12 +17,12 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 
 | Public Live Board (Passengers) | Operations Boarding (Airport Staff) |
 | :---: | :---: |
-| ![Live Board](gallery/live_board.png) | ![Boarding](gallery/boarding.png) |
+| ![Live Board](captures/live_board.png) | ![Boarding](captures/MonitoredFlight.png) |
 | A real-time public screen displaying active flights, statuses, and boarding gates. | A specialized dashboard for airport operators to manage flights for their specific location. |
 
-| Airline Admin Dashboard | Super Admin System |
+| Airline Admin Dashboard | Super Admin System (Audit) |
 | :---: | :---: |
-| ![Airline Dashboard](gallery/airline_dashboard.png) | ![Super Admin](gallery/super_admin.png) |
+| ![Airline Dashboard](captures/airline_dashboard.png) | ![Super Admin](captures/AuditAeroVeloz.png) |
 | Airline managers can batch upload flights and manage their fleet. | Full system audit logs and organization management. |
 
 ---

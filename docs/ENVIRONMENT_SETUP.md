@@ -62,6 +62,7 @@ cd Infraestructure\AeroVeloz.Infraestructure
 dotnet ef database update --startup-project ../../Api/AeroVeloz.Api
 ```
 
+
 > **Tip:** If the command succeeds, you will see a database named `AeroVeloz` in your SQL Server instance, pre-populated with data.
 
 ---
