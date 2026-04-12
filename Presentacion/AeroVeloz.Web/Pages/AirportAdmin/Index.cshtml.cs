@@ -24,7 +24,7 @@ namespace AeroVeloz.Web.Pages.AirportAdmin
         public async Task OnGetAsync()
         {
             UserName = User.Identity?.Name;
-            Organization = User.Claims.FirstOrDefault(c => c.Type == "OrganizationName")?.Value;
+            Organization = "AeroVeloz";
 
             var token = User.Claims.FirstOrDefault(c => c.Type == "JwtToken")?.Value;
             

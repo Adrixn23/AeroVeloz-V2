@@ -24,7 +24,6 @@ namespace AeroVeloz.Web.Pages.Auth
 
         public void OnGet()
         {
-            // Si el usuario ya está autenticado, redirigirlo al Dashboard correspondiente
             if (User.Identity?.IsAuthenticated == true)
             {
                 RedirectToDashboard();
@@ -33,7 +32,6 @@ namespace AeroVeloz.Web.Pages.Auth
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Validación de Frontend (Distribuida)
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -41,12 +39,10 @@ namespace AeroVeloz.Web.Pages.Auth
 
             try
             {
-                // Consumo del Servicio API Backend
                 var response = await _authService.LoginAsync(Input);
 
                 if (response != null && response.User != null && !string.IsNullOrEmpty(response.AccessToken))
                 {
-                    // Crear los Claims (Datos de la sesión segura del usuario)
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, response.User.UserName),
@@ -54,7 +50,7 @@ namespace AeroVeloz.Web.Pages.Auth
                         new Claim(ClaimTypes.Role, response.User.RoleName),
                         new Claim("OrganizationId", response.User.OrganizationId.ToString()),
                         new Claim("OrganizationName", response.User.OrganizationName),
-                        new Claim("JwtToken", response.AccessToken) // Guardamos el JWT para inyectarlo después
+                        new Claim("JwtToken", response.AccessToken)
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -65,7 +61,6 @@ namespace AeroVeloz.Web.Pages.Auth
                         ExpiresUtc = response.ExpiresAtUtc
                     };
 
-                    // Guardar Cookie Segura (Autenticación Automática del Sistema Web)
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity),
@@ -79,7 +74,6 @@ namespace AeroVeloz.Web.Pages.Auth
             }
             catch (ApplicationException ex)
             {
-                // Manejo de errores: API Caída
                 ErrorMessage = ex.Message;
                 return Page();
             }
@@ -87,7 +81,6 @@ namespace AeroVeloz.Web.Pages.Auth
 
         private IActionResult RedirectToDashboard()
         {
-            // Redirección basada en el Rol (Heurística de UX)
             if (User.IsInRole("AIRPORTADMIN"))
                 return RedirectToPage("/AirportAdmin/Index");
             
@@ -95,7 +88,7 @@ namespace AeroVeloz.Web.Pages.Auth
                 return RedirectToPage("/Operator/Index");
             
             if (User.IsInRole("AIRLINEADMIN"))
-                return RedirectToPage("/SuperAdmin/Index"); // O donde decidas enviarlo
+                return RedirectToPage("/SuperAdmin/Index");
                 
             if (User.IsInRole("SYSTEMADMIN"))
                 return RedirectToPage("/SuperAdmin/Index");

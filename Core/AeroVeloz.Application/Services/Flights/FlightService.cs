@@ -18,7 +18,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.Services.Flights
 {
-    public class FlightService : IFlightServicie
+    public class FlightService : IFlightService
     {
         private readonly IFlightRepository _flightRepo;
         private readonly IFlightDomainService _flightDomain;

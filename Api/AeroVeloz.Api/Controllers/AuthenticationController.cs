@@ -14,10 +14,10 @@ namespace AeroVeloz.Api.Controllers
     [AllowAnonymous]
     public class AuthenticationController : ApiBaseController
     {
-        private readonly IAuthenticationServicie _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
         private readonly IConfiguration _configuration;
 
-        public AuthenticationController(IAuthenticationServicie authenticationService, IConfiguration configuration)
+        public AuthenticationController(IAuthenticationService authenticationService, IConfiguration configuration)
         {
             _authenticationService = authenticationService;
             _configuration = configuration;

@@ -28,7 +28,7 @@ namespace AeroVeloz.Web.Pages.SuperAdmin
             // Extraer datos de la cookie segura generada en el Login
             UserName = User.Identity?.Name;
             Role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            Organization = User.Claims.FirstOrDefault(c => c.Type == "OrganizationName")?.Value;
+            Organization = "AeroVeloz";
 
             // Extraer Token y OrganizationId para consumir la API de Vuelos
             var token = User.Claims.FirstOrDefault(c => c.Type == "JwtToken")?.Value;

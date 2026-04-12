@@ -41,6 +41,13 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Airlines
                 .FirstOrDefaultAsync(a => a.codeAirlinesIcao == codeAirlinesIcao);
         }
 
+        public async Task<Airline?> GetEntityByCodeNoTrackingAsync(string codeAirlinesIcao)
+        {
+            return await _context.Airlines
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.codeAirlinesIcao == codeAirlinesIcao);
+        }
+
         public async Task<AirlineDetailModel?> GetDetailByCodeAsync(string codeAirlinesIcao)
         {
             return await _context.Airlines

@@ -9,9 +9,9 @@ namespace AeroVeloz.Api.Controllers
     [Authorize]
     public class FlightsController : ApiBaseController
     {
-        private readonly IFlightServicie _flightService;
+        private readonly IFlightService _flightService;
 
-        public FlightsController(IFlightServicie flightService)
+        public FlightsController(IFlightService flightService)
         {
             _flightService = flightService;
         }

@@ -58,7 +58,7 @@ namespace AeroVeloz.Application.Services.Airlines
                     codeIata = dto.CodeIata,
                     nameOrganization = dto.NameOrganization,
                     typeOrganization = "AIRLINE",
-                    emailOrganization = $"{dto.CodeAirlinesIcao.ToLower()}@aeroveloz.com", // Solución para el constraint UNIQUE
+                    emailOrganization = $"{dto.CodeAirlinesIcao.ToLower()}@aeroveloz.com",
                     isActived = true,
                     createAt = DateTime.UtcNow
                 };
@@ -121,11 +121,9 @@ namespace AeroVeloz.Application.Services.Airlines
                 if (!isAdmin)
                     return OperationResult<bool>.Fail("AIRLINE_AUTH", "No tiene permisos para modificar aerolíneas");
 
-                var airline = await _repo.GetEntityByCodeAsync(codeAirlinesIcao);
+                var airline = await _repo.GetEntityByCodeNoTrackingAsync(codeAirlinesIcao);
                 if (airline == null)
                     return OperationResult<bool>.Fail("AIRLINE_NOT_FOUND", "Aerolínea no encontrada");
-
-               
 
                 var updatedAirline = new Airline
                 {
@@ -135,7 +133,8 @@ namespace AeroVeloz.Application.Services.Airlines
                     nameOrganization = dto.NameOrganization,
                     typeOrganization = airline.typeOrganization,
                     isActived = airline.isActived,
-                    createAt = airline.createAt
+                    createAt = airline.createAt,
+                    emailOrganization = airline.emailOrganization
                 };
 
                 return await _unitOfWork.ExecuteInTransactionAsync(async () =>

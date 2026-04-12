@@ -9,6 +9,8 @@ namespace AeroVeloz.Application.Repositories.Airlines
         //  Obtener la entidad pura 
         Task<Airline?> GetEntityByCodeAsync(string codeAirlinesIcao);
 
+        Task<Airline?> GetEntityByCodeNoTrackingAsync(string codeAirlinesIcao);
+
         // Obtener detalle de aerolínea 
         Task<AirlineDetailModel?> GetDetailByCodeAsync(string codeAirlinesIcao);
 

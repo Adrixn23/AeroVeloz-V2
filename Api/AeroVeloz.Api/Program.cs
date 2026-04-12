@@ -155,7 +155,5 @@ app.MapControllers();
 var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<object>();
 var hashFabricado = hasher.HashPassword(null!, "Admin123!");
 
-Console.WriteLine(hashFabricado);
-
 
 app.Run();

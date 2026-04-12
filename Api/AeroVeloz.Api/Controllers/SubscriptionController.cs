@@ -9,9 +9,9 @@ namespace AeroVeloz.Api.Controllers
     [Authorize]
     public class SubscriptionController : ApiBaseController
     {
-        private readonly ISubscriptionServicie _subscriptionService;
+        private readonly ISubscriptionService _subscriptionService;
 
-        public SubscriptionController(ISubscriptionServicie subscriptionService)
+        public SubscriptionController(ISubscriptionService subscriptionService)
         {
             _subscriptionService = subscriptionService;
         }

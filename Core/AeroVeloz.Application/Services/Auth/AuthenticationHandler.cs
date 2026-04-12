@@ -7,7 +7,7 @@ using AeroVeloz.Domain.DomainService.Interfaces.Organization;
 
 namespace AeroVeloz.Application.Services.Auth
 {
-    public class AuthenticationHandler : IAuthenticationServicie
+    public class AuthenticationHandler : IAuthenticationService
     {
         private readonly IUserRepositoryAuthenticacion _authRepo;
         private readonly IUserRepositoryAuthorization _authzRepo;

@@ -13,7 +13,7 @@ using MediatR;
 
 namespace AeroVeloz.Application.Services.Subscriptions
 {
-    public class SubscriptionService : ISubscriptionServicie
+    public class SubscriptionService : ISubscriptionService
     {
         private readonly ISubscriptionRepository _subscriptionRepo;
         private readonly IFlightRepository _flightRepo;

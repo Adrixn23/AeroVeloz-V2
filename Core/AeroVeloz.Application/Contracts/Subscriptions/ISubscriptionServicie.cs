@@ -3,7 +3,7 @@ using AeroVeloz.Application.Services.Result;
 
 namespace AeroVeloz.Application.Contracts.Subscriptions
 {
-    public interface ISubscriptionServicie
+    public interface ISubscriptionService
     {
         Task<OperationResult<bool>> SubscribeExternalAsync(SubscriptionSaveDto dto);
         Task<OperationResult<bool>> CancelSubscriptionAsync(Guid subscriptionId);

@@ -9,9 +9,9 @@ namespace AeroVeloz.Api.Controllers
     [Authorize]
     public class AuditController : ApiBaseController
     {
-        private readonly IAuditServicie _auditService;
+        private readonly IAuditService _auditService;
 
-        public AuditController(IAuditServicie auditService)
+        public AuditController(IAuditService auditService)
         {
             _auditService = auditService;
         }

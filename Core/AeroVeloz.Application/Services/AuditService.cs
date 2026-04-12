@@ -9,7 +9,7 @@ using AeroVeloz.Transversal.Monitoring;
 
 namespace AeroVeloz.Application.Handlers.Audit
 {
-    public class AuditService : IAuditServicie
+    public class AuditService : IAuditService
     {
         private readonly IAuditRepository _repo;
         private readonly IUserRepositoryAuthorization _auth;

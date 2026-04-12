@@ -20,12 +20,9 @@ namespace AeroVeloz.Web.Services.Implementations
             try
             {
                 var client = _httpClientFactory.CreateClient("AeroVelozApi");
-                
-                // Inyectar el Token JWT en los Headers para peticiones seguras (Prueba de Rúbrica)
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                
-                var url = $"api/flights/airline/{airlineCode}?orgId={orgId}";
-                var response = await client.GetAsync(url);
+
+                var url = $"api/flights/airline/{airlineCode}?orgId={orgId}";                var response = await client.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {

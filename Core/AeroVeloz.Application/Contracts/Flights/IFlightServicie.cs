@@ -3,7 +3,7 @@ using AeroVeloz.Application.Services.Result;
 
 namespace AeroVeloz.Application.Contracts.Flights
 {
-    public interface IFlightServicie
+    public interface IFlightService
     {
         Task<OperationResult<FlightBatchResultDto>> UploadBatchAsync(IEnumerable<FlightBatchItemDto> batch, Guid userId, int orgId);
         Task<OperationResult<FlightBatchResultDto>> UploadCsvAsync(Stream csvStream, Guid userId, int orgId, ICsvFlightParser parser);

@@ -16,11 +16,11 @@ namespace AeroVeloz.IOC.Dependencies
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IAuthenticationServicie, AuthenticationHandler>();
-            services.AddScoped<IFlightServicie, FlightService>();
+            services.AddScoped<IAuthenticationService, AuthenticationHandler>();
+            services.AddScoped<IFlightService, FlightService>();
             services.AddScoped<IAirlineService, AirlineService>();
-            services.AddScoped<ISubscriptionServicie, SubscriptionService>();
-            services.AddScoped<IAuditServicie, AuditService>();
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped<IAuditService, AuditService>();
 
             //services.AddMediatR(cfg =>
             //    cfg.RegisterServicesFromAssembly(typeof(FlightService).Assembly));
