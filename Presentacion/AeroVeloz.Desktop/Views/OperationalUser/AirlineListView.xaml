@@ -1,0 +1,18 @@
+<UserControl x:Class="AeroVeloz.Desktop.Views.OperationalUser.AirlineListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800"
+             Background="Transparent">
+    
+    <Grid Margin="16">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <materialDesign:PackIcon Kind="Airplane" Width="100" Height="100" HorizontalAlignment="Center" Foreground="Gray" Opacity="0.5" />
+            <TextBlock Text="Aerolíneas" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#333" Margin="0,16,0,8" />
+            <TextBlock Text="El módulo de gestión de aerolíneas estará disponible próximamente." FontSize="16" Foreground="Gray" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="400" />
+        </StackPanel>
+    </Grid>
+</UserControl>

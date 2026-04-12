@@ -47,7 +47,15 @@ public partial class AuditLogViewModel : BaseViewModel
         _sessionService = sessionService;
     }
 
+    [ObservableProperty]
+    private string filterUser = string.Empty;
+
     partial void OnSearchTextChanged(string? value)
+    {
+        FilterLogs();
+    }
+
+    partial void OnFilterUserChanged(string? value)
     {
         FilterLogs();
     }
@@ -63,6 +71,11 @@ public partial class AuditLogViewModel : BaseViewModel
                 a.AuditTypeName?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true
                 || a.NameUser?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true
                 || a.NameEntity?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true);
+        }
+
+        if (!string.IsNullOrWhiteSpace(FilterUser))
+        {
+            filtered = filtered.Where(a => a.NameUser?.Contains(FilterUser, StringComparison.OrdinalIgnoreCase) == true);
         }
 
         AuditLogs = new ObservableCollection<AuditDto>(filtered);

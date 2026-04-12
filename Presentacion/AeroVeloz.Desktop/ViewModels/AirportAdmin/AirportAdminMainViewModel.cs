@@ -19,6 +19,7 @@ public partial class AirportAdminMainViewModel : BaseViewModel
     private readonly OperationsListViewModel _operationsListViewModel;
     private readonly ConnectionListViewModel _connectionListViewModel;
     private readonly AuditLogViewModel _auditLogViewModel;
+    private readonly AirlineListViewModel _airlineListViewModel;
 
     [ObservableProperty]
     private BaseViewModel _currentViewModel = null!;
@@ -44,7 +45,8 @@ public partial class AirportAdminMainViewModel : BaseViewModel
         UserListViewModel userListViewModel,
         OperationsListViewModel operationsListViewModel,
         ConnectionListViewModel connectionListViewModel,
-        AuditLogViewModel auditLogViewModel)
+        AuditLogViewModel auditLogViewModel,
+        AirlineListViewModel airlineListViewModel)
     {
         _sessionService = sessionService;
         _notificationService = notificationService;
@@ -53,8 +55,14 @@ public partial class AirportAdminMainViewModel : BaseViewModel
         _operationsListViewModel = operationsListViewModel;
         _connectionListViewModel = connectionListViewModel;
         _auditLogViewModel = auditLogViewModel;
+        _airlineListViewModel = airlineListViewModel;
 
         CurrentViewModel = _dashboardViewModel;
+
+        _dashboardViewModel.OnNavigate = destination =>
+        {
+            Navigate(destination);
+        };
 
         UserName = _sessionService.UserName ?? "Administrador de Aeropuerto";
 
@@ -77,6 +85,9 @@ public partial class AirportAdminMainViewModel : BaseViewModel
         {
             case "Dashboard":
                 CurrentViewModel = _dashboardViewModel;
+                break;
+            case "Airlines":
+                CurrentViewModel = _airlineListViewModel;
                 break;
             case "Operators":
                 CurrentViewModel = _userListViewModel;

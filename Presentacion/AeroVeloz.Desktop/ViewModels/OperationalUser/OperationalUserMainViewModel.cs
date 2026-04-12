@@ -17,6 +17,8 @@ public partial class OperationalUserMainViewModel : BaseViewModel
     private readonly NotificationService _notificationService;
     private readonly OperationalUserDashboardViewModel _dashboardViewModel;
     private readonly OperationsListViewModel _operationsListViewModel;
+    private readonly ConnectionListViewModel _connectionListViewModel;
+    private readonly AeroVeloz.Desktop.ViewModels.OperationalUser.AirlineListViewModel _airlineListViewModel;
 
     [ObservableProperty]
     private BaseViewModel _currentViewModel = null!;
@@ -39,12 +41,18 @@ public partial class OperationalUserMainViewModel : BaseViewModel
         ISessionService sessionService,
         NotificationService notificationService,
         OperationalUserDashboardViewModel dashboardViewModel,
-        OperationsListViewModel operationsListViewModel)
+        OperationsListViewModel operationsListViewModel,
+        ConnectionListViewModel connectionListViewModel,
+        AeroVeloz.Desktop.ViewModels.OperationalUser.AirlineListViewModel airlineListViewModel)
     {
         _sessionService = sessionService;
         _notificationService = notificationService;
         _dashboardViewModel = dashboardViewModel;
         _operationsListViewModel = operationsListViewModel;
+        _connectionListViewModel = connectionListViewModel;
+        _airlineListViewModel = airlineListViewModel;
+
+        _dashboardViewModel.OnNavigate = destination => NavigateTo(destination);
 
         UserName = _sessionService.UserName ?? "Operador";
         CurrentViewModel = _dashboardViewModel;
@@ -71,6 +79,12 @@ public partial class OperationalUserMainViewModel : BaseViewModel
                 break;
             case "Operations":
                 CurrentViewModel = _operationsListViewModel;
+                break;
+            case "Connections":
+                CurrentViewModel = _connectionListViewModel;
+                break;
+            case "Airlines":
+                CurrentViewModel = _airlineListViewModel;
                 break;
         }
     }

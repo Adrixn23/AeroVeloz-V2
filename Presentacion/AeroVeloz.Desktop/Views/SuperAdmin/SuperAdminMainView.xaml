@@ -34,6 +34,9 @@
         <DataTemplate DataType="{x:Type viewmodels:AdminDetailViewModel}">
             <views:AdminDetailView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AirlineListViewModel}">
+            <views:AirlineListView />
+        </DataTemplate>
     </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog" DialogTheme="Inherit">
@@ -83,6 +86,12 @@
                                 <TextBlock Text="Administradores" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
                             </StackPanel>
                         </Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateToAirlinesCommand}" ToolTip="Gestionar las aerolíneas">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Airplane" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Aerolíneas" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
 
                     <!-- Footer / Logout -->
@@ -90,7 +99,7 @@
                         <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LogoutCommand}" CommandParameter="{Binding ElementName=MainAdminWindow}" Background="#D32F2F" Foreground="White">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Logout" Margin="0,0,8,0"/>
-                                <TextBlock Text="Cerrar Sesi�n" />
+                                <TextBlock Text="Cerrar Sesión" />
                             </StackPanel>
                         </Button>
                     </StackPanel>

@@ -98,5 +98,46 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Organization
                 return null;
             }
         }
+
+        public async Task<IEnumerable<OrganizationModel>> GetByTypeAsync(string type)
+        {
+            try
+            {
+                var orgs = await _context.Organizations
+                    .AsNoTracking()
+                    .Where(o => o.typeOrganization == type)
+                    .Select(o => new OrganizationModel(
+                        o.Id,
+                        o.nameOrganization,
+                        o.typeOrganization,
+                        o.isActived,
+                        o.emailOrganization
+                    ))
+                    .ToListAsync();
+
+                return orgs;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error consultando organizaciones por tipo: {Type}", type);
+                return Enumerable.Empty<OrganizationModel>();
+            }
+        }
+
+        public async Task<bool> UpdateOrganizationStatusAsync(int orgId, bool isActived)
+        {
+            try
+            {
+                var result = await _context.Database.ExecuteSqlInterpolatedAsync(
+                    $"UPDATE Identitys.Organizations SET isActived = {isActived} WHERE Id = {orgId}");
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error actualizando estado de la organización: {Id}", orgId);
+                return false;
+            }
+        }
     }
 }

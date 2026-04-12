@@ -34,22 +34,31 @@ public partial class SuperAdminMainViewModel : BaseViewModel
 
     private readonly SuperAdminDashboardViewModel _dashboardViewModel;
     private readonly AirportListViewModel _airportsViewModel;
-
     private readonly AdminListViewModel _adminsViewModel;
+    private readonly AirlineListViewModel _airlinesViewModel;
 
     public SuperAdminMainViewModel(
         ISessionService sessionService,
         NotificationService notificationService,
         SuperAdminDashboardViewModel dashboardViewModel,
         AirportListViewModel airportsViewModel,
-        AdminListViewModel adminsViewModel)
+        AdminListViewModel adminsViewModel,
+        AirlineListViewModel airlinesViewModel)
     {
         _sessionService = sessionService;
         _notificationService = notificationService;
         _dashboardViewModel = dashboardViewModel;
         _airportsViewModel = airportsViewModel;
         _adminsViewModel = adminsViewModel;
+        _airlinesViewModel = airlinesViewModel;
         _currentViewModel = _dashboardViewModel;
+
+        _dashboardViewModel.OnNavigateRequested = destination =>
+        {
+            if (destination == "Airports") NavigateToAirports();
+            else if (destination == "Admins") NavigateToAdmins();
+            else if (destination == "Airlines") NavigateToAirlines();
+        };
 
         UserName = _sessionService.UserName ?? "Super Admin";
 
@@ -83,6 +92,13 @@ public partial class SuperAdminMainViewModel : BaseViewModel
     private void NavigateToAdmins()
     {
         _currentViewModel = _adminsViewModel;
+        OnPropertyChanged(nameof(CurrentViewModel));
+    }
+
+    [RelayCommand]
+    private void NavigateToAirlines()
+    {
+        _currentViewModel = _airlinesViewModel;
         OnPropertyChanged(nameof(CurrentViewModel));
     }
 

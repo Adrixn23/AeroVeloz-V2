@@ -16,6 +16,14 @@ public partial class SuperAdminDashboardViewModel : BaseViewModel
     [ObservableProperty]
     private GlobalStatsDto? _globalStats;
 
+    public Action<string>? OnNavigateRequested;
+
+    [RelayCommand]
+    private void NavigateTo(string destination)
+    {
+        OnNavigateRequested?.Invoke(destination);
+    }
+
     public SuperAdminDashboardViewModel(
         ISuperAdminStatService statService,
         AirportDetailViewModel airportDetailViewModel,

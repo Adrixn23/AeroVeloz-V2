@@ -31,6 +31,11 @@ public class HttpErrorInterceptorHandler : DelegatingHandler
 
                 if ((int)response.StatusCode == 400)
                 {
+                    if (request.RequestUri != null && request.RequestUri.AbsolutePath.Contains("/login", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return response;
+                    }
+
                     try 
                     {
                         var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };

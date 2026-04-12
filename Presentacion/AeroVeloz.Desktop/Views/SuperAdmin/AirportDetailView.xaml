@@ -49,7 +49,8 @@
 
             <!-- Name -->
             <TextBox Grid.ColumnSpan="3" Grid.Row="0" materialDesign:HintAssist.Hint="Nombre de Organización *" 
-                     Text="{Binding NameOrganization, UpdateSourceTrigger=PropertyChanged}" 
+                     Text="{Binding NameOrganization, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                     MaxLength="50"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
             <!-- ICAO / IATA -->
@@ -66,17 +67,18 @@
             <!-- Country / City -->
             <ComboBox Grid.Column="0" Grid.Row="4" materialDesign:HintAssist.Hint="País *" 
                       ItemsSource="{Binding Countries}"
-                      SelectedItem="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
             <ComboBox Grid.Column="2" Grid.Row="4" materialDesign:HintAssist.Hint="Ciudad *" 
                       ItemsSource="{Binding Cities}"
-                      SelectedItem="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
             <!-- Email / TimeOffset -->
             <TextBox Grid.Column="0" Grid.Row="6" materialDesign:HintAssist.Hint="Correo Organizacional" 
                      Text="{Binding EmailOrganization, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                     MaxLength="200"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
             <ComboBox Grid.Column="2" Grid.Row="6" 

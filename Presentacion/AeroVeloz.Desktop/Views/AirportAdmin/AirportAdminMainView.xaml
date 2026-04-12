@@ -43,6 +43,9 @@
         <DataTemplate DataType="{x:Type viewmodels:AuditLogViewModel}">
             <views:AuditLogView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AirlineListViewModel}">
+            <views:AirlineListView />
+        </DataTemplate>
     </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog" DialogTheme="Inherit">
@@ -76,6 +79,13 @@
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ViewDashboard" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                                 <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Airlines">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Airplane" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Aerolíneas en conexión" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
                             </StackPanel>
                         </Button>
 

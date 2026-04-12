@@ -18,6 +18,12 @@ public partial class AirportAdminDashboardViewModel : BaseViewModel
 
     public Action<string>? OnNavigate { get; set; }
 
+    [RelayCommand]
+    private void NavigateTo(string destination)
+    {
+        OnNavigate?.Invoke(destination);
+    }
+
     public AirportAdminDashboardViewModel(
         IAirportAdminStatService statService,
         UserListViewModel userListViewModel,

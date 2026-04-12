@@ -87,12 +87,24 @@ public partial class LoginViewModel : BaseViewModel
             if (mainView != null)
             {
                 mainView.Show();
-                System.Windows.Application.Current.MainWindow?.Close();
+                var currentWindow = System.Windows.Application.Current.Windows.OfType<System.Windows.Window>().FirstOrDefault(w => w.DataContext == this);
+                currentWindow?.Close();
             }
         }
         else
         {
-            ErrorMessage = response.ErrorMessage!;
+            if (response.ErrorMessage != null && (response.ErrorMessage.Contains("comunicación", StringComparison.OrdinalIgnoreCase) || response.ErrorMessage.Contains("conexión", StringComparison.OrdinalIgnoreCase)))
+            {
+                ErrorMessage = response.ErrorMessage;
+            }
+            else if (response.ErrorMessage != null && (response.ErrorMessage.Contains("dominio", StringComparison.OrdinalIgnoreCase) || response.ErrorMessage.Contains("validation", StringComparison.OrdinalIgnoreCase) || response.ErrorMessage.Contains("error", StringComparison.OrdinalIgnoreCase)))
+            {
+                ErrorMessage = "Credenciales incorrectas. Verifique usuario o contraseña e intente de nuevo.";
+            }
+            else
+            {
+                ErrorMessage = response.ErrorMessage ?? "Ocurrió un error al validar su acceso. Intente nuevamente.";
+            }
             Password = string.Empty;
         }
 

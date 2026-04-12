@@ -15,6 +15,9 @@ public static class PresentationViewModels
         services.AddTransient<SuperAdminMainViewModel>();
         services.AddTransient<AdminListViewModel>();
         services.AddTransient<AdminDetailViewModel>();
+        services.AddTransient<AeroVeloz.Desktop.ViewModels.SuperAdmin.AirlineListViewModel>();
+        services.AddTransient<AeroVeloz.Desktop.ViewModels.AirportAdmin.AirlineListViewModel>();
+        services.AddTransient<AeroVeloz.Desktop.ViewModels.OperationalUser.AirlineListViewModel>();
         services.AddTransient<AirportListViewModel>();
         services.AddTransient<AirportDetailViewModel>();
 

@@ -48,7 +48,10 @@
             </Grid.RowDefinitions>
 
             <!-- Card 1: Aerolíneas en Contacto -->
-            <materialDesign:Card Grid.Row="0" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#1976D2" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+            <materialDesign:Card Grid.Row="0" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#1976D2" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3" Cursor="Hand">
+                <materialDesign:Card.InputBindings>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCommand}" CommandParameter="Airlines" />
+                </materialDesign:Card.InputBindings>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -63,7 +66,10 @@
             </materialDesign:Card>
 
             <!-- Card 2: Conexiones Activas -->
-            <materialDesign:Card Grid.Row="0" Grid.Column="2" Padding="24,16" UniformCornerRadius="8" Background="#0097A7" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+            <materialDesign:Card Grid.Row="0" Grid.Column="2" Padding="24,16" UniformCornerRadius="8" Background="#0097A7" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3" Cursor="Hand">
+                <materialDesign:Card.InputBindings>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCommand}" CommandParameter="Connections" />
+                </materialDesign:Card.InputBindings>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -78,7 +84,10 @@
             </materialDesign:Card>
 
             <!-- Card 3: Operaciones Registradas -->
-            <materialDesign:Card Grid.Row="2" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#00796B" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3">
+            <materialDesign:Card Grid.Row="2" Grid.Column="0" Padding="24,16" UniformCornerRadius="8" Background="#00796B" Foreground="White" materialDesign:ElevationAssist.Elevation="Dp3" Cursor="Hand">
+                <materialDesign:Card.InputBindings>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding NavigateToCommand}" CommandParameter="Operations" />
+                </materialDesign:Card.InputBindings>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
