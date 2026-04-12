@@ -23,7 +23,12 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 | Airline Admin Dashboard | Super Admin System (Audit) |
 | :---: | :---: |
 | ![Airline Dashboard](captures/airline_dashboard.png) | ![Super Admin](captures/AuditAeroVeloz.png) |
-| Airline managers can batch upload flights and manage their fleet. | Full system audit logs and organization management. |
+
+### 🛠️ More Views
+| Secure Login Access | Airline Management | Flight Details |
+| :---: | :---: | :---: |
+| ![Login](captures/Login.png) | ![Airlines](captures/AirlinesValid.png) | ![Info](captures/InformationFlights.png) |
+| Encrypted authentication gateway. | Validating and managing airline records. | In-depth flight information and tracking. |
 
 ---
 
