@@ -101,9 +101,9 @@ public partial class AuditLogViewModel : BaseViewModel
 
             FilterLogs();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await _dialogService.ShowErrorAsync("Error", $"No se pudieron cargar los registros de auditoría: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "No se pudieron cargar los registros de auditoría. Si el problema persiste, contacte a soporte técnico.");
         }
         finally
         {

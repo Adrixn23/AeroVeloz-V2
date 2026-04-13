@@ -18,6 +18,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
+        Icon="pack://application:,,,/Assets/icono.png"
         Name="MainOperationalWindow">
 
     <Window.Resources>

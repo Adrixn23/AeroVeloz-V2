@@ -1,6 +1,7 @@
 using AeroVeloz.Application.Contracts.Airport;
 using AeroVeloz.Application.Contracts.Audit;
 using AeroVeloz.Application.Contracts.Auth;
+using AeroVeloz.Application.Contracts.Flights;
 using AeroVeloz.Application.Contracts.Operations;
 using AeroVeloz.Application.Contracts.StatusSystem;
 using AeroVeloz.Application.Contracts.Users;
@@ -10,6 +11,7 @@ using AeroVeloz.Application.Handlers.Audit;
 using AeroVeloz.Application.Handlers.Auth;
 using AeroVeloz.Application.Handlers.Operations;
 using AeroVeloz.Application.Handlers.Users;
+using AeroVeloz.Application.Services.Flights;
 using AeroVeloz.Application.Services.StatusSystem;
 using AeroVeloz.Application.Services.Organization;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,7 @@ namespace AeroVeloz.IOC.Dependencies
         {
             services.AddScoped<IAirportService, AirportService>();
             services.AddScoped<IAirportConnectionService, AirportConnectionService>();
+            services.AddScoped<IFlightService, FlightService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOperationalService, OperationalService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();

@@ -83,9 +83,9 @@ public class HttpErrorInterceptorHandler : DelegatingHandler
 
             return response;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
-            await _dialogService.ShowErrorAsync($"Fallo de conexión con el API: {ex.Message}", "Sin Conexión");
+            await _dialogService.ShowErrorAsync("No se pudo establecer conexión con el servidor. Por favor, verifique su conexión a internet e inténtelo de nuevo.", "Sin Conexión");
             throw; 
         }
         catch (TaskCanceledException)
@@ -93,9 +93,9 @@ public class HttpErrorInterceptorHandler : DelegatingHandler
             await _dialogService.ShowErrorAsync("El tiempo de conexión expiró (Timeout).", "Timeout");
             throw;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await _dialogService.ShowErrorAsync($"Error HTTP inesperado: {ex.Message}", "Excepción de Red");
+            await _dialogService.ShowErrorAsync("Ocurrió un problema de conexión inesperado. Si el problema persiste, contacte al administrador del sistema.", "Excepción de Red");
             throw;
         }
     }

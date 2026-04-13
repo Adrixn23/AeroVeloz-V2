@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 using AeroVeloz.Desktop.Models.DTOs.Audit;
 using AeroVeloz.Desktop.Models.DTOs.Auth;
@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using AeroVeloz.Desktop.Services.Interfaces.AdminSystem;
 using AeroVeloz.Desktop.Services.Interfaces.Audit;
+using AeroVeloz.Desktop.ViewModels.AirportAdmin;
 
 namespace AeroVeloz.Desktop.ViewModels.SuperAdmin;
 
@@ -20,6 +21,7 @@ public partial class AdminListViewModel : BaseViewModel
     private readonly IDialogService _dialogService;
     private readonly AeroVeloz.Desktop.Services.Interfaces.Auth.ISessionService _sessionService;
     private readonly AdminDetailViewModel _detailViewModel;
+    private readonly AuditLogViewModel _auditViewModel;
 
     [ObservableProperty]
     private ObservableCollection<AuthUserDto> _systemUsers = new();
@@ -32,31 +34,16 @@ public partial class AdminListViewModel : BaseViewModel
     [ObservableProperty]
     private string _searchText = string.Empty;
 
-    [ObservableProperty]
-    private ObservableCollection<AuditDto> _selectedUserAudit = new();
+    
 
     [ObservableProperty]
-    private string _auditTitle = "Registro de auditoría";
+    private string _auditTitle = "Registro de auditorÃ­a";
 
-    [ObservableProperty]
-    private bool _isAuditVisible = false;
+    
 
     partial void OnSearchTextChanged(string? value)
     {
         FilterUsers();
-    }
-
-    partial void OnSelectedUserChanged(AuthUserDto? value)
-    {
-        if (value != null)
-        {
-            LoadUserAuditAsync();
-        }
-        else
-        {
-            SelectedUserAudit.Clear();
-            IsAuditVisible = false;
-        }
     }
 
     public AdminListViewModel(
@@ -64,13 +51,15 @@ public partial class AdminListViewModel : BaseViewModel
         IAuditService auditService,
         IDialogService dialogService,
         AeroVeloz.Desktop.Services.Interfaces.Auth.ISessionService sessionService,
-        AdminDetailViewModel detailViewModel)
+        AdminDetailViewModel detailViewModel,
+        AuditLogViewModel auditViewModel)
     {
         _adminManagerService = adminManagerService;
         _auditService = auditService;
         _dialogService = dialogService;
         _sessionService = sessionService;
         _detailViewModel = detailViewModel;
+        _auditViewModel = auditViewModel;
 
         _detailViewModel.OnSavedResultAction = async () => await LoadDataAsync();
     }
@@ -108,50 +97,36 @@ public partial class AdminListViewModel : BaseViewModel
         }
     }
 
-    private async Task LoadUserAuditAsync()
+    [RelayCommand]
+    private async Task ViewDetailsAsync(AuthUserDto? user)
     {
-        if (SelectedUser == null) return;
+        var userToView = user ?? SelectedUser;
+        if (userToView == null) return;
 
-        AuditTitle = $"Registro de auditoría del usuario: {SelectedUser.FullName}";
+        string details = $"Nombre: {userToView.FullName}\n" +
+                         $"Email: {userToView.Email}\n" +
+                         $"Rol: {userToView.Role}\n" +
+                         $"Activo: {(userToView.IsActive ? "SÃ­" : "No")}\n" +
+                         $"Bloqueado: {(userToView.IsBlocked ? "SÃ­" : "No")}";
 
-        IsBusy = true;
-
-        if (!Guid.TryParse(SelectedUser.Id, out var userId))
-        {
-            IsBusy = false;
-            return;
-        }
-
-        var audits = await _auditService.GetUserAuditAsync(userId);
-
-        SelectedUserAudit.Clear();
-        foreach (var audit in audits.OrderByDescending(a => a.OccurredAt))
-        {
-            SelectedUserAudit.Add(audit);
-        }
-
-        IsAuditVisible = SelectedUserAudit.Count > 0;
-        IsBusy = false;
+        await _dialogService.ShowInfoAsync(details, "Detalles del Usuario");
     }
 
     [RelayCommand]
-    private async Task LoadGlobalAuditAsync()
+    private async Task ViewUserAuditAsync(AuthUserDto? user)
     {
-        IsBusy = true;
-        SelectedUser = null;
-        AuditTitle = "Registro de auditoría general";
+        var userToAudit = user ?? SelectedUser;
+        if (userToAudit == null) return;
 
-        var orgId = _sessionService.OrgId > 0 ? _sessionService.OrgId : 1;
-        var audits = await _auditService.GetGlobalAuditAsync(orgId);
-
-        SelectedUserAudit.Clear();
-        foreach (var audit in audits.OrderByDescending(a => a.OccurredAt))
+        if (Guid.TryParse(userToAudit.Id, out var parsedId))
         {
-            SelectedUserAudit.Add(audit);
+            _auditViewModel.TargetUserId = parsedId;
         }
+        _auditViewModel.AuditMode = "User Specific";
 
-        IsAuditVisible = SelectedUserAudit.Count > 0;
-        IsBusy = false;
+        var auditView = new Views.AirportAdmin.AuditLogView { DataContext = _auditViewModel };
+        _auditViewModel.LoadAuditLogsCommand?.Execute(null);
+        await DialogHost.Show(auditView, "RootDialog");
     }
 
     [RelayCommand]
@@ -178,8 +153,8 @@ public partial class AdminListViewModel : BaseViewModel
         if (userToDeactivate == null) return;
 
         var confirm = await _dialogService.ShowConfirmationAsync(
-            $"¿Desactivas a {userToDeactivate.FullName}? Esta acción se registrará en auditoría.",
-            "Confirmar desactivación");
+            $"Â¿Desactivas a {userToDeactivate.FullName}? Esta acciÃ³n se registrarÃ¡ en auditorÃ­a.",
+            "Confirmar desactivaciÃ³n");
 
         if (!confirm) return;
 
@@ -196,7 +171,7 @@ public partial class AdminListViewModel : BaseViewModel
 
         if (success)
         {
-            await _dialogService.ShowInfoAsync("Usuario desactivado exitosamente.", "Desactivación Exitosa");
+            await _dialogService.ShowInfoAsync("Usuario desactivado exitosamente.", "DesactivaciÃ³n Exitosa");
             SelectedUser = null;
             await LoadDataAsync();
         }
@@ -206,5 +181,6 @@ public partial class AdminListViewModel : BaseViewModel
         }
     }
 }
+
 
 

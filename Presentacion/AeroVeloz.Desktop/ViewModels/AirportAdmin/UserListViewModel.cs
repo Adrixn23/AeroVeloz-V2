@@ -90,6 +90,20 @@ public partial class UserListViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task ViewDetailsAsync(UserDto? user)
+    {
+        var userToView = user ?? SelectedUser;
+        if (userToView == null) return;
+
+        string details = $"ID: {userToView.Id}\n" +
+                         $"Nombre: {userToView.FullName}\n" +
+                         $"Email: {userToView.Email}\n" +
+                         $"Activo: {(userToView.IsActive ? "Sí" : "No")}";
+
+        await _dialogService.ShowInfoAsync(details, "Detalles del Operador");
+    }
+
+    [RelayCommand]
     private async Task EditUserAsync()
     {
         if (SelectedUser == null) return;
@@ -126,9 +140,9 @@ public partial class UserListViewModel : BaseViewModel
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "Ocurrió un error inesperado al procesar la operación. Intente nuevamente.");
         }
         finally
         {

@@ -75,6 +75,12 @@ public partial class UserDetailViewModel : BaseViewModel
             return;
         }
 
+        if (UserName.Length > 50)
+        {
+            await _dialogService.ShowInfoAsync("El nombre del usuario no puede exceder los 50 caracteres.", "Validación");
+            return;
+        }
+
         IsBusy = true;
         bool result;
 
@@ -125,10 +131,10 @@ public partial class UserDetailViewModel : BaseViewModel
                 await _dialogService.ShowInfoAsync("Error al guardar el usuario. Intente nuevamente.", "Error");
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             IsBusy = false;
-            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "Ocurrió un error inesperado al procesar la operación. Intente nuevamente.");
         }
     }
 

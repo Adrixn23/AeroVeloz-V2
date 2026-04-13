@@ -98,21 +98,23 @@ public partial class ConnectionListViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task EditConnectionAsync()
+    private async Task EditConnectionAsync(ConnectionDto? connection = null)
     {
-        if (SelectedConnection == null) return;
+        var target = connection ?? SelectedConnection;
+        if (target == null) return;
 
-        _detailViewModel.InitializeForEdit(SelectedConnection);
+        _detailViewModel.InitializeForEdit(target);
         await DialogHost.Show(_detailViewModel, "RootDialog");
     }
 
     [RelayCommand]
-    private async Task DeleteConnectionAsync()
+    private async Task DeleteConnectionAsync(ConnectionDto? connection = null)
     {
-        if (SelectedConnection == null) return;
+        var target = connection ?? SelectedConnection;
+        if (target == null) return;
 
         var confirm = await _dialogService.ShowConfirmationAsync(
-            $"¿Eliminar la conexión {SelectedConnection.CodeAirlinesIcao}-{SelectedConnection.CodeAirportIcao}?",
+            $"¿Eliminar la conexión {target.CodeAirlinesIcao}-{target.CodeAirportIcao}?",
             "Confirmar eliminación");
 
         if (!confirm) return;
@@ -120,7 +122,7 @@ public partial class ConnectionListViewModel : BaseViewModel
         IsBusy = true;
         try
         {
-            if (Guid.TryParse(SelectedConnection.Id, out var connectionId))
+            if (Guid.TryParse(target.Id, out var connectionId))
             {
                 var result = await _connectionService.DeleteConnectionAsync(connectionId);
                 if (result)
@@ -135,14 +137,29 @@ public partial class ConnectionListViewModel : BaseViewModel
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "Ocurrió un error inesperado al procesar la operación. Intente nuevamente.");
         }
         finally
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task ViewDetailsAsync(ConnectionDto? connection = null)
+    {
+        var target = connection ?? SelectedConnection;
+        if (target == null) return;
+
+        string details = $"ID: {target.Id}\n" +
+                         $"Código ICAO Aerolínea: {target.CodeAirlinesIcao}\n" +
+                         $"Código ICAO Aeropuerto: {target.CodeAirportIcao}\n" +
+                         $"Activo: {(target.IsActive ? "Sí" : "No")}\n" +
+                         $"Fecha de Creación: {target.CreateAt:dd/MM/yyyy}\n";
+                        
+        await _dialogService.ShowInfoAsync(details, "Detalles de la Conexión");
     }
 }
 

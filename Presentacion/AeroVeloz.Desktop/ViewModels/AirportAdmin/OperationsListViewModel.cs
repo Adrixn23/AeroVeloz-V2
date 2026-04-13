@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using AeroVeloz.Desktop.Models.DTOs.Operation;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
@@ -90,11 +90,12 @@ public partial class OperationsListViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task EditOperationAsync()
+    private async Task EditOperationAsync(OperationDto? operation = null)
     {
-        if (SelectedOperation == null) return;
+        var target = operation ?? SelectedOperation;
+        if (target == null) return;
 
-        _detailViewModel.InitializeForEdit(SelectedOperation);
+        _detailViewModel.InitializeForEdit(target);
         await DialogHost.Show(_detailViewModel, "RootDialog");
     }
 
@@ -106,12 +107,13 @@ public partial class OperationsListViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task DeleteOperationAsync()
+    private async Task DeleteOperationAsync(OperationDto? operation = null)
     {
-        if (SelectedOperation == null) return;
+        var target = operation ?? SelectedOperation;
+        if (target == null) return;
 
         var confirm = await _dialogService.ShowConfirmationAsync(
-            $"¿Eliminar la operación {SelectedOperation.FlightNumber}?",
+            $"¿Eliminar la operación {target.FlightNumber}?",
             "Confirmar eliminación");
 
         if (!confirm) return;
@@ -119,7 +121,7 @@ public partial class OperationsListViewModel : BaseViewModel
         IsBusy = true;
         try
         {
-            if (Guid.TryParse(SelectedOperation.Id, out var operationId))
+            if (Guid.TryParse(target.Id, out var operationId))
             {
                 var result = await _operationService.DeleteOperationAsync(operationId);
                 if (result)
@@ -134,17 +136,28 @@ public partial class OperationsListViewModel : BaseViewModel
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "Ocurrió un error inesperado al procesar la operación. Intente nuevamente.");
         }
         finally
         {
             IsBusy = false;
         }
     }
+    [RelayCommand]
+    private async Task ViewDetailsAsync(OperationDto operation)
+    {
+        var op = operation ?? SelectedOperation;
+        if (op == null) return;
+
+        string details = "ID: " + op.Id + "\n" +
+                         "Tipo: " + op.IdOperationalType + "\n" +
+                         "Vuelo: " + op.FlightNumber + "\n" +
+                         "Aerolínea: " + op.CodeAirline + "\n" +
+                         "Aeropuerto: " + op.CodeAirport + "\n" +
+                         "Causa: " + op.Cause;
+
+        await _dialogService.ShowInfoAsync(details, "Detalles de Operación");
+    }
 }
-
-
-
-

@@ -27,4 +27,7 @@ public class OperationDto
 
     [JsonPropertyName("cause")]
     public string? Cause { get; set; }
+
+    [JsonPropertyName("isActive")]
+    public bool IsActive { get; set; }
 }

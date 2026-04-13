@@ -28,24 +28,46 @@
                     Foreground="{DynamicResource PrimaryHueMidBrush}" Loaded="RefreshButton_Loaded"/>
         </StackPanel>
 
-        <!-- Connections DataGrid -->
+            <!-- Connections DataGrid -->
         <DataGrid Grid.Row="2" ItemsSource="{Binding Connections}" SelectedItem="{Binding SelectedConnection}"
                   AutoGenerateColumns="False" CanUserAddRows="False" Background="White"
                   materialDesign:DataGridAssist.CellPadding="4" materialDesign:DataGridAssist.ColumnHeaderPadding="4">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewDetailsCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="120"/>
                 <DataGridTextColumn Header="Código ICAO Aerolínea" Binding="{Binding CodeAirlinesIcao}" Width="150"/>
                 <DataGridTextColumn Header="Código ICAO Aeropuerto" Binding="{Binding CodeAirportIcao}" Width="150"/>
-                <DataGridTextColumn Header="Activo" Binding="{Binding IsActive}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Activo" Binding="{Binding IsActive, Mode=OneWay}" Width="80"/>
                 <DataGridTextColumn Header="Fecha de Creación" Binding="{Binding CreateAt, StringFormat='dd/MM/yyyy'}" Width="120"/>
                 <DataGridTemplateColumn Header="Acciones" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Editar" Command="{Binding DataContext.EditConnectionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32"/>
-                                <Button Content="Eliminar" Command="{Binding DataContext.DeleteConnectionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32" Foreground="#D32F2F"/>
+                                <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                        ToolTip="Ver Detalles" 
+                                        Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" 
+                                        Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                    <materialDesign:PackIcon Kind="Eye" />
+                                </Button>
+                                <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                        ToolTip="Editar" 
+                                        Command="{Binding DataContext.EditConnectionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" 
+                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                        Margin="4,0,0,0">
+                                    <materialDesign:PackIcon Kind="Pencil" />
+                                </Button>
+                                <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                        ToolTip="Eliminar" 
+                                        Command="{Binding DataContext.DeleteConnectionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" 
+                                        Foreground="#D32F2F" 
+                                        Margin="4,0,0,0">
+                                    <materialDesign:PackIcon Kind="Delete" />
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

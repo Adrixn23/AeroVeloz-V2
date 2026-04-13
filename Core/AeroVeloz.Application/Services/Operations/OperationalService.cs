@@ -270,6 +270,19 @@ namespace AeroVeloz.Application.Handlers.Operations
                 });
 
                 var result = OperationResult<bool>.Ok(true, "Operation desactivada");
+
+                // Publicar evento de dominio
+                result.AddEvent(new OperationalChangeDeactivatedDomainEvent(
+                    dto.IdOperational,
+                    userId,
+                    operation.operationalId == Guid.Empty ? (short)0 : (short)operation.operationalId.GetHashCode(),
+                    DateTime.UtcNow,
+                    "Operación desactivada por usuario"
+                ));
+
+                foreach (var evt in result.DomainEvents)
+                    await _mediator.Publish(evt);
+
                 return result;
 
             }

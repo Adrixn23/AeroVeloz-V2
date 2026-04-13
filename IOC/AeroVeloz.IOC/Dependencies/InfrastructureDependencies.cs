@@ -21,6 +21,9 @@ using AeroVeloz.Application.Contracts.Auth;
 using AeroVeloz.Infraestructure.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
+using AeroVeloz.Application.Repositories.Flights;
+using AeroVeloz.Infraestructure.Persistence.Repositories.Flights;
+
 namespace AeroVeloz.IOC.Dependencies
 {
     public static class InfrastructureDependencies
@@ -30,6 +33,7 @@ namespace AeroVeloz.IOC.Dependencies
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<IAirportRepository, AirportRepository>();
             services.AddScoped<IAirportConnectionAirline, AirportConnectionAirline>();
+            services.AddScoped<IFlightRepository, FlightRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOperationalRepository, OperationalRepository>();
             services.AddScoped<IAuditRepository, AuditRepository>();

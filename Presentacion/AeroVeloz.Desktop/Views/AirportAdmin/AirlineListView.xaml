@@ -1,4 +1,4 @@
-<UserControl x:Class="AeroVeloz.Desktop.Views.AirportAdmin.AirlineListView"
+﻿<UserControl x:Class="AeroVeloz.Desktop.Views.AirportAdmin.AirlineListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -54,12 +54,26 @@
 
         <!-- Data Grid -->
         <Border Grid.Row="2" Background="White" CornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <DataGrid ItemsSource="{Binding ConnectedAirlines}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" materialDesign:DataGridAssist.CornerRadius="8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+            <DataGrid ItemsSource="{Binding ConnectedAirlines}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" SelectedItem="{Binding SelectedConnection}" materialDesign:DataGridAssist.CornerRadius="8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewDetailsCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Aerolínea" Binding="{Binding AirlineName}" Width="*"/>
                     <DataGridTextColumn Header="Código ICAO" Binding="{Binding CodeAirlinesIcao}" Width="150"/>
                     <DataGridCheckBoxColumn Header="Activo" Binding="{Binding IsActive, Mode=OneWay}" />
                     <DataGridTextColumn Header="Fecha de Registro" Binding="{Binding CreateAt, StringFormat='dd/MM/yyyy'}" Width="150" />
+                    <DataGridTemplateColumn Header="Acciones" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button ToolTip="Ver Detalles" Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Style="{StaticResource MaterialDesignIconButton}" Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                        <materialDesign:PackIcon Kind="Eye" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

@@ -20,6 +20,7 @@ public static class PresentationHttpServices
         services.AddHttpClient("AeroVelozApi", client =>
         {
             client.BaseAddress = new Uri(baseUrl);
+            client.Timeout = TimeSpan.FromSeconds(30); 
         })
         .AddHttpMessageHandler<AuthenticationHandler>()
         .AddHttpMessageHandler<HttpErrorInterceptorHandler>();

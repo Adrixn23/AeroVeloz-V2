@@ -219,10 +219,10 @@ public partial class OperationDetailViewModel : BaseViewModel
                 await _dialogService.ShowInfoAsync("Error al guardar el cambio operacional. Intente nuevamente.", "Error");
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             IsBusy = false;
-            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "Ocurrió un error inesperado al procesar la operación. Intente nuevamente.");
         }
     }
 

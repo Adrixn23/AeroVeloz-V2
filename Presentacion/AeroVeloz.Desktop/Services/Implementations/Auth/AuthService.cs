@@ -72,20 +72,20 @@ public class AuthService : IAuthService
                 };
             }
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             return new LoginResponseDto 
             { 
                 Success = false, 
-                ErrorMessage = $"Error de comunicación con el servidor. Revise su conexión ({ex.Message})." 
+                ErrorMessage = "Error de conexión con el servidor. Revisa tu internet e inténtalo nuevamente." 
             };
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return new LoginResponseDto 
             { 
                 Success = false, 
-                ErrorMessage = $"Ocurrió un error inesperado: {ex.Message}" 
+                ErrorMessage = "Ocurrió un error inesperado al intentar iniciar sesión. Por favor, intenta de nuevo más tarde." 
             };
         }
     }

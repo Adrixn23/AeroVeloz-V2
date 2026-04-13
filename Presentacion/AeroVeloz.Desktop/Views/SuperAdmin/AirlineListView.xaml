@@ -1,4 +1,4 @@
-<UserControl x:Class="AeroVeloz.Desktop.Views.SuperAdmin.AirlineListView"
+﻿<UserControl x:Class="AeroVeloz.Desktop.Views.SuperAdmin.AirlineListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -55,7 +55,10 @@
 
         <!-- Data Grid -->
         <Border Grid.Row="2" Background="White" CornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <DataGrid ItemsSource="{Binding Airlines}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" materialDesign:DataGridAssist.CornerRadius="8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+            <DataGrid ItemsSource="{Binding Airlines}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" SelectedItem="{Binding SelectedAirline}" materialDesign:DataGridAssist.CornerRadius="8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewDetailsCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Aerolínea" Binding="{Binding NameOrganization}" Width="*"/>
                     <DataGridTextColumn Header="Correo" Binding="{Binding EmailOrganization}" Width="*"/>
@@ -65,6 +68,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}" ToolTip="Ver Detalles" Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,8,0">
+                                        <materialDesign:PackIcon Kind="Eye" />
+                                    </Button>
                                     <Button Style="{StaticResource MaterialDesignIconButton}" ToolTip="Bloquear" Command="{Binding DataContext.BlockAirlineCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Foreground="#D32F2F">
                                         <materialDesign:PackIcon Kind="Lock" />
                                     </Button>

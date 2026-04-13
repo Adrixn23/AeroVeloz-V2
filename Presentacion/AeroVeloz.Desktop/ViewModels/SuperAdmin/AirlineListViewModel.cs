@@ -95,4 +95,17 @@ public partial class AirlineListViewModel : BaseViewModel
     {
         await LoadAirlinesAsync();
     }
+
+    [RelayCommand]
+    private async Task ViewDetailsAsync(OrganizationDto selectedAirline)
+    {
+        if (selectedAirline == null) return;
+
+        string details = $"Aerolínea: {selectedAirline.NameOrganization}\n" +
+                         $"Correo: {selectedAirline.EmailOrganization}\n" +
+                         $"Tipo: {selectedAirline.TypeOrganization}\n" +
+                         $"Activa: {(selectedAirline.IsActived ? "Sí" : "No")}";
+
+        await _dialogService.ShowInfoAsync(details, "Detalles de la Aerolínea");
+    }
 }

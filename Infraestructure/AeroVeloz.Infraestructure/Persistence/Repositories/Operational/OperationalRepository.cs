@@ -1,4 +1,5 @@
-﻿using AeroVeloz.Application.Repositories.Operational;
+using AeroVeloz.Application.Repositories.Operational;
+using AeroVeloz.Application.DTOs.Operations;
 using AeroVeloz.Domain.Entities.Operations;
 using AeroVeloz.Domain.Models.Operational;
 using AeroVeloz.Domain.Services.Interfaces.Operational;
@@ -59,7 +60,6 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
             {
                 var operationsByAirport = await (
                     from op in _context.OperationChanges.AsNoTracking()
-                    where op.isActive
                     select new OperationalDetailModel(
                         op.Id,
                         op.idOperationalType,
@@ -129,6 +129,42 @@ namespace AeroVeloz.Infraestructure.Persistence.Repositories.Operational
             {
                 _logger.LogError(ex, "Error obteniendo cambios por número de vuelo {FlightNumber}", flightNumber);
                 return Array.Empty<OperationalModel>();
+            }
+        }
+
+        public async Task<IReadOnlyCollection<FlightOperationDto>> GetFlightOperationsAsync(short flightNumber)
+        {
+            try
+            {
+                var operations = await (
+                    from op in _context.OperationChanges.AsNoTracking()
+                        .Where(op => op.flightNumber == flightNumber)
+                    join t in _context.OperationalChangeTypes.AsNoTracking() 
+                        on op.idOperationalType equals t.Id
+                    select new FlightOperationDto
+                    {
+                        Id = op.Id,
+                        IdOperationalType = op.idOperationalType,
+                        OperationalTypeName = t.name,
+                        FlightNumber = op.flightNumber,
+                        CodeAirline = op.codeAirlinesIcao,
+                        CodeAirport = op.codeAirportIcao,
+                        PreviousValue = op.previosValue,
+                        NewValue = op.newValue,
+                        ChangeAt = op.changeAt,
+                        Cause = op.cause,
+                        IsActive = op.isActive,
+                        UserId = op.idUser
+                    }
+                ).OrderByDescending(op => op.ChangeAt)
+                 .ToListAsync();
+
+                return operations;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo operaciones para el vuelo {FlightNumber}", flightNumber);
+                return Array.Empty<FlightOperationDto>();
             }
         }
 

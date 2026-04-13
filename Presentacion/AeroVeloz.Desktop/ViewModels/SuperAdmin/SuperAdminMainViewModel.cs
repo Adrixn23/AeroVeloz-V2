@@ -36,6 +36,7 @@ public partial class SuperAdminMainViewModel : BaseViewModel
     private readonly AirportListViewModel _airportsViewModel;
     private readonly AdminListViewModel _adminsViewModel;
     private readonly AirlineListViewModel _airlinesViewModel;
+    private readonly AeroVeloz.Desktop.ViewModels.AirportAdmin.AuditLogViewModel _auditViewModel;
 
     public SuperAdminMainViewModel(
         ISessionService sessionService,
@@ -43,7 +44,8 @@ public partial class SuperAdminMainViewModel : BaseViewModel
         SuperAdminDashboardViewModel dashboardViewModel,
         AirportListViewModel airportsViewModel,
         AdminListViewModel adminsViewModel,
-        AirlineListViewModel airlinesViewModel)
+        AirlineListViewModel airlinesViewModel,
+        AeroVeloz.Desktop.ViewModels.AirportAdmin.AuditLogViewModel auditViewModel)
     {
         _sessionService = sessionService;
         _notificationService = notificationService;
@@ -51,6 +53,7 @@ public partial class SuperAdminMainViewModel : BaseViewModel
         _airportsViewModel = airportsViewModel;
         _adminsViewModel = adminsViewModel;
         _airlinesViewModel = airlinesViewModel;
+        _auditViewModel = auditViewModel;
         _currentViewModel = _dashboardViewModel;
 
         _dashboardViewModel.OnNavigateRequested = destination =>
@@ -99,6 +102,16 @@ public partial class SuperAdminMainViewModel : BaseViewModel
     private void NavigateToAirlines()
     {
         _currentViewModel = _airlinesViewModel;
+        OnPropertyChanged(nameof(CurrentViewModel));
+    }
+
+    [RelayCommand]
+    private void NavigateToAudit()
+    {
+        _auditViewModel.AuditMode = "Global";
+        _auditViewModel.TargetUserId = null;
+        _auditViewModel.LoadAuditLogsCommand?.Execute(null);
+        _currentViewModel = _auditViewModel;
         OnPropertyChanged(nameof(CurrentViewModel));
     }
 

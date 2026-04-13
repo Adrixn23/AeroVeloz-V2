@@ -243,9 +243,9 @@ public partial class AirportDetailViewModel : BaseViewModel
                 OnSavedResultAction?.Invoke();
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await _dialogService.ShowErrorAsync($"Error no controlado al guardar: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Ocurrió un error inesperado al guardar los cambios. Intente nuevamente o contacte a soporte técnico.");
         }
         finally
         {

@@ -73,9 +73,21 @@ public partial class ConnectionDetailViewModel : BaseViewModel
             return;
         }
 
+        if (CodeAirlinesIcao.Trim().Length != 3)
+        {
+            await _dialogService.ShowInfoAsync("El código ICAO de la aerolínea debe tener exactamente 3 caracteres.", "Validación");
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(CodeAirportIcao))
         {
             await _dialogService.ShowInfoAsync("Debe ingresar el código ICAO del aeropuerto.", "Validación");
+            return;
+        }
+
+        if (CodeAirportIcao.Trim().Length != 4)
+        {
+            await _dialogService.ShowInfoAsync("El código ICAO del aeropuerto debe tener exactamente 4 caracteres.", "Validación");
             return;
         }
 
@@ -113,10 +125,10 @@ public partial class ConnectionDetailViewModel : BaseViewModel
                 await _dialogService.ShowInfoAsync("Error al guardar la conexión. Intente nuevamente.", "Error");
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             IsBusy = false;
-            await _dialogService.ShowErrorAsync("Error", $"Ocurrió un error: {ex.Message}");
+            await _dialogService.ShowErrorAsync("Error", "Ocurrió un error inesperado al procesar la operación. Intente nuevamente.");
         }
     }
 

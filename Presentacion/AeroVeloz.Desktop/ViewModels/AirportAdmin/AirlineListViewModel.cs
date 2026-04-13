@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using AeroVeloz.Desktop.Models.DTOs.Connection;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
@@ -15,6 +15,9 @@ public partial class AirlineListViewModel : BaseViewModel
 
     [ObservableProperty]
     private ObservableCollection<ConnectionDto> _connectedAirlines = new();
+
+    [ObservableProperty]
+    private ConnectionDto? _selectedConnection;
 
     private ObservableCollection<ConnectionDto> _allConnectedAirlines = new();
 
@@ -68,5 +71,17 @@ public partial class AirlineListViewModel : BaseViewModel
     private async Task RefreshAirlinesAsync()
     {
         await LoadConnectedAirlinesAsync();
+    }
+    [RelayCommand]
+    private async Task ViewDetailsAsync(ConnectionDto connection)
+    {
+        if (connection == null) return;
+
+        string details = "Aerolínea: " + connection.AirlineName + "\n" +
+                         "Código ICAO: " + connection.CodeAirlinesIcao + "\n" +
+                         "Activo: " + (connection.IsActive ? "Sí" : "No") + "\n" +
+                         "Fecha de Registro: " + connection.CreateAt.ToString("dd/MM/yyyy");
+
+        await _dialogService.ShowInfoAsync(details, "Detalles de la Aerolínea");
     }
 }

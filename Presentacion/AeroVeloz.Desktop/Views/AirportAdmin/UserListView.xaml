@@ -1,4 +1,4 @@
-<UserControl x:Class="AeroVeloz.Desktop.Views.AirportAdmin.UserListView"
+﻿<UserControl x:Class="AeroVeloz.Desktop.Views.AirportAdmin.UserListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -32,14 +32,22 @@
         <DataGrid Grid.Row="2" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}"
                   AutoGenerateColumns="False" CanUserAddRows="False" Background="White" IsReadOnly="True"
                   materialDesign:DataGridAssist.CellPadding="4" materialDesign:DataGridAssist.ColumnHeaderPadding="4">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewDetailsCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+            </DataGrid.InputBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Ver Detalles" Command="{Binding ViewDetailsCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Eye" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="Editar Operador" Command="{Binding EditUserCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="Pencil" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Información de Auditoría" Command="{Binding ViewUserAuditCommand}">
+                    <MenuItem Header="InformaciÃ³n de AuditorÃ­a" Command="{Binding ViewUserAuditCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="History" />
                         </MenuItem.Icon>
@@ -54,17 +62,27 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="150"/>
                 <DataGridTextColumn Header="Nombre de Usuario" Binding="{Binding FullName}" Width="200"/>
-                <DataGridTextColumn Header="Activo" Binding="{Binding IsActive}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Activo" Binding="{Binding IsActive, Mode=OneWay}" Width="80"/>
                 <DataGridTemplateColumn Header="Acciones" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Editar" Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32"/>
-                                <Button Content="Auditoría" Command="{Binding DataContext.ViewUserAuditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-                                <Button Content="Desactivar" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32" Foreground="#D32F2F"/>
+                                <Button ToolTip="Detalles" Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                    <materialDesign:PackIcon Kind="Eye" />
+                                </Button>
+                                <Button ToolTip="Editar" Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32">
+                                    <materialDesign:PackIcon Kind="Pencil" />
+                                </Button>
+                                <Button ToolTip="AuditorÃ­a" Command="{Binding DataContext.ViewUserAuditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32" Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                    <materialDesign:PackIcon Kind="History" />
+                                </Button>
+                                <Button ToolTip="Desactivar" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="8" Height="32" Width="32" Foreground="#D32F2F">
+                                    <materialDesign:PackIcon Kind="UserRemove" />
+                                </Button>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -79,4 +97,5 @@
                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50"/>
     </Grid>
 </UserControl>
+
 

@@ -71,25 +71,28 @@ public partial class LoginViewModel : BaseViewModel
 
             System.Windows.Window? mainView = null;
 
-            if (response.RoleName?.ToUpper() == "AIRPORTADMIN")
+            await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                mainView = App.AppHost?.Services.GetRequiredService<AirportAdminMainView>();
-            }
-            else if (response.RoleName?.ToUpper() == "OPERATIONAIRPORT")
-            {
-                mainView = App.AppHost?.Services.GetRequiredService<OperationalUserMainView>();
-            }
-            else
-            {
-                mainView = App.AppHost?.Services.GetRequiredService<SuperAdminMainView>();
-            }
+                if (response.RoleName?.ToUpper() == "AIRPORTADMIN")
+                {
+                    mainView = App.AppHost?.Services.GetRequiredService<AirportAdminMainView>();
+                }
+                else if (response.RoleName?.ToUpper() == "OPERATIONAIRPORT")
+                {
+                    mainView = App.AppHost?.Services.GetRequiredService<OperationalUserMainView>();
+                }
+                else
+                {
+                    mainView = App.AppHost?.Services.GetRequiredService<SuperAdminMainView>();
+                }
 
-            if (mainView != null)
-            {
-                mainView.Show();
-                var currentWindow = System.Windows.Application.Current.Windows.OfType<System.Windows.Window>().FirstOrDefault(w => w.DataContext == this);
-                currentWindow?.Close();
-            }
+                if (mainView != null)
+                {
+                    mainView.Show();
+                    var currentWindow = System.Windows.Application.Current.Windows.OfType<System.Windows.Window>().FirstOrDefault(w => w.DataContext == this);
+                    currentWindow?.Close();
+                }
+            });
         }
         else
         {

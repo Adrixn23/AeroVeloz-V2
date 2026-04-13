@@ -63,7 +63,10 @@
 
         <!-- Data Grid -->
         <Border Grid.Row="2" Background="White" CornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1" Visibility="{Binding IsNotBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <DataGrid ItemsSource="{Binding Airports}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" materialDesign:DataGridAssist.CornerRadius="8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+            <DataGrid ItemsSource="{Binding Airports}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" SelectedItem="{Binding SelectedAirport}" materialDesign:DataGridAssist.CornerRadius="8" IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewDetailsCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="IATA" Binding="{Binding CodeAirportIata}" />
                     <DataGridTextColumn Header="Aeropuerto" Binding="{Binding NameOrganization}" Width="*"/>
@@ -75,6 +78,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}" ToolTip="Ver Detalles" Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,8,0">
+                                        <materialDesign:PackIcon Kind="Eye" />
+                                    </Button>
                                     <Button Style="{StaticResource MaterialDesignIconButton}" ToolTip="Editar" Command="{Binding DataContext.ShowEditDialogCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Foreground="{DynamicResource PrimaryHueMidBrush}">
                                         <materialDesign:PackIcon Kind="Pencil" />
                                     </Button>
@@ -90,3 +96,4 @@
         </Border>
     </Grid>
 </UserControl>
+

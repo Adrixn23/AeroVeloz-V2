@@ -51,8 +51,6 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Search Box -->
@@ -62,19 +60,8 @@
                              Margin="0,0,16,0"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                    <!-- General Audit Button -->
-                    <Button Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedButton}" 
-                            Command="{Binding LoadGlobalAuditCommand}"
-                            Margin="0,0,8,0" Padding="16,8"
-                            ToolTip="Ver auditoría de toda la organización">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FormatListBulleted" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Auditoría General" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
                     <!-- Refresh Button -->
-                    <Button Grid.Column="2" Style="{StaticResource MaterialDesignOutlinedButton}" 
+                    <Button Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedButton}" 
                             Command="{Binding LoadDataCommand}"
                             Margin="0,0,8,0" Padding="16,8"
                             ToolTip="Refrescar y recargar la tabla">
@@ -85,7 +72,7 @@
                     </Button>
 
                     <!-- Create Button -->
-                    <Button Grid.Column="3" Style="{StaticResource MaterialDesignRaisedButton}" 
+                    <Button Grid.Column="2" Style="{StaticResource MaterialDesignRaisedButton}" 
                             Command="{Binding CreateUserCommand}"
                             Margin="0,0,0,0" Padding="16,8"
                             ToolTip="Crear nuevo usuario">
@@ -114,29 +101,48 @@
                               SelectedItem="{Binding SelectedUser}"
                               materialDesign:DataGridAssist.CornerRadius="0,0,8,8" 
                               IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
+                        <DataGrid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewDetailsCommand}" CommandParameter="{Binding SelectedUser, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                        </DataGrid.InputBindings>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre de Usuario" Binding="{Binding FullName}" Width="*"/>
                             <DataGridTextColumn Header="Rol" Binding="{Binding Role}" Width="150"/>
                             <DataGridCheckBoxColumn Header="Activo" Binding="{Binding IsActive, Mode=OneWay}" Width="80"/>
                             <DataGridCheckBoxColumn Header="Bloqueado" Binding="{Binding IsBlocked, Mode=OneWay}" Width="100"/>
 
-                            <DataGridTemplateColumn Header="Acciones" Width="150">
+                            <DataGridTemplateColumn Header="Acciones" Width="200">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                    ToolTip="Ver Detalles" 
+                                                    Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding}" 
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                                <materialDesign:PackIcon Kind="Eye" />
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}" 
                                                     ToolTip="Editar" 
                                                     Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}" 
-                                                    Foreground="{DynamicResource PrimaryHueMidBrush}">
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Margin="4,0,0,0">
                                                 <materialDesign:PackIcon Kind="Pencil" />
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                    ToolTip="Auditoría" 
+                                                    Command="{Binding DataContext.ViewUserAuditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding}" 
+                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Margin="4,0,0,0">
+                                                <materialDesign:PackIcon Kind="History" />
                                             </Button>
                                             <Button Style="{StaticResource MaterialDesignIconButton}" 
                                                     ToolTip="Desactivar" 
                                                     Command="{Binding DataContext.DeactivateUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}" 
                                                     Foreground="#D32F2F" 
-                                                    Margin="8,0,0,0">
+                                                    Margin="4,0,0,0">
                                                 <materialDesign:PackIcon Kind="UserRemove" />
                                             </Button>
                                         </StackPanel>
@@ -147,44 +153,8 @@
                     </DataGrid>
                 </Grid>
             </materialDesign:Card>
-
-            <!-- Audit Section (Expandible) -->
-            <Expander Grid.Row="2" Margin="0,24,0,0" Padding="0" 
-                      IsExpanded="{Binding IsAuditVisible, Mode=TwoWay}"
-                      Visibility="{Binding IsAuditVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal" Margin="16,12">
-                        <materialDesign:PackIcon Kind="History" Width="24" Height="24" Margin="0,0,12,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-                        <TextBlock Text="Historial de Cambios" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding SelectedUserAudit.Count, StringFormat='({0})'}" Margin="8,0,0,0" Foreground="Gray" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Expander.Header>
-
-                <Border Background="White" CornerRadius="0,0,8,8" materialDesign:ElevationAssist.Elevation="Dp1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Grid.Row="0" Text="{Binding AuditTitle}" 
-                                   Margin="24,16" FontSize="13" Foreground="Gray" FontWeight="Medium"/>
-
-                        <DataGrid Grid.Row="1" ItemsSource="{Binding SelectedUserAudit}" 
-                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                                  materialDesign:DataGridAssist.CornerRadius="0,0,8,8"
-                                  IsReadOnly="True" GridLinesVisibility="Horizontal" HeadersVisibility="Column">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Tipo de Acción" Binding="{Binding AuditTypeName}" Width="140"/>
-                                <DataGridTextColumn Header="Realizado por" Binding="{Binding NameUser}" Width="180"/>
-                                <DataGridTextColumn Header="Entidad" Binding="{Binding NameEntity}" Width="100"/>
-                                <DataGridTextColumn Header="Fecha y Hora" Binding="{Binding OccurredAt, StringFormat='dd/MM/yyyy HH:mm:ss'}" Width="160"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </Border>
-            </Expander>
         </Grid>
     </Grid>
 </UserControl>
+
 

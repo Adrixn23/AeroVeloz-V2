@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using AeroVeloz.Desktop.Models.DTOs.Airport;
 using AeroVeloz.Desktop.Services.Dialog;
 using AeroVeloz.Desktop.Services.Interfaces.Airport;
@@ -110,5 +110,18 @@ public partial class AirportListViewModel : BaseViewModel
                 await LoadAirportsAsync();
             }
         }
+    }
+    [RelayCommand]
+    private async Task ViewDetailsAsync(AirportDto airport)
+    {
+        if (airport == null) return;
+        string details = "Aeropuerto: " + airport.NameOrganization + "\n" +
+                         "Código IATA: " + airport.CodeAirportIata + "\n" +
+                         "Código ICAO: " + airport.CodeAirportIcao + "\n" +
+                         "Ubicación: " + airport.City + "\n" +
+                         "API Key: " + airport.ApiKeyMaster + "\n" +
+                         "Activo: " + (airport.IsActived ? "Sí" : "No");
+
+        await _dialogService.ShowInfoAsync(details, "Detalles del Aeropuerto");
     }
 }

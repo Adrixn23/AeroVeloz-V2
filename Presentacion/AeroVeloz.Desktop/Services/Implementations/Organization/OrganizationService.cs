@@ -33,9 +33,9 @@ namespace AeroVeloz.Desktop.Services.Implementations.Organization
                 await _dialogService.ShowErrorAsync("Error al obtener aerolíneas del servidor");
                 return Enumerable.Empty<OrganizationDto>();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await _dialogService.ShowErrorAsync($"Error al conectar con el servidor: {ex.Message}");
+                await _dialogService.ShowErrorAsync("No se pudo conectar con el servidor para obtener los datos de la organización.");
                 return Enumerable.Empty<OrganizationDto>();
             }
         }
@@ -48,9 +48,9 @@ namespace AeroVeloz.Desktop.Services.Implementations.Organization
                 var response = await client.PutAsync($"api/organizations/{orgId}/block", null);
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await _dialogService.ShowErrorAsync($"Error al bloquear aerolínea: {ex.Message}");
+                await _dialogService.ShowErrorAsync("Ocurrió un error inesperado al intentar cambiar el estado de la organización.");
                 return false;
             }
         }

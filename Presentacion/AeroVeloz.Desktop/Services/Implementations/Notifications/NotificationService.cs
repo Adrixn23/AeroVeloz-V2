@@ -45,12 +45,28 @@ namespace AeroVeloz.Desktop.Services.Implementations.Notifications
                     try 
                     {
                         ToastNotificationManagerCompat.History.Clear();
-                        new ToastContentBuilder()
+                        var iconPath = System.IO.Path.Combine(
+                            System.AppDomain.CurrentDomain.BaseDirectory,
+                            "Assets",
+                            "icono.png"
+                        );
+
+                        var builder = new ToastContentBuilder()
                             .AddArgument("action", "viewConversation")
                             .AddArgument("conversationId", 9813)
                             .AddText(message.Title)
-                            .AddText(message.Message)
-                            .Show(); 
+                            .AddText(message.Message);
+
+                        if (System.IO.File.Exists(iconPath))
+                        {
+                            builder.AddAppLogoOverride(new Uri($"file:///{iconPath.Replace("\\", "/")}"));
+                        }
+
+                        builder.Show(toast => 
+                        { 
+                            toast.Tag = "AeroVeloz";
+                            toast.Group = "AeroVeloz";
+                        }); 
                     }
                     catch (Exception ex)
                     {
@@ -58,7 +74,7 @@ namespace AeroVeloz.Desktop.Services.Implementations.Notifications
                     }
                 }
 
-                
+
                 OnNotificationReceived?.Invoke(message.Title, message.Message);
             });
 

@@ -6,6 +6,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels.SuperAdmin"
         xmlns:views="clr-namespace:AeroVeloz.Desktop.Views.SuperAdmin"
+        xmlns:airportviewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels.AirportAdmin"
+        xmlns:airportviews="clr-namespace:AeroVeloz.Desktop.Views.AirportAdmin"
         mc:Ignorable="d"
         Title="AeroVeloz - Super Admin" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen"
@@ -16,6 +18,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
+        Icon="pack://application:,,,/Assets/icono.png"
         Name="MainAdminWindow">
 
         <Window.Resources>
@@ -36,6 +39,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:AirlineListViewModel}">
             <views:AirlineListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type airportviewmodels:AuditLogViewModel}">
+            <airportviews:AuditLogView />
         </DataTemplate>
     </Window.Resources>
 
@@ -90,6 +96,12 @@
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Airplane" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                                 <TextBlock Text="Aerolíneas" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateToAuditCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FileDocument" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Auditoría" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
