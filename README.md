@@ -117,7 +117,7 @@ AeroVeloz follows a **Clean Architecture** pattern with clear separation of conc
 - **Repository Pattern**: Abstraction over data access
 - **Validator Pattern**: Business rule validation at domain level
 
-> 📚 For detailed architecture documentation, see [Architecture Guide](docs/ARCHITECTURE.md)
+> 📚 For detailed architecture documentation, see [Architecture Guide](./docs/ARCHITECTURE.md)
 
 ---
 
@@ -185,7 +185,7 @@ cd Presentacion/AeroVeloz.Desktop
 dotnet run
 ```
 
-> 📖 For detailed setup instructions, see [Environment Setup & Installation Guide](docs/ENVIRONMENT_SETUP_AND_INSTALLATION_GUIDE.md)
+> 📖 For detailed setup instructions, see [Environment Setup & Installation Guide](./docs/ENVIRONMENT_SETUP_AND_INSTALLATION_GUIDE.md)
 
 ---
 
@@ -423,8 +423,8 @@ This project includes comprehensive documentation:
 
 | Document | Purpose |
 |----------|---------|
-| [**ARCHITECTURE.md**](docs/ARCHITECTURE.md) | Detailed system architecture, design patterns, and technical decisions |
-| [**ENVIRONMENT_SETUP_AND_INSTALLATION_GUIDE.md**](docs/ENVIRONMENT_SETUP_AND_INSTALLATION_GUIDE.md) | Step-by-step setup, configuration, and deployment instructions |
+| [**ARCHITECTURE.md**](./docs/ARCHITECTURE.md) | Detailed system architecture, design patterns, and technical decisions |
+| [**ENVIRONMENT_SETUP_AND_INSTALLATION_GUIDE.md**](./docs/ENVIRONMENT_SETUP_AND_INSTALLATION_GUIDE.md) | Step-by-step setup, configuration, and deployment instructions |
 | **README.md** | Project overview and quick reference |
 
 ---
