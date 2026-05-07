@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="interfaces\**" />
+    <Compile Remove="Services\Airports\**" />
+    <Compile Remove="Services\Base\**" />
+    <Compile Remove="DTOs\BaseDto\**" />
+    <Compile Remove="Services\interface\**" />
+    <Compile Remove="Services\UseCases\**" />
+    <EmbeddedResource Remove="interfaces\**" />
+    <EmbeddedResource Remove="Services\Airports\**" />
+    <EmbeddedResource Remove="Services\Base\**" />
+    <EmbeddedResource Remove="DTOs\BaseDto\**" />
+    <EmbeddedResource Remove="Services\interface\**" />
+    <EmbeddedResource Remove="Services\UseCases\**" />
+
+    <None Remove="interfaces\**" />
+    <None Remove="Services\Airports\**" />
+    <None Remove="Services\Base\**" />
+    <None Remove="DTOs\BaseDto\**" />
+    <None Remove="Services\interface\**" />
+    <None Remove="Services\UseCases\**" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AeroVeloz.Domain\AeroVeloz.Domain.csproj" />
+
+    <ProjectReference Include="..\..\Transversal\AeroVeloz.Transversal\AeroVeloz.Transversal.csproj" />
+
+  </ItemGroup>
+
+</Project>
