@@ -1,4 +1,4 @@
-# AeroVeloz 🛫
+# AeroVeloz
 
 ![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
@@ -11,9 +11,9 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 
 ---
 
-## 📸 System UI Preview
+## System UI Preview
 
-*(Note: Place your images in a folder named `gallery` in the root of the project to see them here)*
+*(Note: Place your images in a folder named `captures` in the root of the project to see them here)*
 
 | Public Live Board (Passengers) | Operations Boarding (Airport Staff) |
 | :---: | :---: |
@@ -24,7 +24,7 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 | :---: | :---: |
 | ![Airline Dashboard](captures/airline_dashboard.png) | ![Super Admin](captures/AuditAeroVeloz.png) |
 
-### 🛠️ More Views
+### More Views
 | Secure Login Access | Airline Management | Flight Details |
 | :---: | :---: | :---: |
 | ![Login](captures/Login.png) | ![Airlines](captures/AirlinesValid.png) | ![Info](captures/InformationFlights.png) |
@@ -32,7 +32,7 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 - **Real-Time Flight Monitoring:** Public boards and private dashboards with active heuristic filtering (automatically hiding old flights).
 - **Multi-Tenant System:** Secure role-based access control (RBAC) supporting System Admins, Airport Admins, Airline Admins, and Operators.
@@ -43,7 +43,7 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 
 ---
 
-## 📂 Documentation
+## Documentation
 
 For a deep dive into the system's technical details, refer to the following documentation files:
 
@@ -52,7 +52,7 @@ For a deep dive into the system's technical details, refer to the following docu
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Prerequisites
 - [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
@@ -80,6 +80,7 @@ dotnet user-secrets set "AirLabs:ApiKey" "your-secret-key"
 Navigate to the `Infraestructure\AeroVeloz.Infraestructure` directory and run the Entity Framework Core migrations to seed the database with required Roles, Permissions, and the Admin Organization:
 
 ```bash
+cd Infraestructure\AeroVeloz.Infraestructure
 dotnet ef database update --startup-project ../../Api/AeroVeloz.Api
 ```
 
@@ -104,6 +105,6 @@ Once the system is running, access the web portal at `https://localhost:7001` (o
 
 ---
 
-## 🛡️ License
+## License
 
 This project is licensed under the terms described in the [LICENSE](LICENSE) file.
