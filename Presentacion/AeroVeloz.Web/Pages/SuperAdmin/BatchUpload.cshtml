@@ -1,0 +1,40 @@
+@page
+@model AeroVeloz.Web.Pages.SuperAdmin.BatchUploadModel
+@{
+    ViewData["Title"] = "Carga Masiva de Vuelos";
+}
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Carga Masiva de Vuelos</h2>
+        <p class="text-muted">Utilice esta herramienta para cargar múltiples itinerarios de vuelo mediante la API (POST /api/flights/batch).</p>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">
+        @Model.SuccessMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @Model.ErrorMessage
+    </div>
+}
+
+<div class="card shadow-sm border-0 border-top border-4 border-primary">
+    <div class="card-body p-5 text-center">
+        <i class="bi bi-file-earmark-arrow-up display-1 text-primary mb-4"></i>
+        <h4>Procesar Itinerarios</h4>
+        <p class="text-muted mb-4">Para propósitos de esta demostración, al hacer clic en el botón se enviará un bloque de vuelos de prueba (AVX) a la API de backend.</p>
+        
+        <form method="post">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-cloud-upload"></i> Simular Carga Masiva (API Batch)
+            </button>
+        </form>
+    </div>
+</div>

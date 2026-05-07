@@ -1,0 +1,104 @@
+@page
+@model AeroVeloz.Web.Pages.Operator.IndexModel
+@{
+    ViewData["Title"] = "Mostrador - Boarding Web";
+}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="text-primary"><i class="bi bi-airplane"></i> Mostrador de Operaciones</h2>
+        <p class="text-muted">Actualización rápida de estados de vuelo. Operador: @Model.UserName</p>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡Éxito!</strong> @Model.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @Model.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <h5 class="card-title mb-0">Seleccione un Vuelo para Actualizar</h5>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Flights != null && Model.Flights.Any())
+        {
+            <div class="table-responsive p-3">
+                <table class="table table-hover align-middle mb-0 datatable" id="flightsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Vuelo</th>
+                            <th>Ruta</th>
+                            <th>Salida Programada</th>
+                            <th>Estado Actual</th>
+                            <th>Acciones Rápidas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var flight in Model.Flights)
+                        {
+                            <tr>
+                                <td><strong>#@flight.FlightNumber</strong> <span class="text-muted small">(@flight.CodeAirlinesIcao)</span></td>
+                                <td>@flight.OriginAirport <i class="bi bi-arrow-right text-muted mx-1"></i> @flight.DestinationAirport</td>
+                                <td>@flight.ScheduledDeparture.ToString("HH:mm")</td>
+                                <td>
+                                    @{
+                                        var stateNameEs = flight.FlightStateId switch {
+                                            1 => "Programado",
+                                            2 => "Abordaje",
+                                            3 => "Retrasado",
+                                            4 => "En Vuelo",
+                                            5 => "Aterrizado",
+                                            6 => "Completado",
+                                            7 => "Cancelado",
+                                            8 => "Desviado",
+                                            _ => flight.FlightStateName
+                                        };
+                                        var badgeClass = flight.FlightStateId switch {
+                                            1 => "bg-secondary",
+                                            2 => "bg-warning text-dark",
+                                            3 => "bg-danger",
+                                            4 => "bg-info text-dark",
+                                            5 => "bg-success",
+                                            6 => "bg-primary",
+                                            7 => "bg-dark",
+                                            8 => "bg-danger",
+                                            _ => "bg-light text-dark"
+                                        };
+                                    }
+                                    <span class="badge @badgeClass">@stateNameEs.ToUpper()</span>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary rounded-pill px-3" asp-page="/Operator/UpdateState" asp-route-flightNumber="@flight.FlightNumber" asp-route-airline="@flight.CodeAirlinesIcao">
+                                        <i class="bi bi-pencil-square me-1"></i> Actualizar
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted" id="emptyRow">
+                <p>No hay vuelos disponibles para mostrar en su mostrador.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DataTables JS y configuraciones globales se cargan en el Layout -->
+}

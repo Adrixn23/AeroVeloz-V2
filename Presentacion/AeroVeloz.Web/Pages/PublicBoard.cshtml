@@ -1,0 +1,109 @@
+@page
+@model AeroVeloz.Web.Pages.PublicBoardModel
+@{
+    ViewData["Title"] = "Pantalla Pública de Vuelos";
+    Layout = "_Layout"; // O un layout sin menús si prefieres
+}
+
+<div class="container-fluid bg-dark text-white min-vh-100 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 fw-bold text-info"><i class="bi bi-broadcast"></i> TABLERO DE VUELOS</h1>
+        <div class="text-end">
+            <h3 id="clock" class="mb-0"></h3>
+            <span class="text-muted">AeroVeloz Real-Time System</span>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-dark table-striped table-hover fs-4">
+            <thead class="text-info border-bottom border-info">
+                <tr>
+                    <th>VUELO</th>
+                    <th>AEROLÍNEA</th>
+                    <th>ORIGEN</th>
+                    <th>DESTINO</th>
+                    <th>HORA</th>
+                    <th>PUERTA</th>
+                    <th>ESTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Flights.Any())
+                {
+                    @foreach (var flight in Model.Flights)
+                    {
+                        <tr>
+                            <td class="fw-bold">@flight.FlightNumber</td>
+                            <td>@flight.CodeAirlinesIcao</td>
+                            <td>@flight.OriginAirport</td>
+                            <td>@flight.DestinationAirport</td>
+                            <td>@flight.ScheduledDeparture.ToString("HH:mm")</td>
+                            <td>@flight.BoardingGate</td>
+                            <td>
+                                @{
+                                    var badgeClass = flight.FlightStateId switch {
+                                        1 => "text-secondary", // Scheduled
+                                        2 => "text-warning", // Boarding
+                                        3 => "text-danger",  // Delayed
+                                        4 => "text-info",    // In Flight
+                                        5 => "text-success", // Landed
+                                        6 => "text-primary", // Completed
+                                        7 => "text-dark",    // Cancelled
+                                        8 => "text-danger",  // Diverted
+                                        _ => "text-white"
+                                    };
+
+                                    var stateNameEs = flight.FlightStateId switch {
+                                        1 => "PROGRAMADO",
+                                        2 => "ABORDAJE",
+                                        3 => "RETRASADO",
+                                        4 => "EN VUELO",
+                                        5 => "ATERRIZADO",
+                                        6 => "COMPLETADO",
+                                        7 => "CANCELADO",
+                                        8 => "DESVIADO",
+                                        _ => flight.FlightStateName.ToUpper()
+                                    };
+                                }
+                                <span class="@badgeClass fw-bold"><i class="bi bi-circle-fill me-2" style="font-size: 0.5rem; vertical-align: middle;"></i>@stateNameEs</span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center p-5 text-muted">No hay vuelos activos en este momento.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Auto-refresh cada 30 segundos (Heurística de Visibilidad)
+        setTimeout(function(){
+           location.reload();
+        }, 30000);
+
+        // Inicializar Tooltips de Bootstrap globales
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+}

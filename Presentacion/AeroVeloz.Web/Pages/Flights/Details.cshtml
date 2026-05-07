@@ -1,0 +1,167 @@
+@page "{flightNumber}/{airline}"
+@model AeroVeloz.Web.Pages.Flights.DetailsModel
+@{
+    ViewData["Title"] = "Detalle del Vuelo";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/SuperAdmin/Index">Inicio</a></li>
+            <li class="breadcrumb-item active">Vuelo #@Model.Flight?.FlightNumber</li>
+        </ol>
+    </nav>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4 fade-in d-flex align-items-center" role="alert">
+            <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+            <div>
+                <strong class="d-block">¡Suscripción Exitosa!</strong>
+                <span class="small">@TempData["SuccessMessage"]</span>
+            </div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger border-0 shadow-sm rounded-4 mb-4 fade-in d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+            <div>
+                <strong class="d-block">Error de Suscripción</strong>
+                <span class="small">@TempData["ErrorMessage"]</span>
+            </div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Flight != null)
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 border-top border-4 border-primary">
+                    <div class="card-header bg-white">
+                        <h3 class="mb-0">Información del Vuelo</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Número de Vuelo:</div>
+                            <div class="col-sm-8">#@Model.Flight.FlightNumber</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Aerolínea:</div>
+                            <div class="col-sm-8">@Model.Flight.CodeAirlinesIcao</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Ruta:</div>
+                            <div class="col-sm-8">@Model.Flight.OriginAirport &rarr; @Model.Flight.DestinationAirport</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Salida Programada:</div>
+                            <div class="col-sm-8">@Model.Flight.ScheduledDeparture.ToString("f")</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold">Estado Actual:</div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-primary fs-6">@Model.Flight.FlightStateName</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-4 fw-bold">Puerta de Embarque:</div>
+                            <div class="col-sm-8">@Model.Flight.BoardingGate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4 shadow-sm border-0">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0 text-secondary">Lista de Suscriptores</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        @if (Model.Subscriptions.Any())
+                        {
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Contacto</th>
+                                        <th>Fecha Suscripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var sub in Model.Subscriptions)
+                                    {
+                                        <tr>
+                                            <td>@sub.ContactValue</td>
+                                            <td>@sub.CreateDate.ToString("g")</td>
+                                            <td class="text-end">
+                                                <form method="post" asp-page-handler="CancelSubscription" asp-route-id="@sub.Id" asp-route-flightNumber="@Model.Flight.FlightNumber" asp-route-airline="@Model.Flight.CodeAirlinesIcao">
+                                                    <button type="submit" class="btn btn-sm text-danger" title="Cancelar Suscripción">
+                                                        <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p class="p-3 text-center text-muted mb-0">Aún no hay suscriptores para este vuelo.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 bg-light">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-people display-4 text-secondary mb-3"></i>
+                        <h5>Usuarios Interesados</h5>
+                        <h2 class="text-primary">@Model.InterestedCount</h2>
+                        <p class="text-muted small">Personas suscritas a las notificaciones de este vuelo.</p>
+                        
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#subscribeModal">
+                            <i class="bi bi-bell"></i> Suscribirse
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+</div>
+
+<!-- Modal de Suscripción (CRUD por API) -->
+<div class="modal fade" id="subscribeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Suscripción Externa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" asp-page-handler="Subscribe" id="subscribeForm">
+                <div class="modal-body">
+                    <p>Recibe notificaciones sobre cambios en el estado de este vuelo vía Email.</p>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" name="email" class="form-control" placeholder="usuario@ejemplo.com" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar Suscripción</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Scripts de validación o UI adicionales -->
+}

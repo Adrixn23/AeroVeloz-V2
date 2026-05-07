@@ -1,0 +1,144 @@
+@page
+@model AeroVeloz.Web.Pages.AirportAdmin.AirlinesModel
+@{
+    ViewData["Title"] = "Gestión de Aerolíneas";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Aerolíneas Locales</h2>
+        <p class="text-muted">Administra las aerolíneas autorizadas en el sistema (CRUD por API).</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newAirlineModal">+ Registrar Aerolínea</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡Éxito!</strong> @Model.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @Model.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm border-0 border-top border-4 border-info">
+    <div class="card-body p-0">
+        @if (Model.Airlines != null && Model.Airlines.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Código ICAO</th>
+                            <th>Código IATA</th>
+                            <th>Organización</th>
+                            <th>Estado</th>
+                            <th>Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var airline in Model.Airlines)
+                        {
+                            <tr>
+                                <td>@airline.Id</td>
+                                <td><strong>@airline.CodeAirlinesIcao</strong></td>
+                                <td>@airline.CodeIata</td>
+                                <td>@airline.NameOrganization</td>
+                                <td>
+                                    @if(airline.IsActive) { <span class="badge bg-success">Activa</span> }
+                                    else { <span class="badge bg-danger">Inactiva</span> }
+                                </td>
+                                <td>@airline.CreateAt.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary" title="Editar" onclick="editAirline('@airline.CodeAirlinesIcao', '@airline.CodeIata', '@airline.NameOrganization')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <form method="post" asp-page-handler="Delete" asp-route-codeIcao="@airline.CodeAirlinesIcao" onsubmit="return confirm('¿Está seguro de eliminar esta aerolínea?');" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                <p class="mb-0">No se encontraron aerolíneas registradas o no se pudo contactar con la API.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="newAirlineModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Registrar Nueva Aerolínea</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="NewAirline.CodeAirlinesIcao" class="form-label">Código ICAO (Ej: AVX)</label>
+                        <input asp-for="NewAirline.CodeAirlinesIcao" class="form-control" placeholder="AVX" required>
+                        <span asp-validation-for="NewAirline.CodeAirlinesIcao" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="NewAirline.CodeIata" class="form-label">Código IATA (Ej: AV)</label>
+                        <input asp-for="NewAirline.CodeIata" class="form-control" placeholder="AV" required>
+                        <span asp-validation-for="NewAirline.CodeIata" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="NewAirline.NameOrganization" class="form-label">Nombre de Aerolínea</label>
+                        <input asp-for="NewAirline.NameOrganization" class="form-control" placeholder="AeroVeloz Global" required>
+                        <span asp-validation-for="NewAirline.NameOrganization" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar y Enviar a API</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function editAirline(icao, iata, name) {
+            $('.modal-title').text('Editar Aerolínea: ' + icao);
+            $('input[name="NewAirline.CodeAirlinesIcao"]').val(icao).prop('readonly', true);
+            $('input[name="NewAirline.CodeIata"]').val(iata);
+            $('input[name="NewAirline.NameOrganization"]').val(name);
+            $('#newAirlineModal').modal('show');
+        }
+
+        // Reset modal on close
+        $('#newAirlineModal').on('hidden.bs.modal', function () {
+            $('.modal-title').text('Registrar Nueva Aerolínea');
+            $('input[name="NewAirline.CodeAirlinesIcao"]').val('').prop('readonly', false);
+            $('input[name="NewAirline.CodeIata"]').val('');
+            $('input[name="NewAirline.NameOrganization"]').val('');
+        });
+    </script>
+}
