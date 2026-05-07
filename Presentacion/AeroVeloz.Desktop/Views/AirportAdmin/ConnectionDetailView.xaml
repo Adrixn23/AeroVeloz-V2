@@ -1,0 +1,47 @@
+<UserControl x:Class="AeroVeloz.Desktop.Views.AirportAdmin.ConnectionDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Width="500">
+
+    <StackPanel Margin="16">
+        <TextBlock Text="{Binding Title}" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+        
+        <!-- Connection Form -->
+        <StackPanel>
+            <TextBlock Text="Código ICAO Aerolínea" FontSize="12" Foreground="Gray" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding CodeAirlinesIcao, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Ej: AA, UA, DL"
+                     Padding="12,8" Height="40" Margin="0,0,0,16"/>
+
+            <TextBlock Text="Código ICAO Aeropuerto" FontSize="12" Foreground="Gray" Margin="0,0,0,4"/>
+            <TextBox Text="{Binding CodeAirportIcao, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding IsAirportIcaoEditable}"
+                     materialDesign:HintAssist.Hint="Ej: JFK, LAX, MIA"
+                     Padding="12,8" Height="40" Margin="0,0,0,16"/>
+
+            <CheckBox Content="Activo" 
+                      IsChecked="{Binding IsActive}"
+                      Margin="0,0,0,16"/>
+
+            <!-- Loading -->
+            <ProgressBar IsIndeterminate="True" 
+                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         Height="4" Margin="0,8,0,8"/>
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+            <Button Style="{StaticResource MaterialDesignOutlinedButton}" 
+                    Content="Cancelar"
+                    Command="{Binding CancelCommand}"
+                    Padding="16,8" Margin="0,0,8,0"/>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Content="Guardar"
+                    Command="{Binding SaveCommand}"
+                    Background="{DynamicResource PrimaryHueMidBrush}"
+                    Foreground="White"
+                    Padding="16,8"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

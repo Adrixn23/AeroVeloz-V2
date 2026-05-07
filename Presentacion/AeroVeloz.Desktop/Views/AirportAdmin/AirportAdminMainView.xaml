@@ -1,0 +1,207 @@
+<Window x:Class="AeroVeloz.Desktop.Views.AirportAdmin.AirportAdminMainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewmodels="clr-namespace:AeroVeloz.Desktop.ViewModels.AirportAdmin"
+        xmlns:views="clr-namespace:AeroVeloz.Desktop.Views.AirportAdmin"
+        mc:Ignorable="d"
+        Title="AeroVeloz - Airport Admin" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Icon="pack://application:,,,/Assets/icono.png"
+        Name="MainAirportWindow">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:AirportAdminDashboardViewModel}">
+            <views:AirportAdminDashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:UserListViewModel}">
+            <views:UserListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:UserDetailViewModel}">
+            <views:UserDetailView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:OperationsListViewModel}">
+            <views:OperationsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:OperationDetailViewModel}">
+            <views:OperationDetailView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:ConnectionListViewModel}">
+            <views:ConnectionListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:ConnectionDetailViewModel}">
+            <views:ConnectionDetailView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AuditLogViewModel}">
+            <views:AuditLogView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:AirlineListViewModel}">
+            <views:AirlineListView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <materialDesign:DialogHost Identifier="RootDialog" DialogTheme="Inherit">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Sidebar -->
+                <ColumnDefinition Width="280" />
+                <!-- Main Content -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- SIDEBAR -->
+            <Border Grid.Column="0" Background="{DynamicResource MaterialDesignPaper}" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="160" /> <!-- User Profile / Branding -->
+                        <RowDefinition Height="*" />   <!-- Navigation Menu -->
+                        <RowDefinition Height="80" />  <!-- Footer / Logout -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Branding / User Profile -->
+                    <StackPanel Grid.Row="0" Margin="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Airport" Width="64" Height="64" Foreground="{DynamicResource PrimaryHueMidBrush}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding UserName}" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                        <TextBlock Text="{Binding UserRole}" FontSize="12" Foreground="Gray" HorizontalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Navigation Menu -->
+                    <StackPanel Grid.Row="1" Margin="0,16,0,0">
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Dashboard">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ViewDashboard" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Airlines">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Airplane" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Aerolíneas en conexión" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Operators">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountMultiple" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Operadores" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Operations">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Airplane" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Operaciones" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Connections">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Link" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Conexiones" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalContentAlignment="Left" Margin="8,4" Padding="16,8" Height="48" Command="{Binding NavigateCommand}" CommandParameter="Audit">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FileDocument" Width="24" Height="24" Margin="0,0,16,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                <TextBlock Text="Auditoría" VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Footer / Logout -->
+                    <StackPanel Grid.Row="2" Margin="16" VerticalAlignment="Bottom">
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LogoutCommand}" CommandParameter="{Binding ElementName=MainAirportWindow}" Background="#D32F2F" Foreground="White">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Logout" Margin="0,0,8,0"/>
+                                <TextBlock Text="Cerrar Sesión" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- MAIN WORK AREA -->
+            <Grid Grid.Column="1" Background="#F4F6F8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="64" /> <!-- App Bar -->
+                    <RowDefinition Height="*" />  <!-- Dynamic Content -->
+                </Grid.RowDefinitions>
+
+                <!-- App Bar -->
+                <materialDesign:ColorZone Grid.Row="0" Mode="PrimaryMid" Padding="16" materialDesign:ElevationAssist.Elevation="Dp2">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Airport" Width="36" Height="36" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <TextBlock Text="AeroVeloz - Administrador de Aeropuerto" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding SystemDate}" VerticalAlignment="Center" Margin="0,0,16,0" Opacity="0.8"/>
+                            <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <Grid>
+                                        <materialDesign:PackIcon Kind="BellOutline" Width="28" Height="28"/>
+                                        <Border Background="Red" CornerRadius="10" MinWidth="18" MinHeight="18" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-5,-5,0">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding NotificationCount}" Value="0">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding NotificationCount}" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel MinWidth="250" MaxWidth="350" MaxHeight="400" Margin="16">
+                                    <TextBlock Text="Notificaciones del Aeropuerto" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    
+                                    <ItemsControl ItemsSource="{Binding Notifications}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,1" Padding="4">
+                                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Opacity="0.8" Margin="0,4"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    
+                                    <TextBlock Text="No hay notificaciones." Opacity="0.6" FontStyle="Italic" Margin="0,8,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Notifications.Count}" Value="0">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:ColorZone>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ContentControl Content="{Binding CurrentViewModel}" Margin="16" />
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Presentacion\\AeroVeloz.Desktop\\AeroVeloz.Desktop.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Api\\AeroVelozDesktop.Api\\AeroVelozDesktop.Api.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
