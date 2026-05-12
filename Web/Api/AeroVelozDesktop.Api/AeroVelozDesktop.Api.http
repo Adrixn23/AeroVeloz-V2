@@ -1,6 +1,0 @@
-@AeroVelozDesktop.Api_HostAddress = http://localhost:5078
-
-GET {{AeroVelozDesktop.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
