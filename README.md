@@ -13,7 +13,7 @@ This project was built using **.NET 9** following **Clean Architecture (Onion Ar
 
 ## System UI Preview
 
-*(Note: Place your images in a folder named `captures` in the root of the project to see them here)*
+
 
 | Public Live Board (Passengers) | Operations Boarding (Airport Staff) |
 | :---: | :---: |
